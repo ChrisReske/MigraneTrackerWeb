@@ -5,7 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using MgMateWeb.Persistence;
+using MgMateWeb.Persistence.Entities;
+using MgMateWeb.Persistence.Interfaces;
+using MgMateWeb.Persistence.UnitOfWork;
 
 namespace MgMateWeb
 {
@@ -37,6 +39,11 @@ namespace MgMateWeb
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            #endregion
+
+            #region Custom interfaces
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             #endregion
 

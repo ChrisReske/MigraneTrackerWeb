@@ -1,7 +1,7 @@
 ﻿using MgMateWeb.Models.EntryModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace MgMateWeb.Persistence
+namespace MgMateWeb.Persistence.Entities
 {
     public class ApplicationDbContext : DbContext
     {

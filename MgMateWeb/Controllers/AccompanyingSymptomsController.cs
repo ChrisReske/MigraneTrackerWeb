@@ -6,7 +6,8 @@ using MgMateWeb.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
-using MgMateWeb.Persistence;
+using MgMateWeb.Persistence.Entities;
+using MgMateWeb.Persistence.Interfaces;
 
 namespace MgMateWeb.Controllers
 {
@@ -14,20 +15,28 @@ namespace MgMateWeb.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
 
         public AccompanyingSymptomsController(
             ApplicationDbContext context, 
-            IMapper mapper)
+            IMapper mapper, 
+            IUnitOfWork unitOfWork)
         {
-            _context = context;
-            _mapper = mapper;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         // GET: AccompanyingSymptoms
         public async Task<IActionResult> Index()
         {
-            return View(await _context.AccompanyingSymptoms.ToListAsync());
+            var symptoms = await _unitOfWork
+                .AccompanyingSymptomRepository
+                .GetAllAsync()
+                .ConfigureAwait(false);
+
+            return View(symptoms);
         }
 
         // GET: AccompanyingSymptoms/Details/5
@@ -75,25 +84,6 @@ namespace MgMateWeb.Controllers
             return RedirectToAction("Index", "AccompanyingSymptoms");
         }
 
-        private async Task SaveModelToDatabase(AccompanyingSymptom accompanyingSymptom)
-        {
-            _context.Add(accompanyingSymptom);
-            await _context.SaveChangesAsync();
-        }
-
-        // ReSharper disable once SuggestBaseTypeForParameter
-        private AccompanyingSymptom MapAccompanyingSymptom(AccompanyingSymptomDto accompanyingSymptomDto)
-        {
-            if(accompanyingSymptomDto is null)
-            {
-                return new AccompanyingSymptom();
-            }
-
-            accompanyingSymptomDto.CreationDate = DateTime.Now;
-            
-            var accompanyingSymptom = _mapper.Map<AccompanyingSymptom>(accompanyingSymptomDto);
-            return accompanyingSymptom;
-        }
 
         // GET: AccompanyingSymptoms/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -179,5 +169,34 @@ namespace MgMateWeb.Controllers
         {
             return _context.AccompanyingSymptoms.Any(e => e.Id == id);
         }
+
+        #region private methods
+
+        private async Task SaveModelToDatabase(AccompanyingSymptom accompanyingSymptom)
+        {
+            _unitOfWork
+                .AccompanyingSymptomRepository
+                .Add(accompanyingSymptom);
+
+            await _unitOfWork.CompleteAsync();
+
+        }
+
+        // ReSharper disable once SuggestBaseTypeForParameter
+        private AccompanyingSymptom MapAccompanyingSymptom(AccompanyingSymptomDto accompanyingSymptomDto)
+        {
+            if (accompanyingSymptomDto is null)
+            {
+                return new AccompanyingSymptom();
+            }
+
+            accompanyingSymptomDto.CreationDate = DateTime.Now;
+
+            var accompanyingSymptom = _mapper.Map<AccompanyingSymptom>(accompanyingSymptomDto);
+            return accompanyingSymptom;
+        }
+
+        #endregion
+
     }
 }
