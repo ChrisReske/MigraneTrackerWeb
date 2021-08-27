@@ -71,9 +71,8 @@ namespace MgMateWeb.Controllers
 
             await SaveModelToDatabase(accompanyingSymptom);
 
-            var displayModel = _mapper.Map<AccompanyingSymptomDto>(accompanyingSymptom);
-
-            return View(displayModel);
+            // Todo: Add toast notification if saving was successful or redirect to success page
+            return RedirectToAction("Index", "AccompanyingSymptoms");
         }
 
         private async Task SaveModelToDatabase(AccompanyingSymptom accompanyingSymptom)
@@ -85,7 +84,13 @@ namespace MgMateWeb.Controllers
         // ReSharper disable once SuggestBaseTypeForParameter
         private AccompanyingSymptom MapAccompanyingSymptom(AccompanyingSymptomDto accompanyingSymptomDto)
         {
-            accompanyingSymptomDto.CreationDate = DateTime.Today;
+            if(accompanyingSymptomDto is null)
+            {
+                return new AccompanyingSymptom();
+            }
+
+            accompanyingSymptomDto.CreationDate = DateTime.Now;
+            
             var accompanyingSymptom = _mapper.Map<AccompanyingSymptom>(accompanyingSymptomDto);
             return accompanyingSymptom;
         }
