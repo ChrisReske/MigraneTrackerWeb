@@ -1,5 +1,3 @@
-using System;
-
 namespace MgMateWeb.Models
 {
     public class ErrorViewModel
