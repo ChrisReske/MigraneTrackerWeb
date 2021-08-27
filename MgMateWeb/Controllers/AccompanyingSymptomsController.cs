@@ -63,7 +63,10 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            return View(accompanyingSymptom);
+            var viewModel = _mapper
+                .Map<AccompanyingSymptomDto>(accompanyingSymptom);
+
+            return View(viewModel);
         }
 
         // GET: AccompanyingSymptoms/Create
