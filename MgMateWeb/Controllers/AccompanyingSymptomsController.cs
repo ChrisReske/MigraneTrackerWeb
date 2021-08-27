@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -36,7 +37,9 @@ namespace MgMateWeb.Controllers
                 .GetAllAsync()
                 .ConfigureAwait(false);
 
-            return View(symptoms);
+            var symptomsView = _mapper.Map<IEnumerable<AccompanyingSymptomDto>>(symptoms);
+
+            return View(symptomsView);
         }
 
         // GET: AccompanyingSymptoms/Details/5

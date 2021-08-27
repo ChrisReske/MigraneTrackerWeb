@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using MgMateWeb.Dto;
 using MgMateWeb.Models.EntryModels;
 
@@ -8,8 +9,14 @@ namespace MgMateWeb.Mappings
     {
         public MappingProfile()
         {
+            #region AccompanyingSymptom
+
             CreateMap<AccompanyingSymptom, AccompanyingSymptomDto>();
             CreateMap<AccompanyingSymptomDto, AccompanyingSymptom>();
+
+            #endregion
+
+
 
         }
     }
