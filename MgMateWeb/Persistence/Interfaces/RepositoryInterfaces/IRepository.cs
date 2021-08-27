@@ -19,5 +19,8 @@ namespace MgMateWeb.Persistence.Interfaces.RepositoryInterfaces
         
         void Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entities);
+
+        Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+
     }
 }

@@ -37,6 +37,8 @@ namespace MgMateWeb.Controllers
                 .GetAllAsync()
                 .ConfigureAwait(false);
 
+            // Todo: If symptoms empty redirect to custom error / no data to display page
+
             var symptomsView = _mapper.Map<IEnumerable<AccompanyingSymptomDto>>(symptoms);
 
             return View(symptomsView);
@@ -45,14 +47,18 @@ namespace MgMateWeb.Controllers
         // GET: AccompanyingSymptoms/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (id is null)
             {
                 return NotFound();
             }
-
-            var accompanyingSymptom = await _context.AccompanyingSymptoms
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (accompanyingSymptom == null)
+            
+            var accompanyingSymptom = await _unitOfWork
+                .AccompanyingSymptomRepository
+                .FirstOrDefaultAsync(
+                    m => m.Id == id)
+                .ConfigureAwait(false);
+            
+            if (accompanyingSymptom is null)
             {
                 return NotFound();
             }
