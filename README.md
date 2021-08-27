@@ -25,3 +25,5 @@ The class design is based on a paper version of a migran log issued by "Westdeut
 I then realised that I could some apply some inheritance to reduce the amount of typing and smoothen the overall design. I also realised, that I had not previously accounted for the weather data.
 
 [Add image]
+
+As you can see from the inital design, I left out any users for the start, which I did on purpose. The overall goal was to create a version that I could use on my own. I consider users, authentication and logins as features that would only be added at later stage, once the main parts of the application were working as intended.
