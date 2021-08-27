@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using MgMateWeb.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
@@ -10,10 +13,15 @@ namespace MgMateWeb.Controllers
     public class AccompanyingSymptomsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public AccompanyingSymptomsController(ApplicationDbContext context)
+
+        public AccompanyingSymptomsController(
+            ApplicationDbContext context, 
+            IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: AccompanyingSymptoms
@@ -51,15 +59,35 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,CreationDate")] AccompanyingSymptom accompanyingSymptom)
+        public async Task<IActionResult> Create(AccompanyingSymptomDto accompanyingSymptomDto)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(accompanyingSymptom);
-                await _context.SaveChangesAsync();
+                
                 return RedirectToAction(nameof(Index));
             }
-            return View(accompanyingSymptom);
+
+            var accompanyingSymptom = MapAccompanyingSymptom(accompanyingSymptomDto);
+
+            await SaveModelToDatabase(accompanyingSymptom);
+
+            var displayModel = _mapper.Map<AccompanyingSymptomDto>(accompanyingSymptom);
+
+            return View(displayModel);
+        }
+
+        private async Task SaveModelToDatabase(AccompanyingSymptom accompanyingSymptom)
+        {
+            _context.Add(accompanyingSymptom);
+            await _context.SaveChangesAsync();
+        }
+
+        // ReSharper disable once SuggestBaseTypeForParameter
+        private AccompanyingSymptom MapAccompanyingSymptom(AccompanyingSymptomDto accompanyingSymptomDto)
+        {
+            accompanyingSymptomDto.CreationDate = DateTime.Today;
+            var accompanyingSymptom = _mapper.Map<AccompanyingSymptom>(accompanyingSymptomDto);
+            return accompanyingSymptom;
         }
 
         // GET: AccompanyingSymptoms/Edit/5
