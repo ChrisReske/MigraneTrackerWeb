@@ -41,7 +41,7 @@ namespace MgMateWeb.Utils.ControllerUtils
         }
 
 
-        public async Task<int> SaveModelToDatabase(AccompanyingSymptom accompanyingSymptom)
+        public async Task<int> SaveModelToDatabaseAsync(AccompanyingSymptom accompanyingSymptom)
         {
             if (accompanyingSymptom is null)
             {

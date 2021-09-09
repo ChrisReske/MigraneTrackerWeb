@@ -91,7 +91,7 @@ namespace MgMateWeb.Controllers
                     .ConfigureAwait(false);
 
             await _accompanyingSymptomsControllerUtils.
-                SaveModelToDatabase(accompanyingSymptom)
+                SaveModelToDatabaseAsync(accompanyingSymptom)
                 .ConfigureAwait(false);
 
             // Todo: Add toast notification if saving was successful or redirect to success page

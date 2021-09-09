@@ -8,6 +8,6 @@ namespace MgMateWeb.Interfaces.UtilsInterfaces.ControllerUtilsInterfaces
     {
         Task<AccompanyingSymptom> MapAccompanyingSymptomFromDtoAsync(AccompanyingSymptomDto accompanyingSymptomDto);
 
-        Task<int> SaveModelToDatabase(AccompanyingSymptom accompanyingSymptom);
+        Task<int> SaveModelToDatabaseAsync(AccompanyingSymptom accompanyingSymptom);
     }
 }

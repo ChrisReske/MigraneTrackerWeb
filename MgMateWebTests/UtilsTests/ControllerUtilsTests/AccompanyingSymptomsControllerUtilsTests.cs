@@ -111,6 +111,67 @@ namespace MgMateWebTests.UtilsTests.ControllerUtilsTests
 
         #endregion
 
+        #region Testing AccompanyingSymptomsControllerUtilsTests > SaveToDatabase
+
+        [Test]
+        public void SaveToDatabase_ParameterAccompanyingSymptomIsNull_ReturnsMinus1ForFailed()
+        {
+            const int failed = -1;
+
+            var result = _accompanyingSymptomsControllerUtils
+                .SaveModelToDatabaseAsync(null);
+
+            Assert.AreEqual(failed, result.Result);
+        }
+
+        [Test]
+        public void SaveToDatabase_NoEntriesWrittenToDatabase_ReturnsZeroAsNumberOfEntriesWrittenToDb()
+        {
+            const int noEntriesWrittenToDb = 0;
+
+            var fakeAccompanyingSymptomObject = CreateFakeAccompanyingSymptomObject();
+
+            _fakeUnitOfWork
+                .Setup(fuow => fuow.AccompanyingSymptomRepository
+                    .Add(fakeAccompanyingSymptomObject));
+
+            _fakeUnitOfWork.Setup(fuow => fuow
+                .CompleteAsync())
+                .Returns(Task.FromResult(noEntriesWrittenToDb));
+
+
+            var result = _accompanyingSymptomsControllerUtils
+                .SaveModelToDatabaseAsync(fakeAccompanyingSymptomObject);
+
+            Assert.AreEqual(noEntriesWrittenToDb, result.Result);
+
+        }
+
+        [Test]
+        public void SaveToDatabase_OneEntryWrittenToDatabase_ReturnsOneAsNumberOfEntriesWrittenToDb()
+        {
+            const int numberOfEntriesWrittenToDb = 1;
+
+            var fakeAccompanyingSymptomObject = CreateFakeAccompanyingSymptomObject();
+
+            _fakeUnitOfWork
+                .Setup(fuow => fuow.AccompanyingSymptomRepository
+                    .Add(fakeAccompanyingSymptomObject));
+
+            _fakeUnitOfWork.Setup(fuow => fuow
+                    .CompleteAsync())
+                .Returns(Task.FromResult(numberOfEntriesWrittenToDb));
+
+
+            var result = _accompanyingSymptomsControllerUtils
+                .SaveModelToDatabaseAsync(fakeAccompanyingSymptomObject);
+
+            Assert.AreEqual(numberOfEntriesWrittenToDb, result.Result);
+
+        }
+
+        #endregion
+
         #region Helper methods
 
         private static AccompanyingSymptom CreateFakeAccompanyingSymptomObject()
