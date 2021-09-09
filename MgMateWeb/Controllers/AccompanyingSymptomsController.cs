@@ -1,33 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using AutoMapper;
 using MgMateWeb.Dto;
+using MgMateWeb.Interfaces.UtilsInterfaces.ControllerUtilsInterfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
-using MgMateWeb.Persistence.Entities;
 using MgMateWeb.Persistence.Interfaces;
 
 namespace MgMateWeb.Controllers
 {
     public class AccompanyingSymptomsController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-
+        private readonly IAccompanyingSymptomsControllerUtils _accompanyingSymptomsControllerUtils;
 
         public AccompanyingSymptomsController(
-            ApplicationDbContext context, 
             IMapper mapper, 
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, 
+            IAccompanyingSymptomsControllerUtils accompanyingSymptomsControllerUtils)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _accompanyingSymptomsControllerUtils = accompanyingSymptomsControllerUtils 
+                                                   ?? throw new ArgumentNullException(nameof(accompanyingSymptomsControllerUtils));
         }
 
         // GET: AccompanyingSymptoms
@@ -89,9 +86,14 @@ namespace MgMateWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var accompanyingSymptom = MapAccompanyingSymptom(accompanyingSymptomDto);
+            var accompanyingSymptom = await 
+                _accompanyingSymptomsControllerUtils
+                    .MapAccompanyingSymptomFromDtoAsync(accompanyingSymptomDto)
+                    .ConfigureAwait(false);
 
-            await SaveModelToDatabase(accompanyingSymptom);
+            await _accompanyingSymptomsControllerUtils.
+                SaveModelToDatabase(accompanyingSymptom)
+                .ConfigureAwait(false);
 
             // Todo: Add toast notification if saving was successful or redirect to success page
             return RedirectToAction("Index", "AccompanyingSymptoms");
@@ -106,14 +108,18 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptom = _unitOfWork.AccompanyingSymptomRepository.Get((int)id);
+            var accompanyingSymptom = await _unitOfWork
+                .AccompanyingSymptomRepository
+                .GetAsync((int)id)
+                .ConfigureAwait(false);
 
             if (accompanyingSymptom == null)
             {
                 return NotFound();
             }
 
-            var accompanyingSymptomsDto = _mapper.Map<AccompanyingSymptomDto>(accompanyingSymptom);
+            var accompanyingSymptomsDto = _mapper
+                .Map<AccompanyingSymptomDto>(accompanyingSymptom);
 
             return View(accompanyingSymptomsDto);
         }
@@ -123,7 +129,7 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,CreationDate")] AccompanyingSymptomDto accompanyingSymptomDto)
+        public async Task<IActionResult> Edit(int id, AccompanyingSymptomDto accompanyingSymptomDto)
         {
             if (id != accompanyingSymptomDto.Id)
             {
@@ -171,44 +177,24 @@ namespace MgMateWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var accompanyingSymptom = await _context.AccompanyingSymptoms.FindAsync(id);
-            _context.AccompanyingSymptoms.Remove(accompanyingSymptom);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool AccompanyingSymptomExists(int id)
-        {
-            return _context.AccompanyingSymptoms.Any(e => e.Id == id);
-        }
-
-        #region private methods
-
-        private async Task SaveModelToDatabase(AccompanyingSymptom accompanyingSymptom)
-        {
-            _unitOfWork
-                .AccompanyingSymptomRepository
-                .Add(accompanyingSymptom);
-
-            await _unitOfWork.CompleteAsync();
-
-        }
-
-        // ReSharper disable once SuggestBaseTypeForParameter
-        private AccompanyingSymptom MapAccompanyingSymptom(AccompanyingSymptomDto accompanyingSymptomDto)
-        {
-            if (accompanyingSymptomDto is null)
+            if(id == 0)
             {
-                return new AccompanyingSymptom();
+                return RedirectToAction(nameof(Index));
             }
 
-            accompanyingSymptomDto.CreationDate = DateTime.Now;
+            var accompanyingSymptom =
+                await _unitOfWork
+                    .AccompanyingSymptomRepository
+                    .GetAsync(id)
+                    .ConfigureAwait(false);
 
-            var accompanyingSymptom = _mapper.Map<AccompanyingSymptom>(accompanyingSymptomDto);
-            return accompanyingSymptom;
+            _unitOfWork.AccompanyingSymptomRepository.Remove(accompanyingSymptom);
+
+            await _unitOfWork
+                .CompleteAsync()
+                .ConfigureAwait(false);
+            
+            return RedirectToAction(nameof(Index));
         }
-
-        #endregion
-
     }
 }
