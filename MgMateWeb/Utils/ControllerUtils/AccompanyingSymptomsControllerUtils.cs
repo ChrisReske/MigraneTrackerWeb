@@ -13,13 +13,14 @@ namespace MgMateWeb.Utils.ControllerUtils
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-
         public AccompanyingSymptomsControllerUtils(
             IMapper mapper, 
             IUnitOfWork unitOfWork)
         {
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
+            _mapper = mapper 
+                      ?? throw new ArgumentNullException(nameof(mapper));
+            _unitOfWork = unitOfWork 
+                          ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         public async Task<AccompanyingSymptom> MapAccompanyingSymptomFromDtoAsync(AccompanyingSymptomDto accompanyingSymptomDto)

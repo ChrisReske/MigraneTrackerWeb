@@ -17,4 +17,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ControllerTests\" />
+    <Folder Include="UtilsTests\ControllerUtilsTests\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MgMateWeb\MgMateWeb.csproj" />
+  </ItemGroup>
+
 </Project>
