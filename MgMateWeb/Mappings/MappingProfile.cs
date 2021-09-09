@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using MgMateWeb.Dto;
 using MgMateWeb.Models.EntryModels;
 

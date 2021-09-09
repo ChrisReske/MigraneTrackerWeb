@@ -5,7 +5,6 @@ using AutoMapper;
 using MgMateWeb.Dto;
 using MgMateWeb.Interfaces.UtilsInterfaces.ControllerUtilsInterfaces;
 using Microsoft.AspNetCore.Mvc;
-using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Persistence.Interfaces;
 
 namespace MgMateWeb.Controllers
