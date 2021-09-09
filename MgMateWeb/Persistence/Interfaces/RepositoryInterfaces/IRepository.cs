@@ -8,6 +8,8 @@ namespace MgMateWeb.Persistence.Interfaces.RepositoryInterfaces
     public interface IRepository<TEntity> where TEntity : class
     {
         TEntity Get(int id);
+        Task<TEntity> GetAsync(int id);
+
         IEnumerable<TEntity> GetAll();
         Task<IEnumerable<TEntity>> GetAllAsync();
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);

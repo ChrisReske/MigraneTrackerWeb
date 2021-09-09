@@ -23,6 +23,14 @@ namespace MgMateWeb.Persistence.Repositories
             return Context.Set<TEntity>().Find(id);
         }
 
+        public async Task<TEntity> GetAsync(int id)
+        {
+            return await Context
+                .Set<TEntity>()
+                .FindAsync(id)
+                .ConfigureAwait(false);
+        }
+
         public IEnumerable<TEntity> GetAll()
         {
          

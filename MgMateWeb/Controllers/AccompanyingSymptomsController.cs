@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using AutoMapper;
 using MgMateWeb.Dto;
@@ -105,12 +106,16 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptom = await _context.AccompanyingSymptoms.FindAsync(id);
+            var accompanyingSymptom = _unitOfWork.AccompanyingSymptomRepository.Get((int)id);
+
             if (accompanyingSymptom == null)
             {
                 return NotFound();
             }
-            return View(accompanyingSymptom);
+
+            var accompanyingSymptomsDto = _mapper.Map<AccompanyingSymptomDto>(accompanyingSymptom);
+
+            return View(accompanyingSymptomsDto);
         }
 
         // POST: AccompanyingSymptoms/Edit/5
@@ -118,46 +123,41 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,CreationDate")] AccompanyingSymptom accompanyingSymptom)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,CreationDate")] AccompanyingSymptomDto accompanyingSymptomDto)
         {
-            if (id != accompanyingSymptom.Id)
+            if (id != accompanyingSymptomDto.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(accompanyingSymptom);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AccompanyingSymptomExists(accompanyingSymptom.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var accompanyingSymptom = 
+                    await _unitOfWork.AccompanyingSymptomRepository
+                        .GetAsync(accompanyingSymptomDto.Id)
+                        .ConfigureAwait(false);
+                
+                _mapper.Map(accompanyingSymptomDto, accompanyingSymptom);
+               
+                await _unitOfWork.CompleteAsync();
+               
+               return RedirectToAction(nameof(Index));
             }
-            return View(accompanyingSymptom);
+            return View(accompanyingSymptomDto);
         }
 
         // GET: AccompanyingSymptoms/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (id is null)
             {
                 return NotFound();
             }
 
-            var accompanyingSymptom = await _context.AccompanyingSymptoms
+            var accompanyingSymptom = await _unitOfWork
+                .AccompanyingSymptomRepository
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (accompanyingSymptom == null)
             {
                 return NotFound();
