@@ -79,7 +79,7 @@ namespace MgMateWebTests.UtilsTests.ControllerUtilsTests
         public void MapAccompanyingSymptomFromDtoAsync_CustomMapperReturnsNull_ReturnsNewAndEmptyAccompanyingSymptom()
         {
             var expectedDate = DateTime.MinValue;
-            var fakeDto = CreateFakeAccompanyingSymptomDto();
+            var fakeDto = TestHelper.CreateFakeAccompanyingSymptomDto();
 
             _fakeCustomMapper.Setup(fcm => fcm
                 .MapAccompanyingSymptomFromDtoAsync(fakeDto))
@@ -96,8 +96,8 @@ namespace MgMateWebTests.UtilsTests.ControllerUtilsTests
         [Test]
         public void MapAccompanyingSymptomFromDtoAsync_ParameterAccompanyingSymptomIsNotNull_ReturnsMappedAccompanyingSymptomsObject()
         {
-            var fakeDto = CreateFakeAccompanyingSymptomDto();
-            var fakeAccompanyingSymptomObject = CreateFakeAccompanyingSymptomObject();
+            var fakeDto = TestHelper.CreateFakeAccompanyingSymptomDto();
+            var fakeAccompanyingSymptomObject = TestHelper.CreateFakeAccompanyingSymptomObject();
 
             _fakeCustomMapper.Setup(fcm => fcm
                 .MapAccompanyingSymptomFromDtoAsync(fakeDto))
@@ -129,7 +129,7 @@ namespace MgMateWebTests.UtilsTests.ControllerUtilsTests
         {
             const int noEntriesWrittenToDb = 0;
 
-            var fakeAccompanyingSymptomObject = CreateFakeAccompanyingSymptomObject();
+            var fakeAccompanyingSymptomObject = TestHelper.CreateFakeAccompanyingSymptomObject();
 
             _fakeUnitOfWork
                 .Setup(fuow => fuow.AccompanyingSymptomRepository
@@ -152,7 +152,7 @@ namespace MgMateWebTests.UtilsTests.ControllerUtilsTests
         {
             const int numberOfEntriesWrittenToDb = 1;
 
-            var fakeAccompanyingSymptomObject = CreateFakeAccompanyingSymptomObject();
+            var fakeAccompanyingSymptomObject = TestHelper.CreateFakeAccompanyingSymptomObject();
 
             _fakeUnitOfWork
                 .Setup(fuow => fuow.AccompanyingSymptomRepository
@@ -167,33 +167,6 @@ namespace MgMateWebTests.UtilsTests.ControllerUtilsTests
                 .SaveModelToDatabaseAsync(fakeAccompanyingSymptomObject);
 
             Assert.AreEqual(numberOfEntriesWrittenToDb, result.Result);
-
-        }
-
-        #endregion
-
-        #region Helper methods
-
-        private static AccompanyingSymptom CreateFakeAccompanyingSymptomObject()
-        {
-            var fakeAccompanyingSymptomObject = new AccompanyingSymptom
-            {
-                CreationDate = new DateTime(2021, 8, 21),
-                Description = "DummyDescription",
-                Id = 1
-            };
-            return fakeAccompanyingSymptomObject;
-        }
-
-        private static AccompanyingSymptomDto CreateFakeAccompanyingSymptomDto()
-        {
-            var fakeDto = new AccompanyingSymptomDto
-            {
-                CreationDate = new DateTime(2021, 8, 21),
-                Description = "DummyDescription",
-                Id = 1
-            };
-            return fakeDto;
         }
 
         #endregion
