@@ -1,4 +1,5 @@
 using System;
+using MgMateWeb.Interfaces.UtilsInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces.ControllerUtilsInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Persistence.Entities;
 using MgMateWeb.Persistence.Interfaces;
 using MgMateWeb.Persistence.UnitOfWork;
+using MgMateWeb.Utils;
 using MgMateWeb.Utils.ControllerUtils;
 
 namespace MgMateWeb
@@ -47,6 +49,7 @@ namespace MgMateWeb
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAccompanyingSymptomsControllerUtils, AccompanyingSymptomsControllerUtils>();
+            services.AddScoped<ICustomMapper, CustomMapper>();
 
             #endregion
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AutoMapper;
 using MgMateWeb.Dto;
+using MgMateWeb.Interfaces.UtilsInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces.ControllerUtilsInterfaces;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Persistence.Interfaces;
@@ -10,35 +10,36 @@ namespace MgMateWeb.Utils.ControllerUtils
 {
     public class AccompanyingSymptomsControllerUtils : IAccompanyingSymptomsControllerUtils
     {
-        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICustomMapper _customMapper;
 
         public AccompanyingSymptomsControllerUtils(
-            IMapper mapper, 
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, 
+            ICustomMapper customMapper)
         {
-            _mapper = mapper 
-                      ?? throw new ArgumentNullException(nameof(mapper));
             _unitOfWork = unitOfWork 
                           ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _customMapper = customMapper 
+                            ?? throw new ArgumentNullException(nameof(customMapper));
         }
 
-        public async Task<AccompanyingSymptom> MapAccompanyingSymptomFromDtoAsync(AccompanyingSymptomDto accompanyingSymptomDto)
+        public async Task<AccompanyingSymptom> MapAccompanyingSymptomFromDtoAsync(
+            AccompanyingSymptomDto accompanyingSymptomDto)
         {
             if (accompanyingSymptomDto is null)
             {
                 return new AccompanyingSymptom();
             }
 
-            accompanyingSymptomDto.CreationDate = DateTime.Now;
-
-            var accompanyingSymptom = _mapper.Map<AccompanyingSymptom>(accompanyingSymptomDto);
+            var accompanyingSymptom = await _customMapper
+                .MapAccompanyingSymptomFromDtoAsync(accompanyingSymptomDto)
+                .ConfigureAwait(false);
 
             return await Task
                 .FromResult(accompanyingSymptom)
                 .ConfigureAwait(false);
-            ;
         }
+
 
         public async Task<int> SaveModelToDatabase(AccompanyingSymptom accompanyingSymptom)
         {
