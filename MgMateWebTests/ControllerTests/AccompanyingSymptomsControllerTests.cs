@@ -81,7 +81,7 @@ namespace MgMateWebTests.ControllerTests
 
         #endregion
 
-        #region Testing AccompanyingSymptomsController Index()
+        #region Testing AccompanyingSymptomsController > Index()
 
         [Test]
         public void Index_NoDataToDisplayReturnedFromDatabase_ReturnsNoContentResult()
@@ -117,6 +117,35 @@ namespace MgMateWebTests.ControllerTests
             var result = _accompanyingSymptomsController.Index();
 
             result.Result.Should().BeOfType<ViewResult>();
+
+        }
+
+        #endregion
+
+        #region Testing AccompanyingSymptomsController > Details
+
+        [Test]
+        public void Details_ParameterIdIsNull_ReturnsNotFound()
+        {
+            var result = _accompanyingSymptomsController.Details(null);
+
+            result.Result.Should().BeOfType<NotFoundResult>();
+
+        }
+
+        [Test]
+        public void Details_QueryForIdReturnsNull_ReturnsNoContentResult()
+        {
+            const int testId = 1;
+
+            _fakeUnitOfWork.Setup(fuow => fuow
+                .AccompanyingSymptomRepository
+                .GetAsync(testId))
+                .Returns(Task.FromResult<AccompanyingSymptom>(null));
+
+            var result = _accompanyingSymptomsController.Details(testId);
+
+            result.Result.Should().BeOfType<NoContentResult>();
 
         }
 

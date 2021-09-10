@@ -55,14 +55,13 @@ namespace MgMateWeb.Controllers
             }
             
             var accompanyingSymptom = await _unitOfWork
-                .AccompanyingSymptomRepository
-                .FirstOrDefaultAsync(
-                    m => m.Id == id)
+                .AccompanyingSymptomRepository.GetAsync(id)
                 .ConfigureAwait(false);
             
             if (accompanyingSymptom is null)
             {
-                return NotFound();
+                // TODO: Add redirect to page: "No data to display"
+                return NoContent();
             }
 
             var viewModel = _mapper
