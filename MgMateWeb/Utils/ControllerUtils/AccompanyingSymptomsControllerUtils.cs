@@ -32,7 +32,7 @@ namespace MgMateWeb.Utils.ControllerUtils
             }
 
             var accompanyingSymptom = await _customMapper
-                .MapAccompanyingSymptomFromDtoAsync(accompanyingSymptomDto)
+                .CreateNewAccompanyingSymptomFromDtoAsync(accompanyingSymptomDto)
                 .ConfigureAwait(false);
 
             return await Task

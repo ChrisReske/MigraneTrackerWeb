@@ -28,7 +28,7 @@ namespace MgMateWebTests.UtilsTests
         {
             var expectedDate = DateTime.MinValue;
 
-            var result = _customMapper.MapAccompanyingSymptomFromDtoAsync(null);
+            var result = _customMapper.CreateNewAccompanyingSymptomFromDtoAsync(null);
 
             Assert.AreEqual(expectedDate, result.Result.CreationDate);
         }
@@ -38,7 +38,7 @@ namespace MgMateWebTests.UtilsTests
         {
             var fakeDto = TestHelper.CreateFakeAccompanyingSymptomDto();
 
-            var result = _customMapper.MapAccompanyingSymptomFromDtoAsync(fakeDto);
+            var result = _customMapper.CreateNewAccompanyingSymptomFromDtoAsync(fakeDto);
 
             Assert.AreEqual(fakeDto.Description, result.Result.Description);
 

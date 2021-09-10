@@ -82,7 +82,7 @@ namespace MgMateWebTests.UtilsTests.ControllerUtilsTests
             var fakeDto = TestHelper.CreateFakeAccompanyingSymptomDto();
 
             _fakeCustomMapper.Setup(fcm => fcm
-                .MapAccompanyingSymptomFromDtoAsync(fakeDto))
+                .CreateNewAccompanyingSymptomFromDtoAsync(fakeDto))
                 .Returns((Task<AccompanyingSymptom>)null);
 
             var result =
@@ -100,7 +100,7 @@ namespace MgMateWebTests.UtilsTests.ControllerUtilsTests
             var fakeAccompanyingSymptomObject = TestHelper.CreateFakeAccompanyingSymptomObject();
 
             _fakeCustomMapper.Setup(fcm => fcm
-                .MapAccompanyingSymptomFromDtoAsync(fakeDto))
+                .CreateNewAccompanyingSymptomFromDtoAsync(fakeDto))
                 .Returns(Task.FromResult(fakeAccompanyingSymptomObject));
 
             var result = _accompanyingSymptomsControllerUtils

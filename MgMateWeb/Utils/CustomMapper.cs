@@ -8,7 +8,7 @@ namespace MgMateWeb.Utils
 {
     public class CustomMapper : ICustomMapper
     {
-        public async Task<AccompanyingSymptom> MapAccompanyingSymptomFromDtoAsync(AccompanyingSymptomDto accompanyingSymptomDto)
+        public async Task<AccompanyingSymptom> CreateNewAccompanyingSymptomFromDtoAsync(AccompanyingSymptomDto accompanyingSymptomDto)
         {
             if(accompanyingSymptomDto is null)
             {
