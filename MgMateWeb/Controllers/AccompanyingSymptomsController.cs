@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MgMateWeb.Dto;
@@ -34,8 +35,12 @@ namespace MgMateWeb.Controllers
                 .GetAllAsync()
                 .ConfigureAwait(false);
 
-            // Todo: If symptoms empty redirect to custom error / no data to display page
+            if(symptoms is null || !symptoms.Any())
+            {
+                return NoContent();
+            }
 
+            // Todo: If symptoms empty redirect to custom error / no data to display page
             var symptomsView = _mapper.Map<IEnumerable<AccompanyingSymptomDto>>(symptoms);
 
             return View(symptomsView);
