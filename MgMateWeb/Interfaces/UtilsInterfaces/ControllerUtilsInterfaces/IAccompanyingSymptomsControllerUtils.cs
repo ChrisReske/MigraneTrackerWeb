@@ -6,7 +6,7 @@ namespace MgMateWeb.Interfaces.UtilsInterfaces.ControllerUtilsInterfaces
 {
     public interface IAccompanyingSymptomsControllerUtils
     {
-        Task<AccompanyingSymptom> MapAccompanyingSymptomFromDtoAsync(AccompanyingSymptomDto accompanyingSymptomDto);
+        Task<AccompanyingSymptom> MapAccompanyingSymptomUponCreation(AccompanyingSymptomDto accompanyingSymptomDto);
 
         Task<int> SaveModelToDatabaseAsync(AccompanyingSymptom accompanyingSymptom);
     }

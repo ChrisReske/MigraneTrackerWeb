@@ -21,7 +21,7 @@ namespace MgMateWebTests.UtilsTests
 
         }
 
-        #region Testing CustomMapper > MapAccompanyingSymptomFromDtoAsync
+        #region Testing CustomMapper > MapAccompanyingSymptomUponCreation
 
         [Test]
         public void MapAccompanyingSymptomFromDtoAsync_ParameterAccompanyingSymptomDtoIsNull_ReturnsNewAndEmptyAccompanyingSymptomObject()

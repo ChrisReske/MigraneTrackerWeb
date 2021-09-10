@@ -23,7 +23,7 @@ namespace MgMateWeb.Utils.ControllerUtils
                             ?? throw new ArgumentNullException(nameof(customMapper));
         }
 
-        public async Task<AccompanyingSymptom> MapAccompanyingSymptomFromDtoAsync(
+        public async Task<AccompanyingSymptom> MapAccompanyingSymptomUponCreation(
             AccompanyingSymptomDto accompanyingSymptomDto)
         {
             if (accompanyingSymptomDto is null)

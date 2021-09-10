@@ -91,7 +91,7 @@ namespace MgMateWeb.Controllers
 
             var accompanyingSymptom = await 
                 _accompanyingSymptomsControllerUtils
-                    .MapAccompanyingSymptomFromDtoAsync(accompanyingSymptomDto)
+                    .MapAccompanyingSymptomUponCreation(accompanyingSymptomDto)
                     .ConfigureAwait(false);
 
             await _accompanyingSymptomsControllerUtils.

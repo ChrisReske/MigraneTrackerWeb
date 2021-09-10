@@ -60,7 +60,7 @@ namespace MgMateWebTests.UtilsTests.ControllerUtilsTests
 
         #endregion
 
-        #region Testing AccompanyingSymptomsControllerUtilsTests > MapAccompanyingSymptomFromDtoAsync
+        #region Testing AccompanyingSymptomsControllerUtilsTests > MapAccompanyingSymptomUponCreation
 
         [Test]
         public void MapAccompanyingSymptomFromDtoAsync_ParameterAccompanyingSymptomDtoIsNull_ReturnsNewAndEmptyAccompanyingSymptom()
@@ -69,7 +69,7 @@ namespace MgMateWebTests.UtilsTests.ControllerUtilsTests
 
             var result = 
                 _accompanyingSymptomsControllerUtils
-                    .MapAccompanyingSymptomFromDtoAsync(null);
+                    .MapAccompanyingSymptomUponCreation(null);
 
             Assert.AreEqual(expectedDate, result.Result.CreationDate);
 
@@ -87,7 +87,7 @@ namespace MgMateWebTests.UtilsTests.ControllerUtilsTests
 
             var result =
                 _accompanyingSymptomsControllerUtils
-                    .MapAccompanyingSymptomFromDtoAsync(null);
+                    .MapAccompanyingSymptomUponCreation(null);
 
             Assert.AreEqual(expectedDate, result.Result.CreationDate);
 
@@ -104,7 +104,7 @@ namespace MgMateWebTests.UtilsTests.ControllerUtilsTests
                 .Returns(Task.FromResult(fakeAccompanyingSymptomObject));
 
             var result = _accompanyingSymptomsControllerUtils
-                .MapAccompanyingSymptomFromDtoAsync(fakeDto);
+                .MapAccompanyingSymptomUponCreation(fakeDto);
 
             Assert.AreEqual(fakeDto.Description, result.Result.Description);
         }
