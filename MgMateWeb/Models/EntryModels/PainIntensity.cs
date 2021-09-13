@@ -6,18 +6,18 @@ namespace MgMateWeb.Models.EntryModels
     {
         [Display(Name="Low")]
         Low,
-
+        
         [Display(Name = "Medium")]
         Medium,
-
+        
         [Display(Name = "High")]
         High,
-
-        [Display(Name = "Very high")]
+        
+        [Display(Name="Very High")]
         VeryHigh,
-
-        [Display(Name = "Crippling")]
-        Crippling,
+        
+        [Display(Name="Crippling")]
+        Crippling
 
     }
 }

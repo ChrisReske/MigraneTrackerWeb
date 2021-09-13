@@ -57,7 +57,7 @@ namespace MgMateWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Id,Description,CreationDate")] 
+            [Bind("PainIntensity,Id,Description,CreationDate")] 
             PainType painType)
         {
             if (ModelState.IsValid)
