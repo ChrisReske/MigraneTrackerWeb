@@ -20,7 +20,9 @@ namespace MgMateWeb.Controllers
         // GET: AccompanyingSymptoms
         public async Task<IActionResult> Index()
         {
-            return View(await _context.AccompanyingSymptoms.ToListAsync());
+            return View(await _context.AccompanyingSymptoms
+                .ToListAsync()
+                .ConfigureAwait(false));
         }
 
         // GET: AccompanyingSymptoms/Details/5
@@ -32,7 +34,8 @@ namespace MgMateWeb.Controllers
             }
 
             var accompanyingSymptom = await _context.AccompanyingSymptoms
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id)
+                .ConfigureAwait(false);
             if (accompanyingSymptom == null)
             {
                 return NotFound();
@@ -58,7 +61,9 @@ namespace MgMateWeb.Controllers
             {
                 accompanyingSymptom.CreationDate = DateTime.Now;
                 _context.Add(accompanyingSymptom);
-                await _context.SaveChangesAsync();
+                await _context
+                    .SaveChangesAsync()
+                    .ConfigureAwait(false);
                 return RedirectToAction(nameof(Index));
             }
             return View(accompanyingSymptom);
@@ -72,7 +77,10 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptom = await _context.AccompanyingSymptoms.FindAsync(id);
+            var accompanyingSymptom = await _context
+                .AccompanyingSymptoms
+                .FindAsync(id)
+                .ConfigureAwait(false);
             if (accompanyingSymptom == null)
             {
                 return NotFound();
@@ -97,7 +105,9 @@ namespace MgMateWeb.Controllers
                 try
                 {
                     _context.Update(accompanyingSymptom);
-                    await _context.SaveChangesAsync();
+                    await _context
+                        .SaveChangesAsync()
+                        .ConfigureAwait(false);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -105,10 +115,8 @@ namespace MgMateWeb.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -124,7 +132,9 @@ namespace MgMateWeb.Controllers
             }
 
             var accompanyingSymptom = await _context.AccompanyingSymptoms
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id)
+                .ConfigureAwait(false);
+           
             if (accompanyingSymptom == null)
             {
                 return NotFound();
@@ -138,15 +148,25 @@ namespace MgMateWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var accompanyingSymptom = await _context.AccompanyingSymptoms.FindAsync(id);
-            _context.AccompanyingSymptoms.Remove(accompanyingSymptom);
-            await _context.SaveChangesAsync();
+            var accompanyingSymptom = await _context.AccompanyingSymptoms
+                .FindAsync(id)
+                .ConfigureAwait(false);
+            
+            _context.AccompanyingSymptoms
+                .Remove(accompanyingSymptom);
+            
+            await _context
+                .SaveChangesAsync()
+                .ConfigureAwait(false);
+            
             return RedirectToAction(nameof(Index));
         }
 
         private bool AccompanyingSymptomExists(int id)
         {
-            return _context.AccompanyingSymptoms.Any(e => e.Id == id);
+            return _context
+                .AccompanyingSymptoms
+                .Any(e => e.Id == id);
         }
     }
 }
