@@ -27,3 +27,7 @@ I then realised that I could some apply some inheritance to reduce the amount of
 [Add image]
 
 As you can see from the inital design, I left out any users for the start, which I did on purpose. The overall goal was to create a version that I could use on my own. I consider users, authentication and logins as features that would only be added at later stage, once the main parts of the application were working as intended.
+
+### Update
+
+In attempt to clean my existing code, I realized that I lost track of the complexity involved in such an endeavour. I messed my one and only controller. That is why I decided to change my approach in favour of the _walking skeleton_ approach. The focus now is to create a running application with the desired features. Changes from an architectual point of view (e.g. repository pattern) are to be added at a later stage. 
