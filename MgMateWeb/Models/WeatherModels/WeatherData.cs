@@ -48,46 +48,82 @@ namespace MgMateWeb.Models.WeatherModels
 
     public class Coord
     {
+        [JsonProperty("lon")]
         public float lon { get; set; }
+        
+        [JsonProperty("lat")]
         public float lat { get; set; }
     }
 
     public class Main
     {
+        [JsonProperty("temp")]
         public float temp { get; set; }
+        
+        [JsonProperty("feels_like")]
         public float feels_like { get; set; }
+        
+        [JsonProperty("temp_min")]
         public float temp_min { get; set; }
+        
+        [JsonProperty("temp_max")]
         public float temp_max { get; set; }
+        
+        [JsonProperty("pressure")]
         public int pressure { get; set; }
+        
+        [JsonProperty("humidity")]
         public int humidity { get; set; }
     }
 
     public class Wind
     {
+        [JsonProperty("speed")]
         public float speed { get; set; }
+        
+        [JsonProperty("deg")]
         public int deg { get; set; }
     }
 
     public class Clouds
     {
+        [JsonProperty("all")]
         public int all { get; set; }
     }
 
     public class Sys
     {
+        [JsonProperty("type")]
         public int type { get; set; }
+        
+        [JsonProperty("id")]
         public int id { get; set; }
+        
+        [JsonProperty("message")]
         public float message { get; set; }
+        
+        [JsonProperty("country")]
         public string country { get; set; }
+        
+        [JsonProperty("sunrise")]
         public int sunrise { get; set; }
+        
+        [JsonProperty("sunset")]
         public int sunset { get; set; }
     }
 
     public class Weather
     {
+        [JsonProperty("id")]
         public int id { get; set; }
+        
+        [JsonProperty("main")]
         public string main { get; set; }
+        
+        [JsonProperty("description")]
         public string description { get; set; }
+        
+        [JsonProperty("icon")]
         public string icon { get; set; }
     }
 
