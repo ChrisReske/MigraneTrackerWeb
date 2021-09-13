@@ -15,9 +15,15 @@ namespace MgMateWeb.Controllers
         public async Task<IActionResult> GetWeatherDataAsync()
         {
             // Create query Url
+            // city
+            // country
+            // units (for temperature, eg. F, or C°, set C° as default)
+            // appId (KeyVault ?)
+            // sample query = https://api.openweathermap.org/data/2.5/find?q=Hannover&country=de&units=metric&appid=APIKEY
+
 
             // Create and set up WebClient
-            // Add api headers
+
             var webClient = new WebClient();
 
             // Download data
