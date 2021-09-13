@@ -99,7 +99,7 @@ namespace MgMateWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             int id, 
-            [Bind("Id,Description,CreationDate")] PainType painType)
+            [Bind("PainIntensity,Id,Description,CreationDate")] PainType painType)
         {
             if (id != painType.Id)
             {
