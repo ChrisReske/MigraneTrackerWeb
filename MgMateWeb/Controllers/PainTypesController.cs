@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,9 @@ namespace MgMateWeb.Controllers
         // GET: PainTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.PainTypes.ToListAsync());
+            return View(await _context.PainTypes
+                .ToListAsync()
+                .ConfigureAwait(false));
         }
 
         // GET: PainTypes/Details/5
@@ -31,7 +34,9 @@ namespace MgMateWeb.Controllers
             }
 
             var painType = await _context.PainTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id)
+                .ConfigureAwait(false);
+            
             if (painType == null)
             {
                 return NotFound();
@@ -51,12 +56,18 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,CreationDate")] PainType painType)
+        public async Task<IActionResult> Create(
+            [Bind("Id,Description,CreationDate")] 
+            PainType painType)
         {
             if (ModelState.IsValid)
             {
+                painType.CreationDate = DateTime.Now;
+
                 _context.Add(painType);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync()
+                    .ConfigureAwait(false);
+                
                 return RedirectToAction(nameof(Index));
             }
             return View(painType);
@@ -70,7 +81,10 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var painType = await _context.PainTypes.FindAsync(id);
+            var painType = await _context.PainTypes
+                .FindAsync(id)
+                .ConfigureAwait(false);
+            
             if (painType == null)
             {
                 return NotFound();
@@ -83,7 +97,9 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,CreationDate")] PainType painType)
+        public async Task<IActionResult> Edit(
+            int id, 
+            [Bind("Id,Description,CreationDate")] PainType painType)
         {
             if (id != painType.Id)
             {
@@ -95,7 +111,9 @@ namespace MgMateWeb.Controllers
                 try
                 {
                     _context.Update(painType);
-                    await _context.SaveChangesAsync();
+                    await _context
+                        .SaveChangesAsync()
+                        .ConfigureAwait(false);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -103,10 +121,8 @@ namespace MgMateWeb.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -122,7 +138,9 @@ namespace MgMateWeb.Controllers
             }
 
             var painType = await _context.PainTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id)
+                .ConfigureAwait(false);
+            
             if (painType == null)
             {
                 return NotFound();
@@ -136,9 +154,15 @@ namespace MgMateWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var painType = await _context.PainTypes.FindAsync(id);
+            var painType = await _context.PainTypes
+                .FindAsync(id)
+                .ConfigureAwait(false);
+            
             _context.PainTypes.Remove(painType);
-            await _context.SaveChangesAsync();
+            
+            await _context.SaveChangesAsync()
+                .ConfigureAwait(false);
+            
             return RedirectToAction(nameof(Index));
         }
 
