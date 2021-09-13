@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +56,7 @@ namespace MgMateWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                accompanyingSymptom.CreationDate = DateTime.Now;
                 _context.Add(accompanyingSymptom);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
