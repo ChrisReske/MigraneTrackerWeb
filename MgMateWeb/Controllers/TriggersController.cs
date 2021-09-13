@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -59,8 +60,9 @@ namespace MgMateWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                trigger.CreationDate = DateTime.Now;
+
                 _context.Add(trigger);
-                
                 
                 await _context
                     .SaveChangesAsync()
@@ -168,8 +170,7 @@ namespace MgMateWeb.Controllers
 
         private bool TriggerExists(int id)
         {
-            return _context.Triggers
-                .Any(e => e.Id == id);
+            return _context.Triggers.Any(e => e.Id == id);
         }
     }
 }
