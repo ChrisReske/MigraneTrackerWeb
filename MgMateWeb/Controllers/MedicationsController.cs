@@ -99,7 +99,8 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MedicationEffectiveness,Id,Description,CreationDate")] Medication medication)
+        public async Task<IActionResult> Edit(int id, 
+            [Bind("MedicationEffectiveness,Id,Description,CreationDate")] Medication medication)
         {
             if (id != medication.Id)
             {
