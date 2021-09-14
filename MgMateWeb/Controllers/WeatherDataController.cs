@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using MgMateWeb.Dto;
 using MgMateWeb.Models.WeatherModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -24,8 +26,6 @@ namespace MgMateWeb.Controllers
         {
             return View();
         }
-
-        //TODO Get Weather data from API
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -54,11 +54,38 @@ namespace MgMateWeb.Controllers
 
             // Convert Json to object
             var weatherData = JsonConvert.DeserializeObject<WeatherData>(weatherDataJson);
-
+            if(weatherData is null)
+            {
+                return Content("Could not convert Json data to object.");
+            }
             // Convert object to Dto/ViewModel
-            // to be added to general entry
+            var weatherDataDto = MapWeatherDataToDto(weatherData);
 
             return null;
+        }
+
+        #region private methods
+
+        private static WeatherDataDto MapWeatherDataToDto(WeatherData weatherData)
+        {
+            if (weatherData is null)
+            {
+                return new WeatherDataDto();
+            }
+
+            var weatherDataDto = new WeatherDataDto
+            {
+                // Todo: Create individual methods for select statements in this block
+
+                City = weatherData.Details.Select(d => d.Name).FirstOrDefault(),
+                CountryCode = weatherData.Details.Select(d => d.System.Country).FirstOrDefault(),
+                CreationDate = DateTime.Now,
+                Humidity = weatherData.Details.Select(d => d.Main.Humidity).FirstOrDefault(),
+                Pressure = weatherData.Details.Select(d => d.Main.Pressure).FirstOrDefault(),
+                Temperature = weatherData.Details.Select(d => d.Main.Temperature).FirstOrDefault()
+            };
+
+            return weatherDataDto;
         }
 
         private static async Task<string> DownloadJsonFromApiAsync(string uri)
@@ -106,5 +133,7 @@ namespace MgMateWeb.Controllers
             
             return apiKey;
         }
+
+        #endregion
     }
 }
