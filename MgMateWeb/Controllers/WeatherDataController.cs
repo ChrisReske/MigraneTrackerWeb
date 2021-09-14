@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using System.Web;
 using MgMateWeb.Models.WeatherModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using static System.String;
 
 namespace MgMateWeb.Controllers
@@ -53,6 +53,7 @@ namespace MgMateWeb.Controllers
             }
 
             // Convert Json to object
+            var weatherData = JsonConvert.DeserializeObject<WeatherDataNew>(weatherDataJson);
 
 
 
