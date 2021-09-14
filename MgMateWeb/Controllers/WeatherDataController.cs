@@ -61,7 +61,7 @@ namespace MgMateWeb.Controllers
             // Convert object to Dto/ViewModel
             var weatherDataDto = MapWeatherDataToDto(weatherData);
 
-            return null;
+            return View(weatherDataDto);
         }
 
         #region private methods
