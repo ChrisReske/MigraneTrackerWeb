@@ -1,11 +1,15 @@
-﻿namespace MgMateWeb.Models.WeatherModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MgMateWeb.Models.WeatherModels
 {
     public class WeatherDataFormModel
     {
+        [Required]
         public string City { get; set; }
+        
+        [Required]
         public string Country { get; set; }
 
-        // Todo: Create Enum and Dropdown / Checkboxes for options other than 'metric'
-        public string MeasurementUnit { get; set; }
+        public MeasurementUnit MeasurementUnit { get; set; }
     }
 }
