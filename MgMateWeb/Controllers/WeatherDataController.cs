@@ -53,14 +53,10 @@ namespace MgMateWeb.Controllers
             }
 
             // Convert Json to object
-            var weatherData = JsonConvert.DeserializeObject<WeatherDataNew>(weatherDataJson);
-
-
+            var weatherData = JsonConvert.DeserializeObject<WeatherData>(weatherDataJson);
 
             // Convert object to Dto/ViewModel
             // to be added to general entry
-
-
 
             return null;
         }
