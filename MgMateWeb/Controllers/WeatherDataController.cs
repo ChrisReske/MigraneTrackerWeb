@@ -31,22 +31,29 @@ namespace MgMateWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GetWeatherDataAsync(WeatherDataFormModel formModel)
         {
-
             if (formModel is null)
             {
                 return Content("Form model was null.");
             }
 
             // Build query url
-            var url = BuildQueryUrl(formModel);
-
-            // Create and set up WebClient
-
-            var webClient = new WebClient();
+            var uri = BuildQueryUrl(formModel);
+            if(IsNullOrEmpty(uri) || IsNullOrWhiteSpace(uri))
+            {
+                return Content("Uri for API query was null");
+            }
 
             // Download data
+            var weatherDataJson = await DownloadJsonFromApiAsync(uri)
+                .ConfigureAwait(false);
+            if(IsNullOrEmpty(weatherDataJson) 
+               || IsNullOrWhiteSpace(weatherDataJson))
+            {
+                return Content("Data returned from API was either null, empty or whitespace");
+            }
 
             // Convert Json to object
+
 
 
             // Convert object to Dto/ViewModel
@@ -55,6 +62,21 @@ namespace MgMateWeb.Controllers
 
 
             return null;
+        }
+
+        private static async Task<string> DownloadJsonFromApiAsync(string uri)
+        {
+            if(IsNullOrEmpty(uri) || IsNullOrWhiteSpace(uri))
+            {
+                return Empty;
+            }
+
+            var webClient = new WebClient();
+            var weatherDataJson = await webClient
+                .DownloadStringTaskAsync(uri)
+                .ConfigureAwait(false);
+
+            return await Task.FromResult(weatherDataJson).ConfigureAwait(false);
         }
 
         private string BuildQueryUrl(WeatherDataFormModel formModel)
