@@ -1,8 +1,12 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using MgMateWeb.Models.WeatherModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
+using static System.String;
 
 namespace MgMateWeb.Controllers
 {
@@ -28,20 +32,13 @@ namespace MgMateWeb.Controllers
         public async Task<IActionResult> GetWeatherDataAsync(WeatherDataFormModel formModel)
         {
 
+            if (formModel is null)
+            {
+                return Content("Form model was null.");
+            }
 
-            // Get ApiKey
-            var apiKey = GetWeatherApiKey();
-
-            if (apiKey is null)
-                return Content("Could not retrieve ApiKey");
-            
-            // Create query Url
-            // city
-            // country
-            // units (for temperature, eg. F, or C°, set C° as default)
-            // appId (later => retrieve from KeyVault)
-            // sample query = https://api.openweathermap.org/data/2.5/find?q=Hannover&country=de&units=metric&appid=APIKEY
-
+            // Build query url
+            var url = BuildQueryUrl(formModel);
 
             // Create and set up WebClient
 
@@ -58,6 +55,28 @@ namespace MgMateWeb.Controllers
 
 
             return null;
+        }
+
+        private string BuildQueryUrl(WeatherDataFormModel formModel)
+        {
+            const string weatherApiBaseUrl = @"https://api.openweathermap.org/data/2.5/find";
+
+            var apiKey = GetWeatherApiKey();
+            if(IsNullOrEmpty(apiKey) || IsNullOrWhiteSpace(apiKey))
+            {
+                return Empty;
+            }
+
+            var uriBuilder = new UriBuilder(weatherApiBaseUrl);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["q"] = formModel.City;
+            query["country"] = formModel.Country;
+            query["units"] = formModel.MeasurementUnit.ToString().ToLower();
+            query["appid"] = apiKey;
+            uriBuilder.Query = query.ToString()!;
+
+            var url = uriBuilder.ToString();
+            return url;
         }
 
         private string GetWeatherApiKey()
