@@ -23,7 +23,7 @@ namespace MgMateWeb.Models.WeatherModels
         public Wind Wind { get; set; }
     
         [JsonProperty("sys")]
-        public MgMateWeb.Models.WeatherModels.System System { get; set; }
+        public System System { get; set; }
     
         [JsonProperty("rain")]
         public Rain Rain { get; set; }

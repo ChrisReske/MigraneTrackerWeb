@@ -18,6 +18,6 @@ namespace MgMateWeb.Persistence
         public PainIntensity PainIntensity { get; set; }
         public DbSet<PainType> PainTypes { get; set; }
         public DbSet<Trigger> Triggers { get; set; }
-        public DbSet<WeatherData> WeatherData { get; set; }
+        public DbSet<WeatherDataEntry> WeatherData { get; set; }
     }
 }
