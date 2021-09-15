@@ -8,24 +8,24 @@ using MgMateWeb.Persistence;
 
 namespace MgMateWeb.Controllers
 {
-    public class AccompanyingSymptomsController : Controller
+    public class TriggersController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public AccompanyingSymptomsController(ApplicationDbContext context)
+        public TriggersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: AccompanyingSymptoms
+        // GET: Triggers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.AccompanyingSymptoms
+            return View(await _context.Triggers
                 .ToListAsync()
                 .ConfigureAwait(false));
         }
 
-        // GET: AccompanyingSymptoms/Details/5
+        // GET: Triggers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,43 +33,47 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptom = await _context.AccompanyingSymptoms
+            var trigger = await _context.Triggers
                 .FirstOrDefaultAsync(m => m.Id == id)
                 .ConfigureAwait(false);
-            if (accompanyingSymptom == null)
+            
+            if (trigger == null)
             {
                 return NotFound();
             }
 
-            return View(accompanyingSymptom);
+            return View(trigger);
         }
 
-        // GET: AccompanyingSymptoms/Create
+        // GET: Triggers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: AccompanyingSymptoms/Create
+        // POST: Triggers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,CreationDate")] AccompanyingSymptom accompanyingSymptom)
+        public async Task<IActionResult> Create([Bind("Id,Description,CreationDate")] Trigger trigger)
         {
             if (ModelState.IsValid)
             {
-                accompanyingSymptom.CreationDate = DateTime.Now;
-                _context.Add(accompanyingSymptom);
+                trigger.CreationDate = DateTime.Now;
+
+                _context.Add(trigger);
+                
                 await _context
                     .SaveChangesAsync()
                     .ConfigureAwait(false);
+                
                 return RedirectToAction(nameof(Index));
             }
-            return View(accompanyingSymptom);
+            return View(trigger);
         }
 
-        // GET: AccompanyingSymptoms/Edit/5
+        // GET: Triggers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,25 +81,26 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptom = await _context
-                .AccompanyingSymptoms
+            var trigger = await _context.Triggers
                 .FindAsync(id)
                 .ConfigureAwait(false);
-            if (accompanyingSymptom == null)
+            
+            if (trigger == null)
             {
                 return NotFound();
             }
-            return View(accompanyingSymptom);
+            
+            return View(trigger);
         }
 
-        // POST: AccompanyingSymptoms/Edit/5
+        // POST: Triggers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,CreationDate")] AccompanyingSymptom accompanyingSymptom)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,CreationDate")] Trigger trigger)
         {
-            if (id != accompanyingSymptom.Id)
+            if (id != trigger.Id)
             {
                 return NotFound();
             }
@@ -104,26 +109,29 @@ namespace MgMateWeb.Controllers
             {
                 try
                 {
-                    _context.Update(accompanyingSymptom);
+                    _context.Update(trigger);
+                    
                     await _context
                         .SaveChangesAsync()
                         .ConfigureAwait(false);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AccompanyingSymptomExists(accompanyingSymptom.Id))
+                    if (!TriggerExists(trigger.Id))
                     {
                         return NotFound();
                     }
-
-                    throw;
+                    else
+                    {
+                        throw;
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(accompanyingSymptom);
+            return View(trigger);
         }
 
-        // GET: AccompanyingSymptoms/Delete/5
+        // GET: Triggers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,42 +139,38 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptom = await _context.AccompanyingSymptoms
+            var trigger = await _context.Triggers
                 .FirstOrDefaultAsync(m => m.Id == id)
                 .ConfigureAwait(false);
-           
-            if (accompanyingSymptom == null)
+            
+            if (trigger == null)
             {
                 return NotFound();
             }
 
-            return View(accompanyingSymptom);
+            return View(trigger);
         }
 
-        // POST: AccompanyingSymptoms/Delete/5
+        // POST: Triggers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var accompanyingSymptom = await _context.AccompanyingSymptoms
+            var trigger = await _context.Triggers
                 .FindAsync(id)
                 .ConfigureAwait(false);
             
-            _context.AccompanyingSymptoms
-                .Remove(accompanyingSymptom);
+            _context.Triggers.Remove(trigger);
             
-            await _context
-                .SaveChangesAsync()
+            await _context.SaveChangesAsync()
                 .ConfigureAwait(false);
             
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AccompanyingSymptomExists(int id)
+        private bool TriggerExists(int id)
         {
-            return _context
-                .AccompanyingSymptoms
-                .Any(e => e.Id == id);
+            return _context.Triggers.Any(e => e.Id == id);
         }
     }
 }

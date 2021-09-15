@@ -8,24 +8,24 @@ using MgMateWeb.Persistence;
 
 namespace MgMateWeb.Controllers
 {
-    public class AccompanyingSymptomsController : Controller
+    public class MedicationsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public AccompanyingSymptomsController(ApplicationDbContext context)
+        public MedicationsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: AccompanyingSymptoms
+        // GET: Medications
         public async Task<IActionResult> Index()
         {
-            return View(await _context.AccompanyingSymptoms
+            return View(await _context.Medications
                 .ToListAsync()
                 .ConfigureAwait(false));
         }
 
-        // GET: AccompanyingSymptoms/Details/5
+        // GET: Medications/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,43 +33,49 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptom = await _context.AccompanyingSymptoms
+            var medication = await _context.Medications
                 .FirstOrDefaultAsync(m => m.Id == id)
                 .ConfigureAwait(false);
-            if (accompanyingSymptom == null)
+            
+            if (medication == null)
             {
                 return NotFound();
             }
 
-            return View(accompanyingSymptom);
+            return View(medication);
         }
 
-        // GET: AccompanyingSymptoms/Create
+        // GET: Medications/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: AccompanyingSymptoms/Create
+        // POST: Medications/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,CreationDate")] AccompanyingSymptom accompanyingSymptom)
+        public async Task<IActionResult> Create(
+            [Bind("MedicationEffectiveness,Id,Description,CreationDate")] 
+            Medication medication)
         {
             if (ModelState.IsValid)
             {
-                accompanyingSymptom.CreationDate = DateTime.Now;
-                _context.Add(accompanyingSymptom);
+                medication.CreationDate = DateTime.Now;
+                _context.Add(medication);
+                
                 await _context
                     .SaveChangesAsync()
                     .ConfigureAwait(false);
+                
                 return RedirectToAction(nameof(Index));
             }
-            return View(accompanyingSymptom);
+            
+            return View(medication);
         }
 
-        // GET: AccompanyingSymptoms/Edit/5
+        // GET: Medications/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,25 +83,26 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptom = await _context
-                .AccompanyingSymptoms
+            var medication = await _context.Medications
                 .FindAsync(id)
                 .ConfigureAwait(false);
-            if (accompanyingSymptom == null)
+            
+            if (medication == null)
             {
                 return NotFound();
             }
-            return View(accompanyingSymptom);
+            return View(medication);
         }
 
-        // POST: AccompanyingSymptoms/Edit/5
+        // POST: Medications/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,CreationDate")] AccompanyingSymptom accompanyingSymptom)
+        public async Task<IActionResult> Edit(int id, 
+            [Bind("MedicationEffectiveness,Id,Description,CreationDate")] Medication medication)
         {
-            if (id != accompanyingSymptom.Id)
+            if (id != medication.Id)
             {
                 return NotFound();
             }
@@ -104,14 +111,14 @@ namespace MgMateWeb.Controllers
             {
                 try
                 {
-                    _context.Update(accompanyingSymptom);
+                    _context.Update(medication);
                     await _context
                         .SaveChangesAsync()
                         .ConfigureAwait(false);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AccompanyingSymptomExists(accompanyingSymptom.Id))
+                    if (!MedicationExists(medication.Id))
                     {
                         return NotFound();
                     }
@@ -120,10 +127,10 @@ namespace MgMateWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(accompanyingSymptom);
+            return View(medication);
         }
 
-        // GET: AccompanyingSymptoms/Delete/5
+        // GET: Medications/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,42 +138,36 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptom = await _context.AccompanyingSymptoms
+            var medication = await _context.Medications
                 .FirstOrDefaultAsync(m => m.Id == id)
                 .ConfigureAwait(false);
-           
-            if (accompanyingSymptom == null)
+            
+            if (medication == null)
             {
                 return NotFound();
             }
 
-            return View(accompanyingSymptom);
+            return View(medication);
         }
 
-        // POST: AccompanyingSymptoms/Delete/5
+        // POST: Medications/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var accompanyingSymptom = await _context.AccompanyingSymptoms
+            var medication = await _context.Medications
                 .FindAsync(id)
                 .ConfigureAwait(false);
             
-            _context.AccompanyingSymptoms
-                .Remove(accompanyingSymptom);
-            
-            await _context
-                .SaveChangesAsync()
-                .ConfigureAwait(false);
+            _context.Medications.Remove(medication);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AccompanyingSymptomExists(int id)
+        private bool MedicationExists(int id)
         {
-            return _context
-                .AccompanyingSymptoms
-                .Any(e => e.Id == id);
+            return _context.Medications.Any(e => e.Id == id);
         }
     }
 }

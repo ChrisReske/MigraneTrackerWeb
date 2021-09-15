@@ -15,9 +15,9 @@ namespace MgMateWeb.Persistence.Entities
         public DbSet<Entry> Entries { get; set; }
         public DbSet<Medication> Medications { get; set; }
         public MedicationEffectiveness MedicationEffectiveness { get; set; }
-        public DbSet<PainIntensity> PainIntensities { get; set; }
+        public PainIntensity PainIntensity { get; set; }
         public DbSet<PainType> PainTypes { get; set; }
         public DbSet<Trigger> Triggers { get; set; }
-        public DbSet<WeatherData> WeatherData { get; set; }
+        public DbSet<WeatherDataEntry> WeatherData { get; set; }
     }
 }

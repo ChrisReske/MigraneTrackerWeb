@@ -1,7 +1,23 @@
-﻿namespace MgMateWeb.Models.EntryModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MgMateWeb.Models.EntryModels
 {
-    public class PainIntensity : BaseEntryComponent
+    public enum PainIntensity
     {
+        [Display(Name="Low")]
+        Low,
         
+        [Display(Name = "Medium")]
+        Medium,
+        
+        [Display(Name = "High")]
+        High,
+        
+        [Display(Name="Very High")]
+        VeryHigh,
+        
+        [Display(Name="Crippling")]
+        Crippling
+
     }
 }
