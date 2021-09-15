@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -44,10 +45,12 @@ namespace MgMateWeb.Controllers
         public IActionResult Create()
         {
             var painTypes = _context.PainTypes.ToList();
+            var triggers = _context.Triggers.ToList();
 
             var model = new Entry()
             {
-                PainTypes = painTypes
+                PainTypes = painTypes,
+                Triggers = triggers
             };
 
             return View(model);
