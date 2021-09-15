@@ -46,11 +46,13 @@ namespace MgMateWeb.Controllers
         {
             var painTypes = _context.PainTypes.ToList();
             var triggers = _context.Triggers.ToList();
+            var medications = _context.Medications.ToList();
 
             var model = new Entry()
             {
                 PainTypes = painTypes,
-                Triggers = triggers
+                Triggers = triggers,
+                Medications = medications
             };
 
             return View(model);
