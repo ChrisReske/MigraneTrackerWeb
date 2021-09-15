@@ -36,32 +36,41 @@ namespace MgMateWeb.Controllers
                 return Content("Form model was null.");
             }
 
+            var weatherDataDto = await GetWeatherData(formModel);
+
+            return View(weatherDataDto);
+        }
+
+        private async Task<WeatherDataDto> GetWeatherData(WeatherDataFormModel formModel)
+        {
+            var weatherDataDto = new WeatherDataDto();
+
             // Build query url
             var uri = BuildQueryUrl(formModel);
-            if(IsNullOrEmpty(uri) || IsNullOrWhiteSpace(uri))
+            if (IsNullOrEmpty(uri) || IsNullOrWhiteSpace(uri))
             {
-                return Content("Uri for API query was null");
+                return weatherDataDto;
             }
 
             // Download data
             var weatherDataJson = await DownloadJsonFromApiAsync(uri)
                 .ConfigureAwait(false);
-            if(IsNullOrEmpty(weatherDataJson) 
-               || IsNullOrWhiteSpace(weatherDataJson))
+            if (IsNullOrEmpty(weatherDataJson)
+                || IsNullOrWhiteSpace(weatherDataJson))
             {
-                return Content("Data returned from API was either null, empty or whitespace");
+                return weatherDataDto;
             }
 
             // Convert Json to object
             var weatherData = JsonConvert.DeserializeObject<WeatherData>(weatherDataJson);
-            if(weatherData is null)
+            if (weatherData is null)
             {
-                return Content("Could not convert Json data to object.");
+                return weatherDataDto;
             }
-            // Convert object to Dto/ViewModel
-            var weatherDataDto = MapWeatherDataToDto(weatherData);
 
-            return View(weatherDataDto);
+            // Convert object to Dto/ViewModel
+            weatherDataDto = MapWeatherDataToDto(weatherData);
+            return weatherDataDto;
         }
 
         #region private methods
