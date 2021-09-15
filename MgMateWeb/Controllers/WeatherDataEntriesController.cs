@@ -33,7 +33,7 @@ namespace MgMateWeb.Controllers
         // GET: WeatherDataEntries
         public async Task<IActionResult> Index()
         {
-            return View(await _context.WeatherData.ToListAsync());
+            return View(await _context.WeatherData.ToListAsync().ConfigureAwait(false));
         }
 
         // GET: WeatherDataEntries/Details/5
@@ -45,7 +45,7 @@ namespace MgMateWeb.Controllers
             }
 
             var weatherDataEntry = await _context.WeatherData
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id).ConfigureAwait(false);
             if (weatherDataEntry == null)
             {
                 return NotFound();
@@ -72,20 +72,39 @@ namespace MgMateWeb.Controllers
                 return Content("Model state is invalid");
             }
 
-
             var weatherDataDto = await GetWeatherData(weatherDataFormModel)
                 .ConfigureAwait(false);
+            if(weatherDataDto is null)
+            {
+                return Content("Not weather data available.");
+            }
 
-            var weatherDataEntry = new WeatherDataEntry();
-
-
-
+            var weatherDataEntry = MapDtoToWeatherDataEntry(weatherDataDto);
 
             _context.Add(weatherDataEntry);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             
             return RedirectToAction(nameof(Index));
 
+        }
+
+        private static WeatherDataEntry MapDtoToWeatherDataEntry(WeatherDataDto weatherDataDto)
+        {
+            if (weatherDataDto is null)
+            {
+                return new WeatherDataEntry();
+            }
+
+            var weatherDataEntry = new WeatherDataEntry
+            {
+                CreationDate = weatherDataDto.CreationDate,
+                City = weatherDataDto.City,
+                CountryCode = weatherDataDto.CountryCode,
+                Humidity = weatherDataDto.Humidity,
+                Pressure = weatherDataDto.Pressure,
+                Temperature = weatherDataDto.Temperature
+            };
+            return weatherDataEntry;
         }
 
         // GET: WeatherDataEntries/Edit/5
@@ -96,7 +115,7 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var weatherDataEntry = await _context.WeatherData.FindAsync(id);
+            var weatherDataEntry = await _context.WeatherData.FindAsync(id).ConfigureAwait(false);
             if (weatherDataEntry == null)
             {
                 return NotFound();
@@ -121,7 +140,8 @@ namespace MgMateWeb.Controllers
                 try
                 {
                     _context.Update(weatherDataEntry);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync()
+                        .ConfigureAwait(false);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -148,7 +168,7 @@ namespace MgMateWeb.Controllers
             }
 
             var weatherDataEntry = await _context.WeatherData
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id).ConfigureAwait(false);
             if (weatherDataEntry == null)
             {
                 return NotFound();
@@ -162,9 +182,9 @@ namespace MgMateWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var weatherDataEntry = await _context.WeatherData.FindAsync(id);
+            var weatherDataEntry = await _context.WeatherData.FindAsync(id).ConfigureAwait(false);
             _context.WeatherData.Remove(weatherDataEntry);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction(nameof(Index));
         }
 
