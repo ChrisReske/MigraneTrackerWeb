@@ -8,27 +8,17 @@ namespace MgMateWeb.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PainIntensities",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PainIntensities", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "WeatherData",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CountryCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Temperature = table.Column<float>(type: "real", nullable: false),
+                    Pressure = table.Column<int>(type: "int", nullable: false),
+                    Humidity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,7 +32,7 @@ namespace MgMateWeb.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PainIntensityId = table.Column<int>(type: "int", nullable: true),
+                    PainIntensity = table.Column<int>(type: "int", nullable: false),
                     PainDuration = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WasPainIncreasedDuringPhysicalActivity = table.Column<bool>(type: "bit", nullable: false),
                     DurationOfIncapacitation = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -52,12 +42,6 @@ namespace MgMateWeb.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Entries", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Entries_PainIntensities_PainIntensityId",
-                        column: x => x.PainIntensityId,
-                        principalTable: "PainIntensities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Entries_WeatherData_WeatherDataId",
                         column: x => x.WeatherDataId,
@@ -115,6 +99,7 @@ namespace MgMateWeb.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PainIntensity = table.Column<int>(type: "int", nullable: false),
                     EntryId = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -157,11 +142,6 @@ namespace MgMateWeb.Migrations
                 column: "EntryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Entries_PainIntensityId",
-                table: "Entries",
-                column: "PainIntensityId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Entries_WeatherDataId",
                 table: "Entries",
                 column: "WeatherDataId");
@@ -198,9 +178,6 @@ namespace MgMateWeb.Migrations
 
             migrationBuilder.DropTable(
                 name: "Entries");
-
-            migrationBuilder.DropTable(
-                name: "PainIntensities");
 
             migrationBuilder.DropTable(
                 name: "WeatherData");
