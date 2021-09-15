@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
-using MgMateWeb.Persistence;
+using MgMateWeb.Persistence.Entities;
 
 namespace MgMateWeb.Controllers
 {

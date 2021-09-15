@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Models.WeatherModels;
-using MgMateWeb.Persistence;
+using MgMateWeb.Persistence.Entities;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using static System.String;

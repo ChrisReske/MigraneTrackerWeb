@@ -1,4 +1,3 @@
-using System;
 using MgMateWeb.Interfaces.UtilsInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces.ControllerUtilsInterfaces;
 using Microsoft.AspNetCore.Builder;
@@ -36,12 +35,6 @@ namespace MgMateWeb
                     Configuration.GetConnectionString("DefaultConnection"),
                     b => b
                         .MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-
-            #endregion
-
-            #region  AutoMapper
-
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             #endregion
 
