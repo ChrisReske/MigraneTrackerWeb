@@ -116,7 +116,7 @@ namespace MgMateWeb.Controllers
             var uriBuilder = new UriBuilder(weatherApiBaseUrl);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
             query["q"] = formModel.City;
-            query["country"] = formModel.Country;
+            query["country"] = formModel.CountryCode;
             query["units"] = formModel.MeasurementUnit.ToString().ToLower();
             query["appid"] = apiKey;
             uriBuilder.Query = query.ToString()!;

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
+using MgMateWeb.Models.WeatherModels;
 using MgMateWeb.Persistence;
 
 namespace MgMateWeb.Controllers
@@ -51,15 +52,23 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CreationDate,City,CountryCode,Temperature,Pressure,Humidity")] WeatherDataEntry weatherDataEntry)
+        public async Task<IActionResult> Create([Bind("Id,City,CountryCode,MeasurementUnit")] WeatherDataFormModel weatherDataFormModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(weatherDataEntry);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Content("Model state is invalid");
             }
-            return View(weatherDataEntry);
+
+            var weatherDataEntry = new WeatherDataEntry();
+
+
+
+
+            _context.Add(weatherDataEntry);
+            await _context.SaveChangesAsync();
+            
+            return RedirectToAction(nameof(Index));
+
         }
 
         // GET: WeatherDataEntries/Edit/5

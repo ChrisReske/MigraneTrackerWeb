@@ -8,7 +8,7 @@ namespace MgMateWeb.Models.WeatherModels
         public string City { get; set; }
         
         [Required]
-        public string Country { get; set; }
+        public string CountryCode { get; set; }
 
         public MeasurementUnit MeasurementUnit { get; set; }
     }
