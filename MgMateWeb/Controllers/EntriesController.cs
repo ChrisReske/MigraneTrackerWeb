@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Persistence.Entities;
@@ -46,7 +43,14 @@ namespace MgMateWeb.Controllers
         // GET: Entries/Create
         public IActionResult Create()
         {
-            return View();
+            var painTypes = _context.PainTypes.ToList();
+
+            var model = new Entry()
+            {
+                PainTypes = painTypes
+            };
+
+            return View(model);
         }
 
         // POST: Entries/Create

@@ -14,8 +14,10 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control" />
+                <label asp-for="PainTypes" class="control-label"></label>
+                @Html.ListBoxFor(m => m.PainTypes, 
+                    new MultiSelectList(Model.PainTypes, "Id", "Description"), 
+                    new{@class="form-control", multiple="multiple", id="painTypeDropdown"})
                 <span asp-validation-for="CreationDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -55,5 +57,12 @@
 </div>
 
 @section Scripts {
+    
+    <script>
+        $(document).ready(function(){
+            $('#painTypeDropdown').multiselect();
+        });
+    </script>
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
