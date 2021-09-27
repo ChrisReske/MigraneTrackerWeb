@@ -58,7 +58,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="AccompanyingSymptoms"></label>
-                @Html.ListBoxFor(m => m.AccompanyingSymptoms, 
+                @Html.ListBoxFor(m => m.SelectedSymptoms, 
                     new MultiSelectList(Model.AccompanyingSymptoms, "Id", "Description"), 
                     new
                     {

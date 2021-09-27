@@ -15,6 +15,7 @@ namespace MgMateWeb.Models.EntryModels
         public float HoursOfIncapacitation { get; set; }
         public float HoursOfActivity { get; set; }
         public List<WeatherDataEntry> WeatherData { get; set; }
+        public IEnumerable<int> SelectedSymptoms { get; set; }
 
     }
 }
