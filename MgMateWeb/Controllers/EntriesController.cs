@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,7 +50,7 @@ namespace MgMateWeb.Controllers
             var weatherData = _context.WeatherData.ToList();
             var accompanyingSymptoms = _context.AccompanyingSymptoms.ToList();
 
-            var model = new Entry()
+            var model = new EntryFormModel()
             {
                 PainTypes = painTypes,
                 Triggers = triggers,
@@ -66,16 +67,18 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("Id,CreationDate,PainIntensity,PainDuration,WasPainIncreasedDuringPhysicalActivity,DurationOfIncapacitation,DurationOfActivity,WeatherData")] Entry entry)
+        public async Task<IActionResult> Create(EntryFormModel entryFormModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(entry);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View(entryFormModel);
             }
-            return View(entry);
+
+            var entry = MapEntryFormModelToEntryModel(entryFormModel);
+
+            _context.Add(entry);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Entries/Edit/5
@@ -162,5 +165,29 @@ namespace MgMateWeb.Controllers
         {
             return _context.Entries.Any(e => e.Id == id);
         }
+
+        #region Custom private methods
+
+        private static Entry MapEntryFormModelToEntryModel(EntryFormModel entryFormModel)
+        {
+            var entry = new Entry()
+            {
+                AccompanyingSymptoms = entryFormModel.AccompanyingSymptoms,
+                CreationDate = DateTime.Now,
+                HoursOfActivity = entryFormModel.HoursOfActivity,
+                HoursOfIncapacitation = entryFormModel.HoursOfIncapacitation,
+                HoursOfPain = entryFormModel.HoursOfPain,
+                Medications = entryFormModel.Medications,
+                PainIntensity = entryFormModel.PainIntensity,
+                PainTypes = entryFormModel.PainTypes,
+                Triggers = entryFormModel.Triggers,
+                WasPainIncreasedDuringPhysicalActivity = entryFormModel.WasPainIncreasedDuringPhysicalActivity,
+                WeatherData = entryFormModel.WeatherData
+            };
+            return entry;
+        }
+
+
+        #endregion
     }
 }
