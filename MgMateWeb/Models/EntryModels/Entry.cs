@@ -16,7 +16,7 @@ namespace MgMateWeb.Models.EntryModels
         public List<Medication> Medications { get; set; }
         public float HoursOfIncapacitation { get; set; }
         public float HoursOfActivity { get; set; }
-        public WeatherDataEntry WeatherData { get; set; }
+        public List<WeatherDataEntry> WeatherData { get; set; }
 
     }
 }

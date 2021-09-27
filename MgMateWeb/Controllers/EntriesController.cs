@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -47,12 +46,14 @@ namespace MgMateWeb.Controllers
             var painTypes = _context.PainTypes.ToList();
             var triggers = _context.Triggers.ToList();
             var medications = _context.Medications.ToList();
+            var weatherData = _context.WeatherData.ToList();
 
             var model = new Entry()
             {
                 PainTypes = painTypes,
                 Triggers = triggers,
-                Medications = medications
+                Medications = medications,
+                WeatherData = weatherData
             };
 
             return View(model);
@@ -63,7 +64,8 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CreationDate,PainIntensity,PainDuration,WasPainIncreasedDuringPhysicalActivity,DurationOfIncapacitation,DurationOfActivity")] Entry entry)
+        public async Task<IActionResult> Create(
+            [Bind("Id,CreationDate,PainIntensity,PainDuration,WasPainIncreasedDuringPhysicalActivity,DurationOfIncapacitation,DurationOfActivity,WeatherData")] Entry entry)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +97,7 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CreationDate,PainIntensity,PainDuration,WasPainIncreasedDuringPhysicalActivity,DurationOfIncapacitation,DurationOfActivity")] Entry entry)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CreationDate,PainIntensity,PainDuration,WasPainIncreasedDuringPhysicalActivity,DurationOfIncapacitation,DurationOfActivity,WeatherData")] Entry entry)
         {
             if (id != entry.Id)
             {
