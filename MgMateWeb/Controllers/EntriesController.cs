@@ -47,13 +47,15 @@ namespace MgMateWeb.Controllers
             var triggers = _context.Triggers.ToList();
             var medications = _context.Medications.ToList();
             var weatherData = _context.WeatherData.ToList();
+            var accompanyingSymptoms = _context.AccompanyingSymptoms.ToList();
 
             var model = new Entry()
             {
                 PainTypes = painTypes,
                 Triggers = triggers,
                 Medications = medications,
-                WeatherData = weatherData
+                WeatherData = weatherData,
+                AccompanyingSymptoms = accompanyingSymptoms
             };
 
             return View(model);
