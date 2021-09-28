@@ -76,15 +76,7 @@ namespace MgMateWeb.Controllers
                 return View(entryFormModel);
             }
 
-            var entryList = CreateInitialEntryList(entryFormModel);
-            if (entryList is null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
-
-            var test = entryList;
-
+            var test = entryFormModel;
 
             //_context.Add(entry);
             //await _context.SaveChangesAsync();
@@ -177,22 +169,6 @@ namespace MgMateWeb.Controllers
         }
 
         #region Custom private methods
-
-        private List<EntryDto> CreateInitialEntryList(EntryFormModel entryFormModel)
-        {
-            if(entryFormModel is null)
-            {
-                return new List<EntryDto>();
-            }
-
-            var entryList = entryFormModel.SelectedMedications.Select(
-                medicationId => new EntryDto()
-                {
-                    Medication = _context.Medications.Find(medicationId),
-                }).ToList();
-            return entryList;
-        }
-
 
         #endregion
     }
