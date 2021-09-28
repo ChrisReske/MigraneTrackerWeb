@@ -69,7 +69,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Triggers" class="control-label"></label>
-                @Html.ListBoxFor(m => m.Triggers,
+                @Html.ListBoxFor(m => m.SelectedTriggers,
                     new MultiSelectList(Model.Triggers, "Id", "Description"),
                     new
                     {
