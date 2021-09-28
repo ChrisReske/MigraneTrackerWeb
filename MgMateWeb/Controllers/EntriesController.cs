@@ -77,7 +77,10 @@ namespace MgMateWeb.Controllers
             }
 
             var entryList = CreateInitialEntryList(entryFormModel);
-
+            if (entryList is null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
 
             var test = entryList;
@@ -177,6 +180,11 @@ namespace MgMateWeb.Controllers
 
         private List<EntryDto> CreateInitialEntryList(EntryFormModel entryFormModel)
         {
+            if(entryFormModel is null)
+            {
+                return new List<EntryDto>();
+            }
+
             var entryList = entryFormModel.SelectedMedications.Select(
                 medicationId => new EntryDto()
                 {
