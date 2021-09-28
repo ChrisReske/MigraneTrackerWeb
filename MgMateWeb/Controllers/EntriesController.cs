@@ -74,10 +74,12 @@ namespace MgMateWeb.Controllers
                 return View(entryFormModel);
             }
 
-            var entry = MapEntryFormModelToEntryModel(entryFormModel);
 
-            _context.Add(entry);
-            await _context.SaveChangesAsync();
+            // Todo LATER (first, create adequate model / object structure and relations
+            //var entry = MapEntryFormModelToEntryModel(entryFormModel);
+
+            //_context.Add(entry);
+            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -168,24 +170,24 @@ namespace MgMateWeb.Controllers
 
         #region Custom private methods
 
-        private static Entry MapEntryFormModelToEntryModel(EntryFormModel entryFormModel)
-        {
-            var entry = new Entry()
-            {
-                AccompanyingSymptoms = entryFormModel.AccompanyingSymptoms,
-                CreationDate = DateTime.Now,
-                HoursOfActivity = entryFormModel.HoursOfActivity,
-                HoursOfIncapacitation = entryFormModel.HoursOfIncapacitation,
-                HoursOfPain = entryFormModel.HoursOfPain,
-                Medications = entryFormModel.Medications,
-                PainIntensity = entryFormModel.PainIntensity,
-                PainTypes = entryFormModel.PainTypes,
-                Triggers = entryFormModel.Triggers,
-                WasPainIncreasedDuringPhysicalActivity = entryFormModel.WasPainIncreasedDuringPhysicalActivity,
-                WeatherData = entryFormModel.WeatherData
-            };
-            return entry;
-        }
+        //private static Entry MapEntryFormModelToEntryModel(EntryFormModel entryFormModel)
+        //{
+        //    var entry = new Entry()
+        //    {
+        //        AccompanyingSymptoms = entryFormModel.AccompanyingSymptoms,
+        //        CreationDate = DateTime.Now,
+        //        HoursOfActivity = entryFormModel.HoursOfActivity,
+        //        HoursOfIncapacitation = entryFormModel.HoursOfIncapacitation,
+        //        HoursOfPain = entryFormModel.HoursOfPain,
+        //        Medications = entryFormModel.Medications,
+        //        PainIntensity = entryFormModel.PainIntensity,
+        //        PainTypes = entryFormModel.PainTypes,
+        //        Triggers = entryFormModel.Triggers,
+        //        WasPainIncreasedDuringPhysicalActivity = entryFormModel.WasPainIncreasedDuringPhysicalActivity,
+        //        WeatherData = entryFormModel.WeatherData
+        //    };
+        //    return entry;
+        //}
 
 
         #endregion
