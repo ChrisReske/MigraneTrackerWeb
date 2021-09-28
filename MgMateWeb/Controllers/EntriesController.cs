@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Persistence.Entities;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace MgMateWeb.Controllers
 {
@@ -74,9 +76,12 @@ namespace MgMateWeb.Controllers
                 return View(entryFormModel);
             }
 
+            var entryList = CreateInitialEntryList(entryFormModel);
 
-            // Todo LATER (first, create adequate model / object structure and relations
-            //var entry = MapEntryFormModelToEntryModel(entryFormModel);
+
+
+            var test = entryList;
+
 
             //_context.Add(entry);
             //await _context.SaveChangesAsync();
@@ -170,24 +175,15 @@ namespace MgMateWeb.Controllers
 
         #region Custom private methods
 
-        //private static Entry MapEntryFormModelToEntryModel(EntryFormModel entryFormModel)
-        //{
-        //    var entry = new Entry()
-        //    {
-        //        AccompanyingSymptoms = entryFormModel.AccompanyingSymptoms,
-        //        CreationDate = DateTime.Now,
-        //        HoursOfActivity = entryFormModel.HoursOfActivity,
-        //        HoursOfIncapacitation = entryFormModel.HoursOfIncapacitation,
-        //        HoursOfPain = entryFormModel.HoursOfPain,
-        //        Medications = entryFormModel.Medications,
-        //        PainIntensity = entryFormModel.PainIntensity,
-        //        PainTypes = entryFormModel.PainTypes,
-        //        Triggers = entryFormModel.Triggers,
-        //        WasPainIncreasedDuringPhysicalActivity = entryFormModel.WasPainIncreasedDuringPhysicalActivity,
-        //        WeatherData = entryFormModel.WeatherData
-        //    };
-        //    return entry;
-        //}
+        private List<EntryDto> CreateInitialEntryList(EntryFormModel entryFormModel)
+        {
+            var entryList = entryFormModel.SelectedMedications.Select(
+                medicationId => new EntryDto()
+                {
+                    Medication = _context.Medications.Find(medicationId),
+                }).ToList();
+            return entryList;
+        }
 
 
         #endregion
