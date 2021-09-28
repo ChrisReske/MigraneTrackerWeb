@@ -18,5 +18,6 @@ namespace MgMateWeb.Models.EntryModels
         public IEnumerable<int> SelectedSymptoms { get; set; }
         public IEnumerable<int> SelectedPainTypes { get; set; }
         public IEnumerable<int> SelectedTriggers { get; set; }
+        public IEnumerable<int> SelectedMedications { get; set; }
     }
 }
