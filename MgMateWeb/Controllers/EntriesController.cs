@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
+using MgMateWeb.Models.FormModels;
 using MgMateWeb.Persistence.Entities;
 
 namespace MgMateWeb.Controllers
@@ -74,24 +75,20 @@ namespace MgMateWeb.Controllers
                 return View(entryFormModel);
             }
 
-            var selectedAccompanyingSymptoms = GetSelectedAccompanyingSymptoms(entryFormModel);
-            var selectedPainTypes = GetSelectedPainTypes(entryFormModel);
-            var selectedMedications = GetSelectedMedications(entryFormModel);
-            var selectedTriggers = GetSelectedTriggers(entryFormModel);
-            var selectedWeatherData = GetSelectedWeatherData(entryFormModel);
+            var entryDtoParams = CreateEntryDtoParameters(entryFormModel);
 
             var entryDto = new EntryDto()
             {
-                AccompanyingSymptoms = selectedAccompanyingSymptoms,
-                PainTypes = selectedPainTypes,
+                AccompanyingSymptoms = entryDtoParams.SelectedAccompanyingSymptoms,
+                PainTypes = entryDtoParams.SelectedPainTypes,
                 HoursOfActivity = entryFormModel.HoursOfActivity,
                 HoursOfIncapacitation = entryFormModel.HoursOfIncapacitation,
                 HoursOfPain = entryFormModel.HoursOfPain,
-                Medications = selectedMedications,
+                Medications = entryDtoParams.SelectedMedications,
                 PainIntensity = entryFormModel.PainIntensity,
-                Triggers = selectedTriggers,
+                Triggers = entryDtoParams.SelectedTriggers,
                 WasPainIncreasedDuringPhysicalActivity = entryFormModel.WasPainIncreasedDuringPhysicalActivity,
-                WeatherData = selectedWeatherData
+                WeatherData = entryDtoParams.SelectedWeatherData
             };
 
             var testEntryDto = entryDto;
@@ -122,7 +119,7 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CreationDate,PainIntensity,PainDuration,WasPainIncreasedDuringPhysicalActivity,DurationOfIncapacitation,DurationOfActivity,WeatherData")] Entry entry)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CreationDate,PainIntensity,PainDuration,WasPainIncreasedDuringPhysicalActivity,DurationOfIncapacitation,DurationOfActivity,SelectedWeatherData")] Entry entry)
         {
             if (id != entry.Id)
             {
@@ -227,6 +224,26 @@ namespace MgMateWeb.Controllers
                 .Select(selectedTrigger => _context.Triggers
                     .Find(selectedTrigger))
                 .ToList();
+        }
+
+        private EntryDtoParameters CreateEntryDtoParameters(EntryFormModel entryFormModel)
+        {
+            var selectedAccompanyingSymptoms = GetSelectedAccompanyingSymptoms(entryFormModel);
+            var selectedPainTypes = GetSelectedPainTypes(entryFormModel);
+            var selectedMedications = GetSelectedMedications(entryFormModel);
+            var selectedTriggers = GetSelectedTriggers(entryFormModel);
+            var selectedWeatherData = GetSelectedWeatherData(entryFormModel);
+
+            var entryDtoParameters = new EntryDtoParameters
+            {
+                SelectedAccompanyingSymptoms = selectedAccompanyingSymptoms,
+                SelectedMedications = selectedMedications,
+                SelectedPainTypes = selectedPainTypes,
+                SelectedTriggers = selectedTriggers,
+                SelectedWeatherData = selectedWeatherData
+            };
+
+            return entryDtoParameters;
         }
 
         #endregion

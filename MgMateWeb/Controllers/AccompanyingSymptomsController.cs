@@ -17,7 +17,7 @@ namespace MgMateWeb.Controllers
             _context = context;
         }
 
-        // GET: AccompanyingSymptoms
+        // GET: SelectedAccompanyingSymptoms
         public async Task<IActionResult> Index()
         {
             return View(await _context.AccompanyingSymptoms
@@ -25,7 +25,7 @@ namespace MgMateWeb.Controllers
                 .ConfigureAwait(false));
         }
 
-        // GET: AccompanyingSymptoms/Details/5
+        // GET: SelectedAccompanyingSymptoms/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,13 +44,13 @@ namespace MgMateWeb.Controllers
             return View(accompanyingSymptom);
         }
 
-        // GET: AccompanyingSymptoms/Create
+        // GET: SelectedAccompanyingSymptoms/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: AccompanyingSymptoms/Create
+        // POST: SelectedAccompanyingSymptoms/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -69,7 +69,7 @@ namespace MgMateWeb.Controllers
             return View(accompanyingSymptom);
         }
 
-        // GET: AccompanyingSymptoms/Edit/5
+        // GET: SelectedAccompanyingSymptoms/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -88,7 +88,7 @@ namespace MgMateWeb.Controllers
             return View(accompanyingSymptom);
         }
 
-        // POST: AccompanyingSymptoms/Edit/5
+        // POST: SelectedAccompanyingSymptoms/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -123,7 +123,7 @@ namespace MgMateWeb.Controllers
             return View(accompanyingSymptom);
         }
 
-        // GET: AccompanyingSymptoms/Delete/5
+        // GET: SelectedAccompanyingSymptoms/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,7 +143,7 @@ namespace MgMateWeb.Controllers
             return View(accompanyingSymptom);
         }
 
-        // POST: AccompanyingSymptoms/Delete/5
+        // POST: SelectedAccompanyingSymptoms/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

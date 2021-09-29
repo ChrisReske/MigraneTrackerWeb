@@ -17,7 +17,7 @@ namespace MgMateWeb.Controllers
             _context = context;
         }
 
-        // GET: PainTypes
+        // GET: SelectedPainTypes
         public async Task<IActionResult> Index()
         {
             return View(await _context.PainTypes
@@ -25,7 +25,7 @@ namespace MgMateWeb.Controllers
                 .ConfigureAwait(false));
         }
 
-        // GET: PainTypes/Details/5
+        // GET: SelectedPainTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,13 +45,13 @@ namespace MgMateWeb.Controllers
             return View(painType);
         }
 
-        // GET: PainTypes/Create
+        // GET: SelectedPainTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: PainTypes/Create
+        // POST: SelectedPainTypes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -73,7 +73,7 @@ namespace MgMateWeb.Controllers
             return View(painType);
         }
 
-        // GET: PainTypes/Edit/5
+        // GET: SelectedPainTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,7 +92,7 @@ namespace MgMateWeb.Controllers
             return View(painType);
         }
 
-        // POST: PainTypes/Edit/5
+        // POST: SelectedPainTypes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -129,7 +129,7 @@ namespace MgMateWeb.Controllers
             return View(painType);
         }
 
-        // GET: PainTypes/Delete/5
+        // GET: SelectedPainTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -149,7 +149,7 @@ namespace MgMateWeb.Controllers
             return View(painType);
         }
 
-        // POST: PainTypes/Delete/5
+        // POST: SelectedPainTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
