@@ -82,12 +82,12 @@ namespace MgMateWeb.Controllers
                 return View(entryFormModel);
             }
 
-
             var newEntry = _customMapper
                 .MapEntryDtoToEntry(entryFormModel);
 
-            //_context.Add(entry);
-            //await _context.SaveChangesAsync();
+            _context.Add(newEntry);
+            await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 
