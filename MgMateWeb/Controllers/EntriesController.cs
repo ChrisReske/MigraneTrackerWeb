@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Persistence.Entities;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace MgMateWeb.Controllers
 {
@@ -76,7 +74,27 @@ namespace MgMateWeb.Controllers
                 return View(entryFormModel);
             }
 
-            var test = entryFormModel;
+            var selectedAccompanyingSymptoms = GetSelectedAccompanyingSymptoms(entryFormModel);
+            var selectedPainTypes = GetSelectedPainTypes(entryFormModel);
+            var selectedMedications = GetSelectedMedications(entryFormModel);
+            var selectedTriggers = GetSelectedTriggers(entryFormModel);
+            var selectedWeatherData = GetSelectedWeatherData(entryFormModel);
+
+            var entryDto = new EntryDto()
+            {
+                AccompanyingSymptoms = selectedAccompanyingSymptoms,
+                PainTypes = selectedPainTypes,
+                HoursOfActivity = entryFormModel.HoursOfActivity,
+                HoursOfIncapacitation = entryFormModel.HoursOfIncapacitation,
+                HoursOfPain = entryFormModel.HoursOfPain,
+                Medications = selectedMedications,
+                PainIntensity = entryFormModel.PainIntensity,
+                Triggers = selectedTriggers,
+                WasPainIncreasedDuringPhysicalActivity = entryFormModel.WasPainIncreasedDuringPhysicalActivity,
+                WeatherData = selectedWeatherData
+            };
+
+            var testEntryDto = entryDto;
 
             //_context.Add(entry);
             //await _context.SaveChangesAsync();
@@ -169,6 +187,47 @@ namespace MgMateWeb.Controllers
         }
 
         #region Custom private methods
+
+        private List<AccompanyingSymptom> GetSelectedAccompanyingSymptoms(EntryFormModel entryFormModel)
+        {
+            var accompanyingSymptoms = entryFormModel
+                .SelectedSymptoms
+                .Select(selectedSymptom => _context
+                    .Find<AccompanyingSymptom>(selectedSymptom))
+                .ToList();
+            return accompanyingSymptoms;
+        }
+
+        private List<Medication> GetSelectedMedications(EntryFormModel entryFormModel)
+        {
+            return entryFormModel.SelectedMedications
+                .Select(selectedMedication => _context.Medications
+                    .Find(selectedMedication))
+                .ToList();
+        }
+
+        private List<PainType> GetSelectedPainTypes(EntryFormModel entryFormModel)
+        {
+            return entryFormModel.SelectedPainTypes
+                .Select(selectedPainType => _context.PainTypes
+                    .Find(selectedPainType))
+                .ToList();
+        }
+
+        private WeatherDataEntry GetSelectedWeatherData(EntryFormModel entryFormModel)
+        {
+            var selectedWeatherData = _context.WeatherData
+                .Find(entryFormModel.SelectedWeatherData);
+            return selectedWeatherData;
+        }
+
+        private List<Trigger> GetSelectedTriggers(EntryFormModel entryFormModel)
+        {
+            return entryFormModel.SelectedTriggers
+                .Select(selectedTrigger => _context.Triggers
+                    .Find(selectedTrigger))
+                .ToList();
+        }
 
         #endregion
     }
