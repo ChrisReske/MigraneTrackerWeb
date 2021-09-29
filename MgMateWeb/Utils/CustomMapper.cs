@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MgMateWeb.Controllers;
 using MgMateWeb.Dto;
 using MgMateWeb.Interfaces.UtilsInterfaces;
 using MgMateWeb.Models.EntryModels;
@@ -10,12 +9,12 @@ namespace MgMateWeb.Utils
 {
     public class CustomMapper : ICustomMapper
     {
-        private readonly IEntryDtoParameterUtils _entryDtoParameterUtils;
+        private readonly IEntryDtoUtils _entryDtoUtils;
 
-        public CustomMapper(IEntryDtoParameterUtils entryDtoParameterUtils)
+        public CustomMapper(IEntryDtoUtils entryDtoUtils)
         {
-            _entryDtoParameterUtils = entryDtoParameterUtils 
-                                      ?? throw new ArgumentNullException(nameof(entryDtoParameterUtils));
+            _entryDtoUtils = entryDtoUtils 
+                             ?? throw new ArgumentNullException(nameof(entryDtoUtils));
         }
 
 
@@ -40,31 +39,26 @@ namespace MgMateWeb.Utils
                 .ConfigureAwait(false);
         }
 
-        public EntryDto CreateEntryDto(EntryFormModel entryFormModel)
+        public Entry MapEntryDtoToEntry(EntryFormModel entryFormModel)
         {
-            var entryDtoParams = _entryDtoParameterUtils
-                .CreateEntryDtoParameters(entryFormModel);
+            var entryDto = _entryDtoUtils.CreateEntryDto(entryFormModel);
 
-            if(entryDtoParams is null)
+            var entry = new Entry()
             {
-                return new EntryDto();
-            }
-
-            var entryDto = new EntryDto()
-            {
-                AccompanyingSymptoms = entryDtoParams.SelectedAccompanyingSymptoms,
-                PainTypes = entryDtoParams.SelectedPainTypes,
-                HoursOfActivity = entryFormModel.HoursOfActivity,
-                HoursOfIncapacitation = entryFormModel.HoursOfIncapacitation,
-                HoursOfPain = entryFormModel.HoursOfPain,
-                Medications = entryDtoParams.SelectedMedications,
-                PainIntensity = entryFormModel.PainIntensity,
-                Triggers = entryDtoParams.SelectedTriggers,
-                WasPainIncreasedDuringPhysicalActivity = entryFormModel.WasPainIncreasedDuringPhysicalActivity,
-                WeatherData = entryDtoParams.SelectedWeatherData
+                CreationDate = DateTime.Now,
+                AccompanyingSymptoms = entryDto.AccompanyingSymptoms,
+                HoursOfActivity = entryDto.HoursOfActivity,
+                HoursOfIncapacitation = entryDto.HoursOfIncapacitation,
+                HoursOfPain = entryDto.HoursOfPain,
+                Medications = entryDto.Medications,
+                PainTypes = entryDto.PainTypes,
+                PainIntensity = entryDto.PainIntensity,
+                Triggers = entryDto.Triggers,
+                WasPainIncreasedDuringPhysicalActivity = entryDto.WasPainIncreasedDuringPhysicalActivity,
+                WeatherData = entryDto.WeatherData
             };
 
-            return entryDto;
+            return entry;
         }
 
     }

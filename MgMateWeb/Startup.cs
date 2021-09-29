@@ -45,6 +45,7 @@ namespace MgMateWeb
             services.AddScoped<ICustomMapper, CustomMapper>();
             services.AddScoped<IEntryFormModelUtils, EntryFormModelUtils>();
             services.AddScoped<IEntryDtoParameterUtils, EntryDtoParameterUtils>();
+            services.AddScoped<IEntryDtoUtils, EntryDtoUtils>();
 
             #endregion
 

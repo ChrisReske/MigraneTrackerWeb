@@ -82,8 +82,9 @@ namespace MgMateWeb.Controllers
                 return View(entryFormModel);
             }
 
-            var testEntryDto = _customMapper
-                .CreateEntryDto(entryFormModel);
+
+            var newEntry = _customMapper
+                .MapEntryDtoToEntry(entryFormModel);
 
             //_context.Add(entry);
             //await _context.SaveChangesAsync();
