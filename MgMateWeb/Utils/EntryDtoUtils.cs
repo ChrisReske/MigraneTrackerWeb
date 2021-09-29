@@ -1,5 +1,6 @@
 ﻿using System;
 using MgMateWeb.Controllers;
+using MgMateWeb.Dto;
 using MgMateWeb.Interfaces.UtilsInterfaces;
 using MgMateWeb.Models.FormModels;
 
