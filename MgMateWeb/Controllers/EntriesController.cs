@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MgMateWeb.Interfaces.UtilsInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
@@ -12,10 +14,16 @@ namespace MgMateWeb.Controllers
     public class EntriesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEntryFormModelUtils _entryFormModelUtils;
 
-        public EntriesController(ApplicationDbContext context)
+        public EntriesController(
+            ApplicationDbContext context, 
+            IEntryFormModelUtils entryFormModelUtils)
         {
-            _context = context;
+            _context = context 
+                       ?? throw new ArgumentNullException(nameof(context));
+            _entryFormModelUtils = entryFormModelUtils 
+                                   ?? throw new ArgumentNullException(nameof(entryFormModelUtils));
         }
 
         // GET: Entries
@@ -75,23 +83,7 @@ namespace MgMateWeb.Controllers
                 return View(entryFormModel);
             }
 
-            var entryDtoParams = CreateEntryDtoParameters(entryFormModel);
-
-            var entryDto = new EntryDto()
-            {
-                AccompanyingSymptoms = entryDtoParams.SelectedAccompanyingSymptoms,
-                PainTypes = entryDtoParams.SelectedPainTypes,
-                HoursOfActivity = entryFormModel.HoursOfActivity,
-                HoursOfIncapacitation = entryFormModel.HoursOfIncapacitation,
-                HoursOfPain = entryFormModel.HoursOfPain,
-                Medications = entryDtoParams.SelectedMedications,
-                PainIntensity = entryFormModel.PainIntensity,
-                Triggers = entryDtoParams.SelectedTriggers,
-                WasPainIncreasedDuringPhysicalActivity = entryFormModel.WasPainIncreasedDuringPhysicalActivity,
-                WeatherData = entryDtoParams.SelectedWeatherData
-            };
-
-            var testEntryDto = entryDto;
+            var testEntryDto = CreateEntryDto(entryFormModel);
 
             //_context.Add(entry);
             //await _context.SaveChangesAsync();
@@ -185,54 +177,29 @@ namespace MgMateWeb.Controllers
 
         #region Custom private methods
 
-        private List<AccompanyingSymptom> GetSelectedAccompanyingSymptoms(EntryFormModel entryFormModel)
-        {
-            var accompanyingSymptoms = entryFormModel
-                .SelectedSymptoms
-                .Select(selectedSymptom => _context
-                    .Find<AccompanyingSymptom>(selectedSymptom))
-                .ToList();
-            return accompanyingSymptoms;
-        }
-
-        private List<Medication> GetSelectedMedications(EntryFormModel entryFormModel)
-        {
-            return entryFormModel.SelectedMedications
-                .Select(selectedMedication => _context.Medications
-                    .Find(selectedMedication))
-                .ToList();
-        }
-
-        private List<PainType> GetSelectedPainTypes(EntryFormModel entryFormModel)
-        {
-            return entryFormModel.SelectedPainTypes
-                .Select(selectedPainType => _context.PainTypes
-                    .Find(selectedPainType))
-                .ToList();
-        }
-
-        private WeatherDataEntry GetSelectedWeatherData(EntryFormModel entryFormModel)
-        {
-            var selectedWeatherData = _context.WeatherData
-                .Find(entryFormModel.SelectedWeatherData);
-            return selectedWeatherData;
-        }
-
-        private List<Trigger> GetSelectedTriggers(EntryFormModel entryFormModel)
-        {
-            return entryFormModel.SelectedTriggers
-                .Select(selectedTrigger => _context.Triggers
-                    .Find(selectedTrigger))
-                .ToList();
-        }
-
         private EntryDtoParameters CreateEntryDtoParameters(EntryFormModel entryFormModel)
         {
-            var selectedAccompanyingSymptoms = GetSelectedAccompanyingSymptoms(entryFormModel);
-            var selectedPainTypes = GetSelectedPainTypes(entryFormModel);
-            var selectedMedications = GetSelectedMedications(entryFormModel);
-            var selectedTriggers = GetSelectedTriggers(entryFormModel);
-            var selectedWeatherData = GetSelectedWeatherData(entryFormModel);
+            if(entryFormModel is null)
+            {
+                return new EntryDtoParameters();
+            }
+
+            // TODO: Add null checks and add return statements
+
+            var selectedAccompanyingSymptoms = 
+                _entryFormModelUtils.GetSelectedAccompanyingSymptoms(entryFormModel);
+            
+            var selectedPainTypes = 
+                _entryFormModelUtils.GetSelectedPainTypes(entryFormModel);
+            
+            var selectedMedications = _entryFormModelUtils
+                .GetSelectedMedications(entryFormModel);
+            
+            var selectedTriggers = _entryFormModelUtils
+                .GetSelectedTriggers(entryFormModel);
+            
+            var selectedWeatherData = _entryFormModelUtils
+                .GetSelectedWeatherData(entryFormModel);
 
             var entryDtoParameters = new EntryDtoParameters
             {
@@ -244,6 +211,27 @@ namespace MgMateWeb.Controllers
             };
 
             return entryDtoParameters;
+        }
+
+        private EntryDto CreateEntryDto(EntryFormModel entryFormModel)
+        {
+            var entryDtoParams = CreateEntryDtoParameters(entryFormModel);
+
+            var entryDto = new EntryDto()
+            {
+                AccompanyingSymptoms = entryDtoParams.SelectedAccompanyingSymptoms,
+                PainTypes = entryDtoParams.SelectedPainTypes,
+                HoursOfActivity = entryFormModel.HoursOfActivity,
+                HoursOfIncapacitation = entryFormModel.HoursOfIncapacitation,
+                HoursOfPain = entryFormModel.HoursOfPain,
+                Medications = entryDtoParams.SelectedMedications,
+                PainIntensity = entryFormModel.PainIntensity,
+                Triggers = entryDtoParams.SelectedTriggers,
+                WasPainIncreasedDuringPhysicalActivity = entryFormModel.WasPainIncreasedDuringPhysicalActivity,
+                WeatherData = entryDtoParams.SelectedWeatherData
+            };
+
+            return entryDto;
         }
 
         #endregion
