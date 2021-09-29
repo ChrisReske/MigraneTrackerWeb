@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MgMateWeb.Interfaces.UtilsInterfaces;
@@ -14,16 +13,16 @@ namespace MgMateWeb.Controllers
     public class EntriesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IEntryFormModelUtils _entryFormModelUtils;
+        private readonly ICustomMapper _customMapper;
 
         public EntriesController(
             ApplicationDbContext context, 
-            IEntryFormModelUtils entryFormModelUtils)
+            ICustomMapper customMapper)
         {
             _context = context 
                        ?? throw new ArgumentNullException(nameof(context));
-            _entryFormModelUtils = entryFormModelUtils 
-                                   ?? throw new ArgumentNullException(nameof(entryFormModelUtils));
+            _customMapper = customMapper 
+                            ?? throw new ArgumentNullException(nameof(customMapper));
         }
 
         // GET: Entries
@@ -83,7 +82,8 @@ namespace MgMateWeb.Controllers
                 return View(entryFormModel);
             }
 
-            var testEntryDto = CreateEntryDto(entryFormModel);
+            var testEntryDto = _customMapper
+                .CreateEntryDto(entryFormModel);
 
             //_context.Add(entry);
             //await _context.SaveChangesAsync();
@@ -175,65 +175,5 @@ namespace MgMateWeb.Controllers
             return _context.Entries.Any(e => e.Id == id);
         }
 
-        #region Custom private methods
-
-        private EntryDtoParameters CreateEntryDtoParameters(EntryFormModel entryFormModel)
-        {
-            if(entryFormModel is null)
-            {
-                return new EntryDtoParameters();
-            }
-
-            // TODO: Add null checks and add return statements
-
-            var selectedAccompanyingSymptoms = 
-                _entryFormModelUtils.GetSelectedAccompanyingSymptoms(entryFormModel);
-            
-            var selectedPainTypes = 
-                _entryFormModelUtils.GetSelectedPainTypes(entryFormModel);
-            
-            var selectedMedications = _entryFormModelUtils
-                .GetSelectedMedications(entryFormModel);
-            
-            var selectedTriggers = _entryFormModelUtils
-                .GetSelectedTriggers(entryFormModel);
-            
-            var selectedWeatherData = _entryFormModelUtils
-                .GetSelectedWeatherData(entryFormModel);
-
-            var entryDtoParameters = new EntryDtoParameters
-            {
-                SelectedAccompanyingSymptoms = selectedAccompanyingSymptoms,
-                SelectedMedications = selectedMedications,
-                SelectedPainTypes = selectedPainTypes,
-                SelectedTriggers = selectedTriggers,
-                SelectedWeatherData = selectedWeatherData
-            };
-
-            return entryDtoParameters;
-        }
-
-        private EntryDto CreateEntryDto(EntryFormModel entryFormModel)
-        {
-            var entryDtoParams = CreateEntryDtoParameters(entryFormModel);
-
-            var entryDto = new EntryDto()
-            {
-                AccompanyingSymptoms = entryDtoParams.SelectedAccompanyingSymptoms,
-                PainTypes = entryDtoParams.SelectedPainTypes,
-                HoursOfActivity = entryFormModel.HoursOfActivity,
-                HoursOfIncapacitation = entryFormModel.HoursOfIncapacitation,
-                HoursOfPain = entryFormModel.HoursOfPain,
-                Medications = entryDtoParams.SelectedMedications,
-                PainIntensity = entryFormModel.PainIntensity,
-                Triggers = entryDtoParams.SelectedTriggers,
-                WasPainIncreasedDuringPhysicalActivity = entryFormModel.WasPainIncreasedDuringPhysicalActivity,
-                WeatherData = entryDtoParams.SelectedWeatherData
-            };
-
-            return entryDto;
-        }
-
-        #endregion
     }
 }
