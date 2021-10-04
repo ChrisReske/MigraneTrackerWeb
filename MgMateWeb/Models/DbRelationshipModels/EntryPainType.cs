@@ -7,9 +7,9 @@ namespace MgMateWeb.Models.DbRelationshipModels
         public int Id { get; set; }
 
         public int PainTypeId { get; set; }
-        public PainType PainType { get; set; }
+        public virtual PainType PainType { get; set; }
 
-        public int MainEntryId { get; set; }
-        public Entry Entry { get; set; }
+        public int EntryId { get; set; }
+        public virtual Entry Entry { get; set; }
     }
 }

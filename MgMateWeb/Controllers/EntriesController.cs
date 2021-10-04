@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MgMateWeb.Interfaces.UtilsInterfaces;
+using MgMateWeb.Models.DbRelationshipModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
@@ -100,7 +101,20 @@ namespace MgMateWeb.Controllers
                 .ConfigureAwait(false);
 
 
-          
+            foreach (var painTypeId in entryFormModel.SelectedPainTypes)
+            {
+                var entryPainType = new EntryPainType()
+                {
+                    EntryId = initialEntryFromDb.Id,
+                    PainTypeId = painTypeId
+                };
+
+                _context.Add(entryPainType); 
+                await _context.SaveChangesAsync()
+                    .ConfigureAwait(false);
+            }
+
+            var test = initialEntryFromDb;
 
             _context.Add(initialEntryFromDb);
             await _context.SaveChangesAsync()
