@@ -1,4 +1,5 @@
-﻿using MgMateWeb.Models.EntryModels;
+﻿using MgMateWeb.Models.DbRelationshipModels;
+using MgMateWeb.Models.EntryModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace MgMateWeb.Persistence.Entities
@@ -19,5 +20,7 @@ namespace MgMateWeb.Persistence.Entities
         public DbSet<PainType> PainTypes { get; set; }
         public DbSet<Trigger> Triggers { get; set; }
         public DbSet<WeatherDataEntry> WeatherData { get; set; }
+
+        public DbSet<EntryPainType> EntryPainTypes { get; set; }
     }
 }
