@@ -28,7 +28,7 @@ namespace MgMateWeb.Controllers
         // GET: Entries
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Entries.ToListAsync());
+            return View(await _context.Entries.ToListAsync().ConfigureAwait(false));
         }
 
         // GET: Entries/Details/5
@@ -40,7 +40,7 @@ namespace MgMateWeb.Controllers
             }
 
             var entry = await _context.Entries
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id).ConfigureAwait(false);
             if (entry == null)
             {
                 return NotFound();
@@ -82,11 +82,29 @@ namespace MgMateWeb.Controllers
                 return View(entryFormModel);
             }
 
-            var newEntry = _customMapper
-                .MapEntryDtoToEntry(entryFormModel);
+            // Create initial entry to get id
+            var initialEntry = new Entry()
+            {
+                CreationDate = DateTime.Now
+            };
 
-            _context.Add(newEntry);
-            await _context.SaveChangesAsync();
+            _context.Add(initialEntry);
+            await _context
+                .SaveChangesAsync()
+                .ConfigureAwait(false);
+
+
+            var initialEntryFromDb = await _context.Entries
+                .OrderByDescending(e => e.CreationDate)
+                .FirstOrDefaultAsync()
+                .ConfigureAwait(false);
+
+
+          
+
+            _context.Add(initialEntryFromDb);
+            await _context.SaveChangesAsync()
+                .ConfigureAwait(false);
             
             return RedirectToAction(nameof(Index));
         }
@@ -99,7 +117,7 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var entry = await _context.Entries.FindAsync(id);
+            var entry = await _context.Entries.FindAsync(id).ConfigureAwait(false);
             if (entry == null)
             {
                 return NotFound();
@@ -124,7 +142,7 @@ namespace MgMateWeb.Controllers
                 try
                 {
                     _context.Update(entry);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -151,7 +169,7 @@ namespace MgMateWeb.Controllers
             }
 
             var entry = await _context.Entries
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id).ConfigureAwait(false);
             if (entry == null)
             {
                 return NotFound();
@@ -165,9 +183,9 @@ namespace MgMateWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var entry = await _context.Entries.FindAsync(id);
+            var entry = await _context.Entries.FindAsync(id).ConfigureAwait(false);
             _context.Entries.Remove(entry);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction(nameof(Index));
         }
 

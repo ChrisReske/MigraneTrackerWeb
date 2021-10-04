@@ -9,7 +9,7 @@ namespace MgMateWeb.Interfaces.UtilsInterfaces
     {
         Task<AccompanyingSymptom> CreateNewAccompanyingSymptomFromDtoAsync(AccompanyingSymptomDto accompanyingSymptomDto);
 
-        Entry MapEntryDtoToEntry(EntryFormModel entryFormModel);
+        //Entry MapEntryDtoToEntry(EntryFormModel entryFormModel, Entry initialEntry);
 
     }
 }
