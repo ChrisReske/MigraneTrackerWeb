@@ -17,16 +17,16 @@
                 @Html.DisplayNameFor(model => model.CreationDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PainDuration)
+                @Html.DisplayNameFor(model => model.HoursOfPain)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.WasPainIncreasedDuringPhysicalActivity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DurationOfIncapacitation)
+                @Html.DisplayNameFor(model => model.HoursOfIncapacitation)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DurationOfActivity)
+                @Html.DisplayNameFor(model => model.HoursOfActivity)
             </th>
             <th></th>
         </tr>
@@ -38,16 +38,16 @@
                 @Html.DisplayFor(modelItem => item.CreationDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PainDuration)
+                @Html.DisplayFor(modelItem => item.HoursOfPain)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.WasPainIncreasedDuringPhysicalActivity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DurationOfIncapacitation)
+                @Html.DisplayFor(modelItem => item.HoursOfIncapacitation)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DurationOfActivity)
+                @Html.DisplayFor(modelItem => item.HoursOfActivity)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
