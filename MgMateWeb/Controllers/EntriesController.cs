@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
+using MgMateWeb.Models.FormModels;
 using MgMateWeb.Persistence;
 
 namespace MgMateWeb.Controllers
@@ -54,18 +56,20 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CreationDate,PainDuration,WasPainIncreasedDuringPhysicalActivity,DurationOfIncapacitation,DurationOfActivity")] Entry entry)
+        public async Task<IActionResult> Create(CreateEntryFormModel createEntryFormModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(entry);
+                return View(createEntryFormModel);
             }
 
-            _context.Add(entry);
-            await _context
-                .SaveChangesAsync()
-                .ConfigureAwait(false);
-            
+            // Save blank entry first to access 'id' property
+
+            var entry = new Entry() { };
+            var wasEntrySaved = await SaveEntryToDbAsync(entry);
+
+
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -155,7 +159,7 @@ namespace MgMateWeb.Controllers
            
             _context.Entries.Remove(entry);
             
-            await _context
+           await _context
                 .SaveChangesAsync()
                 .ConfigureAwait(false);
             
@@ -166,5 +170,36 @@ namespace MgMateWeb.Controllers
         {
             return _context.Entries.Any(e => e.Id == id);
         }
+
+        #region Private Methods
+
+        private async Task<bool> SaveEntryToDbAsync(Entry entry)
+        {
+            if(entry is null)
+            {
+                return false;
+            }
+
+            try
+            {
+                _context.Add(entry);
+                await _context
+                    .SaveChangesAsync()
+                    .ConfigureAwait(false);
+
+                return await Task
+                    .FromResult(true)
+                    .ConfigureAwait(false);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+
+        #endregion
     }
 }
