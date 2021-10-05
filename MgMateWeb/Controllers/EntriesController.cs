@@ -48,7 +48,14 @@ namespace MgMateWeb.Controllers
         // GET: Entries/Create
         public IActionResult Create()
         {
-            return View();
+            var accompanyingSymptoms = _context.AccompanyingSymptoms.ToList();
+
+            var createEntryFormModel = new CreateEntryFormModel
+            {
+                AccompanyingSymptoms = accompanyingSymptoms
+            };
+
+            return View(createEntryFormModel);
         }
 
         // POST: Entries/Create
@@ -68,6 +75,8 @@ namespace MgMateWeb.Controllers
             var entry = new Entry() { };
             var wasEntrySaved = await SaveEntryToDbAsync(entry);
 
+            // Reload entry and map EntryId to selected symptoms
+            var selectedSymptoms = createEntryFormModel.SelectedAccSymptoms;
 
 
             return RedirectToAction(nameof(Index));
