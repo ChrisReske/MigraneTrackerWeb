@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\EntryModels\Medication.cs" />
+    <Compile Remove="Models\EntryModels\MedicationEffectiveness.cs" />
+    <Compile Remove="Models\EntryModels\PainIntensity.cs" />
+    <Compile Remove="Models\EntryModels\PainType.cs" />
+    <Compile Remove="Models\EntryModels\Trigger.cs" />
+    <Compile Remove="Models\EntryModels\WeatherData.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
       <PrivateAssets>all</PrivateAssets>
