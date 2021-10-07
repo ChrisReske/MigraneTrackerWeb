@@ -1,4 +1,5 @@
 ﻿using MgMateWeb.Models.EntryModels;
+using MgMateWeb.Models.RelationshipModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace MgMateWeb.Persistence
@@ -13,6 +14,8 @@ namespace MgMateWeb.Persistence
 
         public DbSet<AccompanyingSymptom> AccompanyingSymptoms { get; set; }
         public DbSet<Entry> Entries { get; set; }
+
+        public DbSet<EntryAccompanyingSymptom> EntryAccompanyingSymptoms { get; set; }
 
     }
 }
