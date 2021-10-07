@@ -1,8 +1,8 @@
-﻿using MgMateWeb.Models.DbRelationshipModels;
-using MgMateWeb.Models.EntryModels;
+﻿using MgMateWeb.Models.EntryModels;
+using MgMateWeb.Models.RelationshipModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace MgMateWeb.Persistence.Entities
+namespace MgMateWeb.Persistence
 {
     public class ApplicationDbContext : DbContext
     {
@@ -14,13 +14,8 @@ namespace MgMateWeb.Persistence.Entities
 
         public DbSet<AccompanyingSymptom> AccompanyingSymptoms { get; set; }
         public DbSet<Entry> Entries { get; set; }
-        public DbSet<Medication> Medications { get; set; }
-        public MedicationEffectiveness MedicationEffectiveness { get; set; }
-        public PainIntensity PainIntensity { get; set; }
-        public DbSet<PainType> PainTypes { get; set; }
-        public DbSet<Trigger> Triggers { get; set; }
-        public DbSet<WeatherDataEntry> WeatherData { get; set; }
 
-        public DbSet<EntryPainType> EntryPainTypes { get; set; }
+        public DbSet<EntryAccompanyingSymptom> EntryAccompanyingSymptoms { get; set; }
+
     }
 }

@@ -1,5 +1,4 @@
-﻿@using MgMateWeb.Models.EntryModels
-@model MgMateWeb.Models.FormModels.EntryFormModel
+﻿@model MgMateWeb.Models.FormModels.CreateEntryFormModel
 
 @{
     ViewData["Title"] = "Create";
@@ -14,25 +13,20 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
-                <label asp-for="PainTypes" class="control-label"></label>
-                @Html.ListBoxFor(m => m.SelectedPainTypes, 
-                    new MultiSelectList(Model.PainTypes, "Id", "Description"), 
+                <label asp-for="AccompanyingSymptoms"></label>
+                @Html.ListBoxFor(m => m.SelectedAccSymptoms, 
+                    new MultiSelectList(
+                        Model.AccompanyingSymptoms, 
+                        "Id", 
+                        "Description"), 
                     new
                     {
                         @class="form-control", 
-                        multiple="multiple", 
-                        id="painTypeDropdown"
+                        multiple="multiple",
+                        id="ddlAccompanyingSymptoms"
                     })
-                <span asp-validation-for="PainTypes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PainIntensity" class="control-label"></label>
-                <select 
-                    asp-for="PainIntensity" 
-                    asp-items="Html.GetEnumSelectList<PainIntensity>()"
-                    class="form-control dropdown"></select>
-                <span asp-validation-for="PainIntensity" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="HoursOfPain" class="control-label"></label>
@@ -41,9 +35,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" 
-                           asp-for="WasPainIncreasedDuringPhysicalActivity" /> 
-                    @Html.DisplayNameFor(model => model.WasPainIncreasedDuringPhysicalActivity)
+                    <input class="form-check-input" asp-for="WasPainIncreasedDuringPhysicalActivity" /> @Html.DisplayNameFor(model => model.WasPainIncreasedDuringPhysicalActivity)
                 </label>
             </div>
             <div class="form-group">
@@ -57,52 +49,6 @@
                 <span asp-validation-for="HoursOfActivity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AccompanyingSymptoms"></label>
-                @Html.ListBoxFor(m => m.SelectedSymptoms, 
-                    new MultiSelectList(Model.AccompanyingSymptoms, "Id", "Description"), 
-                    new
-                    {
-                        @class="form-control", 
-                        multiple="multiple", 
-                        id="accompanyingSystemDropdown"
-                    })
-            </div>
-            <div class="form-group">
-                <label asp-for="Triggers" class="control-label"></label>
-                @Html.ListBoxFor(m => m.SelectedTriggers,
-                    new MultiSelectList(Model.Triggers, "Id", "Description"),
-                    new
-                    {
-                        @class = "form-control", 
-                        multiple = "multiple", 
-                        id = "triggerDropdown"
-                    })
-                <span asp-validation-for="Triggers" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Medications" class="control-label"></label>
-                @Html.ListBoxFor(m => m.SelectedMedications,
-                    new MultiSelectList(Model.Medications, "Id", "Description"),
-                    new
-                    {
-                        @class = "form-control", 
-                        multiple = "multiple", 
-                        id = "medicationsDropdown"
-                    })
-                <span asp-validation-for="Medications" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WeatherData" class="control-label"></label>
-                @Html.DropDownListFor(m => m.SelectedWeatherData, 
-                    new SelectList(Model.WeatherData, "Id", "CreationDate"),
-                    new
-                    {
-                        @class="form-control",
-                        id="weatherDataDropdown"
-                    })
-                <span asp-validation-for="WeatherData" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -114,6 +60,5 @@
 </div>
 
 @section Scripts {
-
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

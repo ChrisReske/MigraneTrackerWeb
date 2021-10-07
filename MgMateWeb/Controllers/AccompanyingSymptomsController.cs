@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
-using MgMateWeb.Persistence.Entities;
+using MgMateWeb.Persistence;
 
 namespace MgMateWeb.Controllers
 {
@@ -17,15 +17,13 @@ namespace MgMateWeb.Controllers
             _context = context;
         }
 
-        // GET: SelectedAccompanyingSymptoms
+        // GET: AccompanyingSymptom
         public async Task<IActionResult> Index()
         {
-            return View(await _context.AccompanyingSymptoms
-                .ToListAsync()
-                .ConfigureAwait(false));
+            return View(await _context.AccompanyingSymptoms.ToListAsync());
         }
 
-        // GET: SelectedAccompanyingSymptoms/Details/5
+        // GET: AccompanyingSymptom/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,8 +32,7 @@ namespace MgMateWeb.Controllers
             }
 
             var accompanyingSymptom = await _context.AccompanyingSymptoms
-                .FirstOrDefaultAsync(m => m.Id == id)
-                .ConfigureAwait(false);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (accompanyingSymptom == null)
             {
                 return NotFound();
@@ -44,13 +41,13 @@ namespace MgMateWeb.Controllers
             return View(accompanyingSymptom);
         }
 
-        // GET: SelectedAccompanyingSymptoms/Create
+        // GET: AccompanyingSymptom/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: SelectedAccompanyingSymptoms/Create
+        // POST: AccompanyingSymptom/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -61,15 +58,13 @@ namespace MgMateWeb.Controllers
             {
                 accompanyingSymptom.CreationDate = DateTime.Now;
                 _context.Add(accompanyingSymptom);
-                await _context
-                    .SaveChangesAsync()
-                    .ConfigureAwait(false);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(accompanyingSymptom);
         }
 
-        // GET: SelectedAccompanyingSymptoms/Edit/5
+        // GET: AccompanyingSymptom/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,10 +72,7 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptom = await _context
-                .AccompanyingSymptoms
-                .FindAsync(id)
-                .ConfigureAwait(false);
+            var accompanyingSymptom = await _context.AccompanyingSymptoms.FindAsync(id);
             if (accompanyingSymptom == null)
             {
                 return NotFound();
@@ -88,7 +80,7 @@ namespace MgMateWeb.Controllers
             return View(accompanyingSymptom);
         }
 
-        // POST: SelectedAccompanyingSymptoms/Edit/5
+        // POST: AccompanyingSymptom/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -105,9 +97,7 @@ namespace MgMateWeb.Controllers
                 try
                 {
                     _context.Update(accompanyingSymptom);
-                    await _context
-                        .SaveChangesAsync()
-                        .ConfigureAwait(false);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -115,15 +105,17 @@ namespace MgMateWeb.Controllers
                     {
                         return NotFound();
                     }
-
-                    throw;
+                    else
+                    {
+                        throw;
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(accompanyingSymptom);
         }
 
-        // GET: SelectedAccompanyingSymptoms/Delete/5
+        // GET: AccompanyingSymptom/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,9 +124,7 @@ namespace MgMateWeb.Controllers
             }
 
             var accompanyingSymptom = await _context.AccompanyingSymptoms
-                .FirstOrDefaultAsync(m => m.Id == id)
-                .ConfigureAwait(false);
-           
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (accompanyingSymptom == null)
             {
                 return NotFound();
@@ -143,30 +133,20 @@ namespace MgMateWeb.Controllers
             return View(accompanyingSymptom);
         }
 
-        // POST: SelectedAccompanyingSymptoms/Delete/5
+        // POST: AccompanyingSymptom/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var accompanyingSymptom = await _context.AccompanyingSymptoms
-                .FindAsync(id)
-                .ConfigureAwait(false);
-            
-            _context.AccompanyingSymptoms
-                .Remove(accompanyingSymptom);
-            
-            await _context
-                .SaveChangesAsync()
-                .ConfigureAwait(false);
-            
+            var accompanyingSymptom = await _context.AccompanyingSymptoms.FindAsync(id);
+            _context.AccompanyingSymptoms.Remove(accompanyingSymptom);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool AccompanyingSymptomExists(int id)
         {
-            return _context
-                .AccompanyingSymptoms
-                .Any(e => e.Id == id);
+            return _context.AccompanyingSymptoms.Any(e => e.Id == id);
         }
     }
 }

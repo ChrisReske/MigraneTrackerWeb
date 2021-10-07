@@ -1,36 +1,48 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MgMateWeb.Interfaces.UtilsInterfaces;
-using MgMateWeb.Models.DbRelationshipModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Models.FormModels;
-using MgMateWeb.Persistence.Entities;
+using MgMateWeb.Models.RelationshipModels;
+using MgMateWeb.Persistence;
 
 namespace MgMateWeb.Controllers
 {
     public class EntriesController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ICustomMapper _customMapper;
+        #region Fields and constants
 
-        public EntriesController(
-            ApplicationDbContext context, 
-            ICustomMapper customMapper)
+        private readonly ApplicationDbContext _context;
+
+        #endregion
+
+        #region Constructor(s)
+
+        public EntriesController(ApplicationDbContext context)
         {
-            _context = context 
-                       ?? throw new ArgumentNullException(nameof(context));
-            _customMapper = customMapper 
-                            ?? throw new ArgumentNullException(nameof(customMapper));
+            _context = context;
         }
+
+        #endregion
+
+        #region Entry / Index
 
         // GET: Entries
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Entries.ToListAsync().ConfigureAwait(false));
+            return View(await _context.Entries
+                .Include(e => e.EntryAccompanyingSymptoms)
+                .ThenInclude(e => e.AccompanyingSymptom)
+                .ToListAsync()
+                .ConfigureAwait(false));
         }
+
+        #endregion
+
+        #region Entry / Details 
 
         // GET: Entries/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -41,7 +53,8 @@ namespace MgMateWeb.Controllers
             }
 
             var entry = await _context.Entries
-                .FirstOrDefaultAsync(m => m.Id == id).ConfigureAwait(false);
+                .FirstOrDefaultAsync(m => m.Id == id)
+                .ConfigureAwait(false);
             if (entry == null)
             {
                 return NotFound();
@@ -50,25 +63,21 @@ namespace MgMateWeb.Controllers
             return View(entry);
         }
 
+        #endregion
+
+        #region Entry / Create (GET and POST)
+
         // GET: Entries/Create
         public IActionResult Create()
         {
-            var painTypes = _context.PainTypes.ToList();
-            var triggers = _context.Triggers.ToList();
-            var medications = _context.Medications.ToList();
-            var weatherData = _context.WeatherData.ToList();
             var accompanyingSymptoms = _context.AccompanyingSymptoms.ToList();
 
-            var model = new EntryFormModel()
+            var createEntryFormModel = new CreateEntryFormModel
             {
-                PainTypes = painTypes,
-                Triggers = triggers,
-                Medications = medications,
-                WeatherData = weatherData,
                 AccompanyingSymptoms = accompanyingSymptoms
             };
 
-            return View(model);
+            return View(createEntryFormModel);
         }
 
         // POST: Entries/Create
@@ -76,52 +85,65 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(EntryFormModel entryFormModel)
+        public async Task<IActionResult> Create(CreateEntryFormModel createEntryFormModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(entryFormModel);
+                return View(createEntryFormModel);
             }
 
-            // Create initial entry to get id
-            var initialEntry = new Entry()
+            var entry = await CreateInitialEntryAsync(createEntryFormModel);
+            if (entry is null)
             {
-                CreationDate = DateTime.Now
-            };
+                return RedirectToAction(nameof(Index));
+            }
 
-            _context.Add(initialEntry);
-            await _context
-                .SaveChangesAsync()
+            var wasEntrySaved = await SaveEntryToDbAsync(entry)
                 .ConfigureAwait(false);
-
-
-            var initialEntryFromDb = await _context.Entries
-                .OrderByDescending(e => e.CreationDate)
-                .FirstOrDefaultAsync()
-                .ConfigureAwait(false);
-
-
-            foreach (var painTypeId in entryFormModel.SelectedPainTypes)
+            if (wasEntrySaved is false)
             {
-                var entryPainType = new EntryPainType()
-                {
-                    EntryId = initialEntryFromDb.Id,
-                    PainTypeId = painTypeId
-                };
+                return RedirectToAction(nameof(Index));
+            }
 
-                _context.Add(entryPainType); 
-                await _context.SaveChangesAsync()
+            var selectedSymptoms = createEntryFormModel.SelectedAccSymptoms;
+            var symptoms = new List<AccompanyingSymptom>();
+            var entryAccompanyingSymptoms = new List<EntryAccompanyingSymptom>();
+
+            var entryReloaded = await ReloadEntry();
+            if (entryReloaded is null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            foreach (var selectedSymptom in selectedSymptoms)
+            {
+                var symptom = await FindAccompanyingSymptomById(selectedSymptom)
                     .ConfigureAwait(false);
+
+                symptoms.Add(symptom);
+
+                var entryAccompanyingSymptom = 
+                    await CreateEntryAccompanyingSymptom(entryReloaded, symptom)
+                    .ConfigureAwait(false);
+
+                _context.EntryAccompanyingSymptoms.Add(entryAccompanyingSymptom);
+                
+                await _context
+                    .SaveChangesAsync()
+                    .ConfigureAwait(false);
+
+                entryAccompanyingSymptoms.Add(entryAccompanyingSymptom);
             }
 
-            var test = initialEntryFromDb;
+            entryReloaded.EntryAccompanyingSymptoms = entryAccompanyingSymptoms;
+            _context.Update(entry);
 
-            _context.Add(initialEntryFromDb);
-            await _context.SaveChangesAsync()
-                .ConfigureAwait(false);
-            
             return RedirectToAction(nameof(Index));
         }
+
+        #endregion
+
+        #region Entry / Edit (GET and POST)
 
         // GET: Entries/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -131,7 +153,10 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var entry = await _context.Entries.FindAsync(id).ConfigureAwait(false);
+            var entry = await _context.Entries
+                .FindAsync(id)
+                .ConfigureAwait(false);
+
             if (entry == null)
             {
                 return NotFound();
@@ -144,35 +169,40 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CreationDate,PainIntensity,PainDuration,WasPainIncreasedDuringPhysicalActivity,DurationOfIncapacitation,DurationOfActivity,SelectedWeatherData")] Entry entry)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CreationDate,PainDuration,WasPainIncreasedDuringPhysicalActivity,DurationOfIncapacitation,DurationOfActivity")] Entry entry)
         {
             if (id != entry.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(entry);
-                    await _context.SaveChangesAsync().ConfigureAwait(false);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EntryExists(entry.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(entry);
             }
-            return View(entry);
+
+            try
+            {
+                _context.Update(entry);
+                await _context
+                    .SaveChangesAsync()
+                    .ConfigureAwait(false);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!EntryExists(entry.Id))
+                {
+                    return NotFound();
+                }
+
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
         }
+
+        #endregion
+
+        #region Entry / Delete (GET and POST)
 
         // GET: Entries/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -183,7 +213,9 @@ namespace MgMateWeb.Controllers
             }
 
             var entry = await _context.Entries
-                .FirstOrDefaultAsync(m => m.Id == id).ConfigureAwait(false);
+                .FirstOrDefaultAsync(m => m.Id == id)
+                .ConfigureAwait(false);
+
             if (entry == null)
             {
                 return NotFound();
@@ -197,9 +229,16 @@ namespace MgMateWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var entry = await _context.Entries.FindAsync(id).ConfigureAwait(false);
+            var entry = await _context.Entries
+                .FindAsync(id)
+                .ConfigureAwait(false);
+
             _context.Entries.Remove(entry);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
+
+            await _context
+                 .SaveChangesAsync()
+                 .ConfigureAwait(false);
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -208,5 +247,101 @@ namespace MgMateWeb.Controllers
             return _context.Entries.Any(e => e.Id == id);
         }
 
+        #endregion
+
+        #region Private Methods
+
+        private async Task<bool> SaveEntryToDbAsync(Entry entry)
+        {
+            if (entry is null)
+            {
+                return false;
+            }
+
+            try
+            {
+                _context.Add(entry);
+                await _context
+                    .SaveChangesAsync()
+                    .ConfigureAwait(false);
+
+                return await Task
+                    .FromResult(true)
+                    .ConfigureAwait(false);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        private async Task<Entry> ReloadEntry()
+        {
+            var entryReloaded = await _context.Entries
+                .OrderByDescending(entry => entry.CreationDate)
+                .FirstOrDefaultAsync().ConfigureAwait(false);
+            return entryReloaded;
+        }
+
+        private async Task<AccompanyingSymptom> FindAccompanyingSymptomById(int selectedSymptom)
+        {
+            if (selectedSymptom <= 0)
+            {
+                return new AccompanyingSymptom();
+            }
+
+            var symptom = await _context.AccompanyingSymptoms
+                .FindAsync(selectedSymptom)
+                .ConfigureAwait(false);
+            return symptom;
+        }
+
+        private async Task<Entry> CreateInitialEntryAsync(CreateEntryFormModel createEntryFormModel)
+        {
+            if (createEntryFormModel is null)
+            {
+                return new Entry();
+            }
+
+            var entry = new Entry()
+            {
+                CreationDate = DateTime.Now,
+                HoursOfActivity = createEntryFormModel.HoursOfActivity,
+                HoursOfIncapacitation = createEntryFormModel.HoursOfIncapacitation,
+                HoursOfPain = createEntryFormModel.HoursOfPain,
+                WasPainIncreasedDuringPhysicalActivity = createEntryFormModel.WasPainIncreasedDuringPhysicalActivity
+            };
+            return await Task
+                .FromResult(entry)
+                .ConfigureAwait(false);
+        }
+
+        private async Task<EntryAccompanyingSymptom> CreateEntryAccompanyingSymptom(
+            Entry entryReloaded, 
+            AccompanyingSymptom symptom)
+        {
+            if(entryReloaded is null 
+               || symptom is null)
+            {
+                return new EntryAccompanyingSymptom();
+            }
+
+            var entryAccompanyingSymptom = new EntryAccompanyingSymptom
+            {
+                Entry = entryReloaded,
+                EntryId = entryReloaded.Id,
+                AccompanyingSymptom = symptom,
+                AccompanyingSymptomId = symptom.Id
+            };
+
+            return await Task
+                .FromResult(entryAccompanyingSymptom)
+                .ConfigureAwait(false);
+        }
+
+
+        #endregion
     }
 }
