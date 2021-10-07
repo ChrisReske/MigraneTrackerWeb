@@ -40,6 +40,12 @@ namespace MgMateWeb.Persistence.Repositories
             return _context.Set<TEntity>().Where(predicate);
         }
 
+
+        public async Task<TEntity> GetAsync(int? id)
+        {
+            return await _context.Set<TEntity>().FindAsync(id);
+        }
+
         public TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
             return _context.Set<TEntity>().SingleOrDefault(predicate);
