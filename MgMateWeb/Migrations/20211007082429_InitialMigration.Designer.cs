@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MgMateWeb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211007075833_AddJunctionTableForEntryAndAccompanyingSymptom")]
-    partial class AddJunctionTableForEntryAndAccompanyingSymptom
+    [Migration("20211007082429_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
