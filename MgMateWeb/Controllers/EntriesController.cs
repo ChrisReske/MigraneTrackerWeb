@@ -74,15 +74,7 @@ namespace MgMateWeb.Controllers
                 return View(createEntryFormModel);
             }
 
-            // Save blank entry first to access 'id' property
-            var entry = new Entry()
-            {
-                CreationDate = DateTime.Now,
-                HoursOfActivity = createEntryFormModel.HoursOfActivity,
-                HoursOfIncapacitation = createEntryFormModel.HoursOfIncapacitation,
-                HoursOfPain = createEntryFormModel.HoursOfPain,
-                WasPainIncreasedDuringPhysicalActivity = createEntryFormModel.WasPainIncreasedDuringPhysicalActivity
-            };
+            var entry = await CreateInitialEntryAsync(createEntryFormModel);
 
             var wasEntrySaved = await SaveEntryToDbAsync(entry)
                 .ConfigureAwait(false);
@@ -122,6 +114,26 @@ namespace MgMateWeb.Controllers
             _context.Update(entry);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task<Entry> CreateInitialEntryAsync(CreateEntryFormModel createEntryFormModel)
+        {
+            if (createEntryFormModel is null)
+            {
+                return new Entry();
+            }
+
+            var entry = new Entry()
+            {
+                CreationDate = DateTime.Now,
+                HoursOfActivity = createEntryFormModel.HoursOfActivity,
+                HoursOfIncapacitation = createEntryFormModel.HoursOfIncapacitation,
+                HoursOfPain = createEntryFormModel.HoursOfPain,
+                WasPainIncreasedDuringPhysicalActivity = createEntryFormModel.WasPainIncreasedDuringPhysicalActivity
+            };
+            return await Task
+                .FromResult(entry)
+                .ConfigureAwait(false);
         }
 
         // GET: Entries/Edit/5
