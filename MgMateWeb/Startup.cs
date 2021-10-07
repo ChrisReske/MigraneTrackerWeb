@@ -1,3 +1,4 @@
+using MgMateWeb.Interfaces.PersistenceInterfaces;
 using MgMateWeb.Interfaces.RepositoryInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,13 @@ namespace MgMateWeb
                     Configuration.GetConnectionString("DefaultConnection"),
                     b => b
                         .MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+            #endregion
+
+            #region Interfaces
+
+            services.AddScoped<IUnitOfWork, IUnitOfWork>();
+
 
             #endregion
 
