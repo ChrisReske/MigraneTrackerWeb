@@ -71,12 +71,19 @@ namespace MgMateWeb.Controllers
             }
 
             // Save blank entry first to access 'id' property
+            var entry = new Entry()
+            {
+                CreationDate = DateTime.Now
+            };
 
-            var entry = new Entry() { };
-            var wasEntrySaved = await SaveEntryToDbAsync(entry);
+            var wasEntrySaved = await SaveEntryToDbAsync(entry)
+                .ConfigureAwait(false);
 
-            // Reload entry and map EntryId to selected symptoms
+            // Reload entry
             var selectedSymptoms = createEntryFormModel.SelectedAccSymptoms;
+
+            var entryReloaded = await ReloadEntry();
+
 
 
             return RedirectToAction(nameof(Index));
@@ -206,6 +213,14 @@ namespace MgMateWeb.Controllers
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        private async Task<Entry> ReloadEntry()
+        {
+            var entryReloaded = await _context.Entries
+                .OrderByDescending(entry => entry.CreationDate)
+                .FirstOrDefaultAsync().ConfigureAwait(false);
+            return entryReloaded;
         }
 
 
