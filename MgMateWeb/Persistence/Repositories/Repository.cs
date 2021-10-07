@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using MgMateWeb.Interfaces.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,9 +10,9 @@ namespace MgMateWeb.Persistence.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private readonly DbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public Repository(DbContext context)
+        public Repository(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -26,6 +27,12 @@ namespace MgMateWeb.Persistence.Repositories
         {
          
             return _context.Set<TEntity>().ToList();
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+
+            return await _context.Set<TEntity>().ToListAsync();
         }
 
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)

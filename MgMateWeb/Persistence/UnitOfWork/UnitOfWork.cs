@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
+using MgMateWeb.Interfaces.RepositoryInterfaces;
+using MgMateWeb.Persistence.Repositories;
 
 namespace MgMateWeb.Persistence.UnitOfWork
 {
@@ -8,12 +10,16 @@ namespace MgMateWeb.Persistence.UnitOfWork
     {
         private readonly ApplicationDbContext _context;
         private bool _disposed;
+        public IAccompanyingSymptomsRepository AccompanyingSymptoms { get; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
-           
+            AccompanyingSymptoms = new AccompanyingSymptomRepository(_context);
+
         }
+
+        
 
         public async Task<int> CompleteAsync()
         {
