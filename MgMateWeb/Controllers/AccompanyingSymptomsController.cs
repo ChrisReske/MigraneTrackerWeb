@@ -72,8 +72,10 @@ namespace MgMateWeb.Controllers
             if (ModelState.IsValid)
             {
                 accompanyingSymptom.CreationDate = DateTime.Now;
-                _context.Add(accompanyingSymptom);
-                await _context.SaveChangesAsync();
+                
+                _unitOfWork.AccompanyingSymptoms.Add(accompanyingSymptom);
+                await _unitOfWork.CompleteAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(accompanyingSymptom);
