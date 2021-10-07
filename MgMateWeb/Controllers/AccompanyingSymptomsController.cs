@@ -30,7 +30,9 @@ namespace MgMateWeb.Controllers
                 .GetAllAsync()
                 .ConfigureAwait(false);
 
-            return View(accompanyingSymptoms);
+            return accompanyingSymptoms is null 
+                ? View() 
+                : View(accompanyingSymptoms);
         }
 
         // GET: AccompanyingSymptom/Details/5
@@ -41,8 +43,11 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptom = await _context.AccompanyingSymptoms
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var accompanyingSymptom = await _unitOfWork
+                .AccompanyingSymptoms
+                .GetFirstOrDefaultById(m => m.Id == id)
+                .ConfigureAwait(false);
+
             if (accompanyingSymptom == null)
             {
                 return NotFound();

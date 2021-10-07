@@ -64,5 +64,10 @@ namespace MgMateWeb.Persistence.Repositories
         {
             _context.Set<TEntity>().RemoveRange(entities);
         }
+
+        public async Task<TEntity> GetFirstOrDefaultById(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _context.Set<TEntity>().FirstOrDefaultAsync(predicate); 
+        }
     }
 }
