@@ -25,7 +25,7 @@ namespace MgMateWeb.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AccompanyingSymptoms",
+                name: "AccompanyingSymptom",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -60,7 +60,7 @@ namespace MgMateWeb.Migrations
                     table.ForeignKey(
                         name: "FK_EntryAccompanyingSymptoms_AccompanyingSymptoms_AccompanyingSymptomId",
                         column: x => x.AccompanyingSymptomId,
-                        principalTable: "AccompanyingSymptoms",
+                        principalTable: "AccompanyingSymptom",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -73,7 +73,7 @@ namespace MgMateWeb.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_AccompanyingSymptoms_EntryId",
-                table: "AccompanyingSymptoms",
+                table: "AccompanyingSymptom",
                 column: "EntryId");
 
             migrationBuilder.CreateIndex(
@@ -93,7 +93,7 @@ namespace MgMateWeb.Migrations
                 name: "EntryAccompanyingSymptoms");
 
             migrationBuilder.DropTable(
-                name: "AccompanyingSymptoms");
+                name: "AccompanyingSymptom");
 
             migrationBuilder.DropTable(
                 name: "Entries");

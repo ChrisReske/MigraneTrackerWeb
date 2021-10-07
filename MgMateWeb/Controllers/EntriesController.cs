@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Models.FormModels;
+using MgMateWeb.Models.RelationshipModels;
 using MgMateWeb.Persistence;
 
 namespace MgMateWeb.Controllers
@@ -22,6 +24,8 @@ namespace MgMateWeb.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Entries
+                .Include(e => e.EntryAccompanyingSymptoms)
+                .ThenInclude(e => e.AccompanyingSymptom)
                 .ToListAsync()
                 .ConfigureAwait(false));
         }
@@ -73,7 +77,11 @@ namespace MgMateWeb.Controllers
             // Save blank entry first to access 'id' property
             var entry = new Entry()
             {
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.Now,
+                HoursOfActivity = createEntryFormModel.HoursOfActivity,
+                HoursOfIncapacitation = createEntryFormModel.HoursOfIncapacitation,
+                HoursOfPain = createEntryFormModel.HoursOfPain,
+                WasPainIncreasedDuringPhysicalActivity = createEntryFormModel.WasPainIncreasedDuringPhysicalActivity
             };
 
             var wasEntrySaved = await SaveEntryToDbAsync(entry)
@@ -81,10 +89,37 @@ namespace MgMateWeb.Controllers
 
             // Reload entry
             var selectedSymptoms = createEntryFormModel.SelectedAccSymptoms;
+            var symptoms = new List<AccompanyingSymptom>();
+            var entryAccompanyingSymptoms = new List<EntryAccompanyingSymptom>();
 
             var entryReloaded = await ReloadEntry();
 
+            foreach (var selectedSymptom in selectedSymptoms)
+            {
+                var symptom = await _context.AccompanyingSymptoms
+                    .FindAsync(selectedSymptom)
+                    .ConfigureAwait(false);
 
+                symptoms.Add(symptom);
+
+                var entryAccompanyingSymptom = new EntryAccompanyingSymptom
+                {
+                    Entry = entryReloaded,
+                    EntryId = entryReloaded.Id,
+                    AccompanyingSymptom = symptom,
+                    AccompanyingSymptomId = symptom.Id
+                };
+
+                _context.EntryAccompanyingSymptoms.Add(entryAccompanyingSymptom);
+                await _context
+                    .SaveChangesAsync()
+                    .ConfigureAwait(false);
+
+                entryAccompanyingSymptoms.Add(entryAccompanyingSymptom);
+            }
+
+            entryReloaded.EntryAccompanyingSymptoms = entryAccompanyingSymptoms;
+            _context.Update(entry);
 
             return RedirectToAction(nameof(Index));
         }

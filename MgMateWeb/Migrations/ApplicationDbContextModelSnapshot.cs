@@ -32,14 +32,9 @@ namespace MgMateWeb.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EntryId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("EntryId");
-
-                    b.ToTable("AccompanyingSymptoms");
+                    b.ToTable("AccompanyingSymptom");
                 });
 
             modelBuilder.Entity("MgMateWeb.Models.EntryModels.Entry", b =>
@@ -91,13 +86,6 @@ namespace MgMateWeb.Migrations
                     b.ToTable("EntryAccompanyingSymptoms");
                 });
 
-            modelBuilder.Entity("MgMateWeb.Models.EntryModels.AccompanyingSymptom", b =>
-                {
-                    b.HasOne("MgMateWeb.Models.EntryModels.Entry", null)
-                        .WithMany("AccompanyingSymptoms")
-                        .HasForeignKey("EntryId");
-                });
-
             modelBuilder.Entity("MgMateWeb.Models.RelationshipModels.EntryAccompanyingSymptom", b =>
                 {
                     b.HasOne("MgMateWeb.Models.EntryModels.AccompanyingSymptom", "AccompanyingSymptom")
@@ -107,7 +95,7 @@ namespace MgMateWeb.Migrations
                         .IsRequired();
 
                     b.HasOne("MgMateWeb.Models.EntryModels.Entry", "Entry")
-                        .WithMany()
+                        .WithMany("EntryAccompanyingSymptoms")
                         .HasForeignKey("EntryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -119,7 +107,7 @@ namespace MgMateWeb.Migrations
 
             modelBuilder.Entity("MgMateWeb.Models.EntryModels.Entry", b =>
                 {
-                    b.Navigation("AccompanyingSymptoms");
+                    b.Navigation("EntryAccompanyingSymptoms");
                 });
 #pragma warning restore 612, 618
         }
