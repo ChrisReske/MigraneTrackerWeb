@@ -1,4 +1,4 @@
-﻿@model MgMateWeb.Models.EntryModels.AccompanyingSymptom
+﻿@model MgMateWeb.Dto.AccompanyingSymptomDto
 
 @{
     ViewData["Title"] = "Delete";
@@ -17,12 +17,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreationDate)
         </dd>
     </dl>
     

@@ -190,12 +190,16 @@ namespace MgMateWeb.Controllers
                 .GetFirstOrDefaultById(m => m.Id == id)
                 .ConfigureAwait(false);
 
-            if (accompanyingSymptom == null)
+            if (accompanyingSymptom is null)
             {
                 return NotFound();
             }
 
-            return View(accompanyingSymptom);
+            var accompanyingSymptomDto = await _customMapper
+                .MapToAccompanyingSymptomDtoAsync(accompanyingSymptom)
+                .ConfigureAwait(false);
+
+            return View(accompanyingSymptomDto);
         }
 
         // POST: AccompanyingSymptom/Delete/5
