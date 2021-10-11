@@ -69,16 +69,17 @@ namespace MgMateWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Description,CreationDate")] AccompanyingSymptom accompanyingSymptom)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                accompanyingSymptom.CreationDate = DateTime.Now;
-                
-                _unitOfWork.AccompanyingSymptoms.Add(accompanyingSymptom);
-                await _unitOfWork.CompleteAsync();
-
-                return RedirectToAction(nameof(Index));
+                return View(accompanyingSymptom);
             }
-            return View(accompanyingSymptom);
+
+            accompanyingSymptom.CreationDate = DateTime.Now;
+                
+            _unitOfWork.AccompanyingSymptoms.Add(accompanyingSymptom);
+            await _unitOfWork.CompleteAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: AccompanyingSymptom/Edit/5
@@ -113,27 +114,32 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(accompanyingSymptom);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AccompanyingSymptomExists(accompanyingSymptom.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(accompanyingSymptom);
             }
-            return View(accompanyingSymptom);
+
+            try
+            {
+                _unitOfWork.AccompanyingSymptoms
+                    .Update(accompanyingSymptom);
+                await _unitOfWork
+                    .CompleteAsync()
+                    .ConfigureAwait(false);
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AccompanyingSymptomExists(accompanyingSymptom.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: AccompanyingSymptom/Delete/5

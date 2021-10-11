@@ -75,5 +75,10 @@ namespace MgMateWeb.Persistence.Repositories
         {
             return await _context.Set<TEntity>().FirstOrDefaultAsync(predicate); 
         }
+
+        public void Update(TEntity entity)
+        {
+             _context.Set<TEntity>().Update(entity);
+        }
     }
 }

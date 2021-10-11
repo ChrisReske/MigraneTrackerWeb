@@ -24,5 +24,8 @@ namespace MgMateWeb.Interfaces.RepositoryInterfaces
         void RemoveRange(IEnumerable<TEntity> entities);
         Task<TEntity> GetFirstOrDefaultById(Expression<Func<TEntity, bool>> predicate);
 
+        void Update(TEntity entity);
+
+
     }
 }
