@@ -5,7 +5,6 @@ using MgMateWeb.Interfaces.PersistenceInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MgMateWeb.Models.EntryModels;
 
 namespace MgMateWeb.Controllers
 {
@@ -120,7 +119,12 @@ namespace MgMateWeb.Controllers
             {
                 return NotFound();
             }
-            return View(accompanyingSymptom);
+
+            var accompanyingSymptomDto = await _customMapper
+                .MapToAccompanyingSymptomDtoAsync(accompanyingSymptom)
+                .ConfigureAwait(false);
+
+            return View(accompanyingSymptomDto);
         }
 
         // POST: AccompanyingSymptom/Edit/5
@@ -128,16 +132,27 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,CreationDate")] AccompanyingSymptom accompanyingSymptom)
+        public async Task<IActionResult> Edit(
+            int id, 
+            AccompanyingSymptomDto accompanyingSymptomDto)
         {
-            if (id != accompanyingSymptom.Id)
+            if (id != accompanyingSymptomDto.Id)
             {
                 return NotFound();
             }
 
             if (!ModelState.IsValid)
             {
-                return View(accompanyingSymptom);
+                return View(accompanyingSymptomDto);
+            }
+
+            var accompanyingSymptom = await _customMapper
+                .MapFromAccompanyingSymptomDtoAsync(accompanyingSymptomDto)
+                .ConfigureAwait(false);
+
+            if(accompanyingSymptom is null)
+            {
+                return NotFound();
             }
 
             try
