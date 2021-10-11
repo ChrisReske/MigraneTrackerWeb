@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MgMateWeb.Dto;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -83,15 +84,19 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,CreationDate")] AccompanyingSymptom accompanyingSymptom)
+        public async Task<IActionResult> Create(AccompanyingSymptomDto accompanyingSymptomDto)
         {
             if (!ModelState.IsValid)
             {
-                return View(accompanyingSymptom);
+                return View(accompanyingSymptomDto);
             }
 
-            accompanyingSymptom.CreationDate = DateTime.Now;
-                
+            accompanyingSymptomDto.CreationDate = DateTime.Now;
+
+            var accompanyingSymptom = await _customMapper
+                .MapFromAccompanyingSymptomDtoAsync(accompanyingSymptomDto)
+                .ConfigureAwait(false);
+
             _unitOfWork.AccompanyingSymptoms.Add(accompanyingSymptom);
             await _unitOfWork.CompleteAsync();
 
