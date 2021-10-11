@@ -61,7 +61,15 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            return View(accompanyingSymptom);
+            var accompanyingSymptomDto = await _customMapper
+                .MapToAccompanyingSymptomDtoAsync(accompanyingSymptom)
+                .ConfigureAwait(false);
+            if(accompanyingSymptomDto is null)
+            {
+                return NotFound();
+            }
+
+            return View(accompanyingSymptomDto);
         }
 
         // GET: AccompanyingSymptom/Create
