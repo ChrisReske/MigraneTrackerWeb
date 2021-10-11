@@ -21,7 +21,8 @@ namespace MgMateWeb.Utils
             {
                 CreationDate = accompanyingSymptomDto.CreationDate,
                 Description = accompanyingSymptomDto.Description,
-                Id = accompanyingSymptomDto.Id
+                Id = accompanyingSymptomDto.Id,
+                LastEditedAt = accompanyingSymptomDto.LastEditedAt
             };
 
             return await Task
@@ -40,7 +41,8 @@ namespace MgMateWeb.Utils
             {
                 CreationDate = accompanyingSymptom.CreationDate,
                 Description = accompanyingSymptom.Description,
-                Id = accompanyingSymptom.Id
+                Id = accompanyingSymptom.Id,
+                LastEditedAt = accompanyingSymptom.LastEditedAt,
             };
 
             return await Task

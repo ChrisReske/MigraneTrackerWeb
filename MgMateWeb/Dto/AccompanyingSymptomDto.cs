@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.AccessControl;
 
 namespace MgMateWeb.Dto
 {
@@ -7,5 +8,7 @@ namespace MgMateWeb.Dto
         public int Id { get; set; }
         public string Description { get; set; }
         public DateTime CreationDate { get; set; }
+        public DateTime LastEditedAt { get; set; }
+        
     }
 }

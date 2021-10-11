@@ -146,6 +146,8 @@ namespace MgMateWeb.Controllers
                 return View(accompanyingSymptomDto);
             }
 
+            accompanyingSymptomDto.LastEditedAt = DateTime.Now;
+
             var accompanyingSymptom = await _customMapper
                 .MapFromAccompanyingSymptomDtoAsync(accompanyingSymptomDto)
                 .ConfigureAwait(false);
