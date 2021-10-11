@@ -26,6 +26,7 @@ namespace MgMateWeb.Interfaces.RepositoryInterfaces
 
         void Update(TEntity entity);
 
+        Task<bool> CheckIfAnyAsync(Expression<Func<TEntity, bool>> predicate);
 
     }
 }

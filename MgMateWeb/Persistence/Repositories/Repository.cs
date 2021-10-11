@@ -80,5 +80,10 @@ namespace MgMateWeb.Persistence.Repositories
         {
              _context.Set<TEntity>().Update(entity);
         }
+
+        public async Task<bool> CheckIfAnyAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _context.Set<TEntity>().AnyAsync(predicate);
+        }
     }
 }

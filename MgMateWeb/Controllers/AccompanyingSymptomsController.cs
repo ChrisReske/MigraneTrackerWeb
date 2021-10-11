@@ -130,14 +130,12 @@ namespace MgMateWeb.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AccompanyingSymptomExists(accompanyingSymptom.Id))
+                if (await AccompanyingSymptomExists(accompanyingSymptom.Id) is false)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
             return RedirectToAction(nameof(Index));
         }
@@ -182,9 +180,11 @@ namespace MgMateWeb.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AccompanyingSymptomExists(int id)
+        private async Task<bool> AccompanyingSymptomExists(int id)
         {
-            return _context.AccompanyingSymptoms.Any(e => e.Id == id);
+            return await _unitOfWork.AccompanyingSymptoms
+                .CheckIfAnyAsync(e => e.Id == id)
+                .ConfigureAwait(false);
         }
     }
 }
