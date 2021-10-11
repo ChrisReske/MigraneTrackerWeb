@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
+using MgMateWeb.Interfaces.UtilsInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
@@ -10,10 +11,14 @@ namespace MgMateWeb.Controllers
     public class AccompanyingSymptomsController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICustomMapper _customMapper;
 
-        public AccompanyingSymptomsController(IUnitOfWork unitOfWork)
+        public AccompanyingSymptomsController(
+            IUnitOfWork unitOfWork, 
+            ICustomMapper customMapper)
         {
             _unitOfWork = unitOfWork;
+            _customMapper = customMapper;
         }
 
         // GET: AccompanyingSymptom
@@ -24,9 +29,18 @@ namespace MgMateWeb.Controllers
                 .GetAllAsync()
                 .ConfigureAwait(false);
 
-            return accompanyingSymptoms is null 
+            if(accompanyingSymptoms is null)
+            {
+                return View();
+            }
+
+            var accompanyingSymptomsDto = await _customMapper
+                .MapToMultipleAccompanyingSymptomsDtoAsync(accompanyingSymptoms)
+                .ConfigureAwait(false);
+
+            return accompanyingSymptomsDto is null 
                 ? View() 
-                : View(accompanyingSymptoms);
+                : View(accompanyingSymptomsDto);
         }
 
         // GET: AccompanyingSymptom/Details/5
