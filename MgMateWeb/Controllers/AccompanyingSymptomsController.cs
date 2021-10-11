@@ -5,20 +5,15 @@ using MgMateWeb.Interfaces.PersistenceInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
-using MgMateWeb.Persistence;
 
 namespace MgMateWeb.Controllers
 {
     public class AccompanyingSymptomsController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AccompanyingSymptomsController(
-            ApplicationDbContext context, 
-            IUnitOfWork unitOfWork)
+        public AccompanyingSymptomsController(IUnitOfWork unitOfWork)
         {
-            _context = context;
             _unitOfWork = unitOfWork;
         }
 
