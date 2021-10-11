@@ -167,9 +167,18 @@ namespace MgMateWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var accompanyingSymptom = await _context.AccompanyingSymptoms.FindAsync(id);
-            _context.AccompanyingSymptoms.Remove(accompanyingSymptom);
-            await _context.SaveChangesAsync();
+            var accompanyingSymptom = await _unitOfWork.AccompanyingSymptoms
+                .GetAsync(id)
+                .ConfigureAwait(false);
+
+            _unitOfWork
+                .AccompanyingSymptoms
+                .Remove(accompanyingSymptom);
+
+            await _unitOfWork
+                .CompleteAsync()
+                .ConfigureAwait(false);
+
             return RedirectToAction(nameof(Index));
         }
 
