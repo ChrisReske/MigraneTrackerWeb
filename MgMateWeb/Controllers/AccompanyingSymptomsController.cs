@@ -150,8 +150,10 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptom = await _context.AccompanyingSymptoms
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var accompanyingSymptom = await _unitOfWork.AccompanyingSymptoms
+                .GetFirstOrDefaultById(m => m.Id == id)
+                .ConfigureAwait(false);
+
             if (accompanyingSymptom == null)
             {
                 return NotFound();
