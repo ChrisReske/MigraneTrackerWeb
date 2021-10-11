@@ -162,7 +162,6 @@ namespace MgMateWebTests.UtilsTests
             const int expectedNumberOfMappedListItems = 2;
             var fakeListOfAccompanyingSymptoms = CreateListOfFakeAccompanyingSymptoms();
 
-
             var result = _customMapper
                 .MapToMultipleAccompanyingSymptomsDtoAsync(fakeListOfAccompanyingSymptoms);
 

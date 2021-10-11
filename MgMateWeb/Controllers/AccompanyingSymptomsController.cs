@@ -17,8 +17,10 @@ namespace MgMateWeb.Controllers
             IUnitOfWork unitOfWork, 
             ICustomMapper customMapper)
         {
-            _unitOfWork = unitOfWork;
-            _customMapper = customMapper;
+            _unitOfWork = unitOfWork 
+                          ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _customMapper = customMapper 
+                            ?? throw new ArgumentNullException(nameof(customMapper));
         }
 
         // GET: AccompanyingSymptom
