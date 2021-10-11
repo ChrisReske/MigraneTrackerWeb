@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MgMateWeb.Dto;
 using MgMateWeb.Interfaces.UtilsInterfaces;
 using MgMateWeb.Models.EntryModels;
@@ -7,7 +8,9 @@ namespace MgMateWeb.Utils
 {
     public class CustomMapper : ICustomMapper
     {
-        public async Task<AccompanyingSymptom> MapFromAccompanyingSymptomDto(AccompanyingSymptomDto accompanyingSymptomDto)
+        #region AccompanyingSymptom
+
+        public async Task<AccompanyingSymptom> MapFromAccompanyingSymptomDtoAsync(AccompanyingSymptomDto accompanyingSymptomDto)
         {
             if(accompanyingSymptomDto is null)
             {
@@ -26,7 +29,7 @@ namespace MgMateWeb.Utils
                 .ConfigureAwait(false);
         }
 
-        public async Task<AccompanyingSymptomDto> MapToAccompanyingSymptomDto(AccompanyingSymptom accompanyingSymptom)
+        public async Task<AccompanyingSymptomDto> MapToAccompanyingSymptomDtoAsync(AccompanyingSymptom accompanyingSymptom)
         {
             if (accompanyingSymptom is null)
             {
@@ -45,5 +48,49 @@ namespace MgMateWeb.Utils
                 .ConfigureAwait(false);
 
         }
+
+        public async Task<IEnumerable<AccompanyingSymptom>> MapFromMultipleAccompanyingSymptomsDtoAsync(
+            IEnumerable<AccompanyingSymptomDto> accompanyingSymptomDtos)
+        {
+            if(accompanyingSymptomDtos is null)
+            {
+                return new List<AccompanyingSymptom>();
+            }
+
+            var accompanyingSymptoms = new List<AccompanyingSymptom>();
+
+            foreach (var accompanyingSymptomDto in accompanyingSymptomDtos)
+            {
+                var accompanyingSymptom = await MapFromAccompanyingSymptomDtoAsync(accompanyingSymptomDto)
+                    .ConfigureAwait(false);
+                
+                accompanyingSymptoms.Add(accompanyingSymptom);
+            }
+
+            return await Task.FromResult(accompanyingSymptoms);
+        }
+
+        public async Task<IEnumerable<AccompanyingSymptomDto>> MapToMultipleAccompanyingSymptomsDtoAsync(
+            IEnumerable<AccompanyingSymptom> accompanyingSymptoms)
+        {
+            if (accompanyingSymptoms is null)
+            {
+                return new List<AccompanyingSymptomDto>();
+            }
+
+            var accompanyingSymptomDtos = new List<AccompanyingSymptomDto>();
+
+            foreach (var accompanyingSymptom in accompanyingSymptoms)
+            {
+                var accompanyingSymptomDto = await MapToAccompanyingSymptomDtoAsync(accompanyingSymptom)
+                    .ConfigureAwait(false);
+
+                accompanyingSymptomDtos.Add(accompanyingSymptomDto);
+            }
+
+            return await Task.FromResult(accompanyingSymptomDtos);
+        }
+
+        #endregion
     }
 }
