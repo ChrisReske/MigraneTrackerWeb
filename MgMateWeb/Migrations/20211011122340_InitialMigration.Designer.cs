@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MgMateWeb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211007090812_AddJunctionTableEntryAccompanyingSymptomPropertyToEntryModel")]
-    partial class AddJunctionTableEntryAccompanyingSymptomPropertyToEntryModel
+    [Migration("20211011122340_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,9 +34,12 @@ namespace MgMateWeb.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("LastEditedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
-                    b.ToTable("AccompanyingSymptom");
+                    b.ToTable("AccompanyingSymptoms");
                 });
 
             modelBuilder.Entity("MgMateWeb.Models.EntryModels.Entry", b =>

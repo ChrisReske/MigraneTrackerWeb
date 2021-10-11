@@ -32,9 +32,12 @@ namespace MgMateWeb.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("LastEditedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
-                    b.ToTable("AccompanyingSymptom");
+                    b.ToTable("AccompanyingSymptoms");
                 });
 
             modelBuilder.Entity("MgMateWeb.Models.EntryModels.Entry", b =>

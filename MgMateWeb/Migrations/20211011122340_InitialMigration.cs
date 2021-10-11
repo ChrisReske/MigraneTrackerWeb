@@ -8,6 +8,21 @@ namespace MgMateWeb.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AccompanyingSymptoms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastEditedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccompanyingSymptoms", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Entries",
                 columns: table => new
                 {
@@ -25,27 +40,6 @@ namespace MgMateWeb.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AccompanyingSymptom",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EntryId = table.Column<int>(type: "int", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AccompanyingSymptoms", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AccompanyingSymptoms_Entries_EntryId",
-                        column: x => x.EntryId,
-                        principalTable: "Entries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "EntryAccompanyingSymptoms",
                 columns: table => new
                 {
@@ -60,7 +54,7 @@ namespace MgMateWeb.Migrations
                     table.ForeignKey(
                         name: "FK_EntryAccompanyingSymptoms_AccompanyingSymptoms_AccompanyingSymptomId",
                         column: x => x.AccompanyingSymptomId,
-                        principalTable: "AccompanyingSymptom",
+                        principalTable: "AccompanyingSymptoms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -70,11 +64,6 @@ namespace MgMateWeb.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AccompanyingSymptoms_EntryId",
-                table: "AccompanyingSymptom",
-                column: "EntryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntryAccompanyingSymptoms_AccompanyingSymptomId",
@@ -93,7 +82,7 @@ namespace MgMateWeb.Migrations
                 name: "EntryAccompanyingSymptoms");
 
             migrationBuilder.DropTable(
-                name: "AccompanyingSymptom");
+                name: "AccompanyingSymptoms");
 
             migrationBuilder.DropTable(
                 name: "Entries");
