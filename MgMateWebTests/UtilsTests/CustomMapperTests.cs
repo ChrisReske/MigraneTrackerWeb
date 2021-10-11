@@ -132,6 +132,45 @@ namespace MgMateWebTests.UtilsTests
 
         #endregion
 
+        #region Testing CustomMapper > MapToMultipleAccompanyingSymptomsDtoAsync
+
+        [Test]
+        public void MapToMultipleAccompanyingSymptomsDtoAsync_ParameterListOfAccompanyingSymptomsIsNull_ReturnsNewListOfAccompanyingSymptomsDto()
+        {
+            const int expectedNumberOfListItems = 0;
+
+            var result = _customMapper.MapToMultipleAccompanyingSymptomsDtoAsync(null);
+
+            Assert.AreEqual(expectedNumberOfListItems, result.Result.Count());
+        }
+
+        [Test]
+        public void MapToMultipleAccompanyingSymptomsDtoAsync_ParameterListOfAccompanyingSymptomsIsEmpty_ReturnsEmptyListOfAccompanyingSymptomsDto()
+        {
+            const int expectedNumberOfListItems = 0;
+
+            var result = _customMapper
+                .MapToMultipleAccompanyingSymptomsDtoAsync(new List<AccompanyingSymptom>());
+
+            Assert.AreEqual(expectedNumberOfListItems, result.Result.Count());
+        }
+
+        [Test]
+        public void
+            MapToMultipleAccompanyingSymptomsDtoAsync_ParameterListOfAccompanyingSymptomsHasItems_ReturnsListOfMappedAccompanyingSymptomsDtoObjects()
+        {
+            const int expectedNumberOfMappedListItems = 2;
+            var fakeListOfAccompanyingSymptoms = CreateListOfFakeAccompanyingSymptoms();
+
+
+            var result = _customMapper
+                .MapToMultipleAccompanyingSymptomsDtoAsync(fakeListOfAccompanyingSymptoms);
+
+            Assert.AreEqual(expectedNumberOfMappedListItems, result.Result.Count());
+        }
+
+        #endregion
+
         #region Helper methods
 
         private AccompanyingSymptomDto CreateFakeAccompanyingSymptomDto()
