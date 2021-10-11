@@ -1,4 +1,5 @@
 using MgMateWeb.Interfaces.PersistenceInterfaces;
+using MgMateWeb.Interfaces.UtilsInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Persistence;
 using MgMateWeb.Persistence.UnitOfWork;
+using MgMateWeb.Utils;
 
 namespace MgMateWeb
 {
@@ -37,7 +39,7 @@ namespace MgMateWeb
             #region Interfaces
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+            services.AddScoped<ICustomMapper, CustomMapper>();
 
             #endregion
 
