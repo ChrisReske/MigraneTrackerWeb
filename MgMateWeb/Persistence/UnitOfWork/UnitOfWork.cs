@@ -17,11 +17,10 @@ namespace MgMateWeb.Persistence.UnitOfWork
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
+            Entries = new EntryRepository(_context);
             AccompanyingSymptoms = new AccompanyingSymptomRepository(_context);
 
         }
-
-        
 
         public async Task<int> CompleteAsync()
         {

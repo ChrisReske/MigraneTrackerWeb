@@ -39,11 +39,12 @@ namespace MgMateWeb.Controllers
         // GET: Entries
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Entries
-                .Include(e => e.EntryAccompanyingSymptoms)
-                .ThenInclude(e => e.AccompanyingSymptom)
-                .ToListAsync()
-                .ConfigureAwait(false));
+            var entries = await _unitOfWork
+                .Entries
+                .GetAllEntriesAndRelatedDataAsync()
+                .ConfigureAwait(false);
+
+            return View(entries);
         }
 
         #endregion
