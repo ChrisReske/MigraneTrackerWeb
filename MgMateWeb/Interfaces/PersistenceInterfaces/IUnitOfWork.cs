@@ -7,6 +7,7 @@ namespace MgMateWeb.Interfaces.PersistenceInterfaces
     public interface IUnitOfWork : IDisposable
     {
         IAccompanyingSymptomsRepository AccompanyingSymptoms { get; }
+        IEntryRepository Entries { get; }
 
         /// <summary>
         /// Asynchronously saves all changes made in this context to the underlying database.

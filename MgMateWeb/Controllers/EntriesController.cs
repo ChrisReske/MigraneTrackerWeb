@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MgMateWeb.Interfaces.PersistenceInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
@@ -16,14 +17,19 @@ namespace MgMateWeb.Controllers
         #region Fields and constants
 
         private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
         #endregion
 
         #region Constructor(s)
 
-        public EntriesController(ApplicationDbContext context)
+        public EntriesController(
+            ApplicationDbContext context, 
+            IUnitOfWork unitOfWork)
         {
             _context = context;
+            _unitOfWork = unitOfWork 
+                          ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         #endregion
