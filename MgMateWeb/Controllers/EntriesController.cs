@@ -12,6 +12,8 @@ using MgMateWeb.Models.RelationshipModels;
 
 namespace MgMateWeb.Controllers
 {
+    // TODO Replace actual instances of 'Entry' with Dto counterpart
+
     public class EntriesController : Controller
     {
         #region Fields and constants

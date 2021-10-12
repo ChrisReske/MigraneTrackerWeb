@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MgMateWeb.Utils
 {
+    // Todo: Remove dependency on '_context' using unit-of-work and repositories.
+
     public class EntriesControllerUtils : IEntriesControllerUtils
     {
         private readonly ApplicationDbContext _context;
