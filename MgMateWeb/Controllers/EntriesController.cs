@@ -267,11 +267,11 @@ namespace MgMateWeb.Controllers
                 .GetAsync(id)
                 .ConfigureAwait(false);
 
-            _context.Entries.Remove(entry);
+            _unitOfWork.Entries.Remove(entry);
 
-            await _context
-                 .SaveChangesAsync()
-                 .ConfigureAwait(false);
+            await _unitOfWork
+                .CompleteAsync()
+                .ConfigureAwait(false);
 
             return RedirectToAction(nameof(Index));
         }
