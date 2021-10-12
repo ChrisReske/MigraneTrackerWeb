@@ -150,8 +150,8 @@ namespace MgMateWeb.Controllers
                         .CreateEntryAccompanyingSymptom(entryReloaded, symptom)
                         .ConfigureAwait(false);
 
-                _context.EntryAccompanyingSymptoms.Add(entryAccompanyingSymptom);
-                
+                _unitOfWork.EntryAccompanyingSymptoms.Add(entryAccompanyingSymptom);
+
                 await _context
                     .SaveChangesAsync()
                     .ConfigureAwait(false);

@@ -9,6 +9,8 @@ namespace MgMateWeb.Interfaces.PersistenceInterfaces
         IAccompanyingSymptomsRepository AccompanyingSymptoms { get; }
         IEntryRepository Entries { get; }
 
+        IEntryAccompanyingSymptomsRepository EntryAccompanyingSymptoms { get; }
+
         /// <summary>
         /// Asynchronously saves all changes made in this context to the underlying database.
         /// </summary>

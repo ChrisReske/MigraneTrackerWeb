@@ -16,7 +16,7 @@ namespace MgMateWeb.Persistence.UnitOfWork
         public IAccompanyingSymptomsRepository AccompanyingSymptoms { get; }
         public IEntryRepository Entries { get; }
 
-        public IEntryAccompanyingSymptomsRepository EntryAccompanyingSymptomsRepository { get; }
+        public IEntryAccompanyingSymptomsRepository EntryAccompanyingSymptoms { get; }
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace MgMateWeb.Persistence.UnitOfWork
             _context = context;
             Entries = new EntryRepository(_context);
             AccompanyingSymptoms = new AccompanyingSymptomRepository(_context);
-            EntryAccompanyingSymptomsRepository = new EntryAccompanyingSymptomRepository(_context);
+            EntryAccompanyingSymptoms = new EntryAccompanyingSymptomRepository(_context);
 
         }
 
