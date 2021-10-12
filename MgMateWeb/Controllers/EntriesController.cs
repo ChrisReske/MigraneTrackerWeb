@@ -217,7 +217,9 @@ namespace MgMateWeb.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EntryExists(entry.Id))
+                if (! await _entriesControllerUtils
+                    .EntryExists(entry.Id)
+                    .ConfigureAwait(false))
                 {
                     return NotFound();
                 }
@@ -274,11 +276,6 @@ namespace MgMateWeb.Controllers
                 .ConfigureAwait(false);
 
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool EntryExists(int id)
-        {
-            return _context.Entries.Any(e => e.Id == id);
         }
 
         #endregion

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using MgMateWeb.Interfaces.PersistenceInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Models.FormModels;
@@ -13,10 +14,15 @@ namespace MgMateWeb.Utils
     public class EntriesControllerUtils : IEntriesControllerUtils
     {
         private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EntriesControllerUtils(ApplicationDbContext context)
+
+        public EntriesControllerUtils(
+            ApplicationDbContext context, 
+            IUnitOfWork unitOfWork)
         {
             _context = context;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -111,7 +117,18 @@ namespace MgMateWeb.Utils
                 .ConfigureAwait(false);
         }
 
+        public async Task<bool> EntryExists(int id)
+        {
+            if (id <= 0)
+            {
+                return false;
+            }
 
+            return await _unitOfWork
+                .Entries
+                .CheckIfAnyAsync(e => e.Id == id)
+                .ConfigureAwait(false);
+        }
 
     }
 }

@@ -19,5 +19,8 @@ namespace MgMateWeb.Interfaces.UtilsInterfaces
 
         Task<Entry> CreateInitialEntryAsync(CreateEntryFormModel createEntryFormModel);
 
+        Task<bool> EntryExists(int id);
+
+
     }
 }
