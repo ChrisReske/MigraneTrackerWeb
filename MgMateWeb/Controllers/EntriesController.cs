@@ -26,12 +26,12 @@ namespace MgMateWeb.Controllers
         #region Constructor(s)
 
         public EntriesController(
-            ApplicationDbContext context, 
-            IUnitOfWork unitOfWork, 
+            ApplicationDbContext context,
+            IUnitOfWork unitOfWork,
             IEntriesControllerUtils entriesControllerUtils)
         {
             _context = context;
-            _unitOfWork = unitOfWork 
+            _unitOfWork = unitOfWork
                           ?? throw new ArgumentNullException(nameof(unitOfWork));
             _entriesControllerUtils = entriesControllerUtils;
         }
@@ -109,7 +109,7 @@ namespace MgMateWeb.Controllers
             var entry = await _entriesControllerUtils
                 .CreateInitialEntryAsync(createEntryFormModel)
                 .ConfigureAwait(false);
-            
+
             if (entry is null)
             {
                 return RedirectToAction(nameof(Index));
@@ -118,7 +118,7 @@ namespace MgMateWeb.Controllers
             var wasEntrySaved = await _entriesControllerUtils
                 .SaveEntryToDbAsync(entry)
                 .ConfigureAwait(false);
-            
+
             if (wasEntrySaved is false)
             {
                 return RedirectToAction(nameof(Index));
@@ -131,7 +131,7 @@ namespace MgMateWeb.Controllers
             var entryReloaded = await _entriesControllerUtils
                 .ReloadEntryAsync()
                 .ConfigureAwait(false);
-            
+
             if (entryReloaded is null)
             {
                 return RedirectToAction(nameof(Index));
@@ -145,16 +145,17 @@ namespace MgMateWeb.Controllers
 
                 symptoms.Add(symptom);
 
-                var entryAccompanyingSymptom = 
+                var entryAccompanyingSymptom =
                     await _entriesControllerUtils
                         .CreateEntryAccompanyingSymptom(entryReloaded, symptom)
                         .ConfigureAwait(false);
 
                 _unitOfWork.EntryAccompanyingSymptoms.Add(entryAccompanyingSymptom);
 
-                await _context
-                    .SaveChangesAsync()
-                    .ConfigureAwait(false);
+                await _unitOfWork
+                     .CompleteAsync()
+                     .ConfigureAwait(false);
+
 
                 entryAccompanyingSymptoms.Add(entryAccompanyingSymptom);
             }
