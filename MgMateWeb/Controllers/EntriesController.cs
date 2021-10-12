@@ -196,7 +196,7 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CreationDate,PainDuration,WasPainIncreasedDuringPhysicalActivity,DurationOfIncapacitation,DurationOfActivity")] Entry entry)
+        public async Task<IActionResult> Edit(int id, Entry entry)
         {
             if (id != entry.Id)
             {
@@ -210,10 +210,12 @@ namespace MgMateWeb.Controllers
 
             try
             {
-                _context.Update(entry);
-                await _context
-                    .SaveChangesAsync()
+                _unitOfWork.Entries.Update(entry);
+
+                await _unitOfWork
+                    .CompleteAsync()
                     .ConfigureAwait(false);
+
             }
             catch (DbUpdateConcurrencyException)
             {
