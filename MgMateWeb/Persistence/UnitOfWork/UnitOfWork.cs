@@ -10,15 +10,22 @@ namespace MgMateWeb.Persistence.UnitOfWork
     {
         private readonly ApplicationDbContext _context;
         private bool _disposed;
-        
+
+        #region Repositories
+
         public IAccompanyingSymptomsRepository AccompanyingSymptoms { get; }
         public IEntryRepository Entries { get; }
+
+        public IEntryAccompanyingSymptomsRepository EntryAccompanyingSymptomsRepository { get; }
+
+        #endregion
 
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
             Entries = new EntryRepository(_context);
             AccompanyingSymptoms = new AccompanyingSymptomRepository(_context);
+            EntryAccompanyingSymptomsRepository = new EntryAccompanyingSymptomRepository(_context);
 
         }
 
