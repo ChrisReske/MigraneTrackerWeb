@@ -10,6 +10,7 @@ using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Models.FormModels;
 using MgMateWeb.Models.RelationshipModels;
 using MgMateWeb.Persistence;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace MgMateWeb.Controllers
 {
@@ -256,8 +257,14 @@ namespace MgMateWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var entry = await _context.Entries
-                .FindAsync(id)
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
+            var entry = await _unitOfWork
+                .Entries
+                .GetAsync(id)
                 .ConfigureAwait(false);
 
             _context.Entries.Remove(entry);
