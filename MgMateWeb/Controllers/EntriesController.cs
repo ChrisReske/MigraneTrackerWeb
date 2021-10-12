@@ -9,8 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Models.FormModels;
 using MgMateWeb.Models.RelationshipModels;
-using MgMateWeb.Persistence;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace MgMateWeb.Controllers
 {
@@ -18,7 +16,6 @@ namespace MgMateWeb.Controllers
     {
         #region Fields and constants
 
-        private readonly ApplicationDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEntriesControllerUtils _entriesControllerUtils;
 
@@ -27,11 +24,9 @@ namespace MgMateWeb.Controllers
         #region Constructor(s)
 
         public EntriesController(
-            ApplicationDbContext context,
             IUnitOfWork unitOfWork,
             IEntriesControllerUtils entriesControllerUtils)
         {
-            _context = context;
             _unitOfWork = unitOfWork
                           ?? throw new ArgumentNullException(nameof(unitOfWork));
             _entriesControllerUtils = entriesControllerUtils;
@@ -83,13 +78,17 @@ namespace MgMateWeb.Controllers
         #region Entry / Create (GET and POST)
 
         // GET: Entries/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var accompanyingSymptoms = _context.AccompanyingSymptoms.ToList();
+
+            var accompanyingSymptoms = await _unitOfWork
+                .AccompanyingSymptoms
+                .GetAllAsync()
+                .ConfigureAwait(false);
 
             var createEntryFormModel = new CreateEntryFormModel
             {
-                AccompanyingSymptoms = accompanyingSymptoms
+                AccompanyingSymptoms = accompanyingSymptoms as List<AccompanyingSymptom>
             };
 
             return View(createEntryFormModel);
