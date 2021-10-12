@@ -40,6 +40,7 @@ namespace MgMateWeb
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICustomMapper, CustomMapper>();
+            services.AddScoped<IEntriesControllerUtils, EntriesControllerUtils>();
 
             #endregion
 

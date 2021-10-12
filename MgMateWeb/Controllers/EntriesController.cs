@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
+using MgMateWeb.Interfaces.UtilsInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Models.EntryModels;
@@ -18,6 +19,7 @@ namespace MgMateWeb.Controllers
 
         private readonly ApplicationDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEntriesControllerUtils _entriesControllerUtils;
 
         #endregion
 
@@ -25,11 +27,13 @@ namespace MgMateWeb.Controllers
 
         public EntriesController(
             ApplicationDbContext context, 
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, 
+            IEntriesControllerUtils entriesControllerUtils)
         {
             _context = context;
             _unitOfWork = unitOfWork 
                           ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _entriesControllerUtils = entriesControllerUtils;
         }
 
         #endregion
@@ -102,14 +106,19 @@ namespace MgMateWeb.Controllers
                 return View(createEntryFormModel);
             }
 
-            var entry = await CreateInitialEntryAsync(createEntryFormModel);
+            var entry = await _entriesControllerUtils
+                .CreateInitialEntryAsync(createEntryFormModel)
+                .ConfigureAwait(false);
+            
             if (entry is null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            var wasEntrySaved = await SaveEntryToDbAsync(entry)
+            var wasEntrySaved = await _entriesControllerUtils
+                .SaveEntryToDbAsync(entry)
                 .ConfigureAwait(false);
+            
             if (wasEntrySaved is false)
             {
                 return RedirectToAction(nameof(Index));
@@ -119,7 +128,10 @@ namespace MgMateWeb.Controllers
             var symptoms = new List<AccompanyingSymptom>();
             var entryAccompanyingSymptoms = new List<EntryAccompanyingSymptom>();
 
-            var entryReloaded = await ReloadEntry();
+            var entryReloaded = await _entriesControllerUtils
+                .ReloadEntryAsync()
+                .ConfigureAwait(false);
+            
             if (entryReloaded is null)
             {
                 return RedirectToAction(nameof(Index));
@@ -127,14 +139,16 @@ namespace MgMateWeb.Controllers
 
             foreach (var selectedSymptom in selectedSymptoms)
             {
-                var symptom = await FindAccompanyingSymptomById(selectedSymptom)
+                var symptom = await _entriesControllerUtils
+                    .FindAccompanyingSymptomById(selectedSymptom)
                     .ConfigureAwait(false);
 
                 symptoms.Add(symptom);
 
                 var entryAccompanyingSymptom = 
-                    await CreateEntryAccompanyingSymptom(entryReloaded, symptom)
-                    .ConfigureAwait(false);
+                    await _entriesControllerUtils
+                        .CreateEntryAccompanyingSymptom(entryReloaded, symptom)
+                        .ConfigureAwait(false);
 
                 _context.EntryAccompanyingSymptoms.Add(entryAccompanyingSymptom);
                 
@@ -259,99 +273,5 @@ namespace MgMateWeb.Controllers
 
         #endregion
 
-        #region Private Methods
-
-        private async Task<bool> SaveEntryToDbAsync(Entry entry)
-        {
-            if (entry is null)
-            {
-                return false;
-            }
-
-            try
-            {
-                _context.Add(entry);
-                await _context
-                    .SaveChangesAsync()
-                    .ConfigureAwait(false);
-
-                return await Task
-                    .FromResult(true)
-                    .ConfigureAwait(false);
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
-        private async Task<Entry> ReloadEntry()
-        {
-            var entryReloaded = await _context.Entries
-                .OrderByDescending(entry => entry.CreationDate)
-                .FirstOrDefaultAsync().ConfigureAwait(false);
-            return entryReloaded;
-        }
-
-        private async Task<AccompanyingSymptom> FindAccompanyingSymptomById(int selectedSymptom)
-        {
-            if (selectedSymptom <= 0)
-            {
-                return new AccompanyingSymptom();
-            }
-
-            var symptom = await _context.AccompanyingSymptoms
-                .FindAsync(selectedSymptom)
-                .ConfigureAwait(false);
-            return symptom;
-        }
-
-        private async Task<Entry> CreateInitialEntryAsync(CreateEntryFormModel createEntryFormModel)
-        {
-            if (createEntryFormModel is null)
-            {
-                return new Entry();
-            }
-
-            var entry = new Entry()
-            {
-                CreationDate = DateTime.Now,
-                HoursOfActivity = createEntryFormModel.HoursOfActivity,
-                HoursOfIncapacitation = createEntryFormModel.HoursOfIncapacitation,
-                HoursOfPain = createEntryFormModel.HoursOfPain,
-                WasPainIncreasedDuringPhysicalActivity = createEntryFormModel.WasPainIncreasedDuringPhysicalActivity
-            };
-            return await Task
-                .FromResult(entry)
-                .ConfigureAwait(false);
-        }
-
-        private async Task<EntryAccompanyingSymptom> CreateEntryAccompanyingSymptom(
-            Entry entryReloaded, 
-            AccompanyingSymptom symptom)
-        {
-            if(entryReloaded is null 
-               || symptom is null)
-            {
-                return new EntryAccompanyingSymptom();
-            }
-
-            var entryAccompanyingSymptom = new EntryAccompanyingSymptom
-            {
-                Entry = entryReloaded,
-                EntryId = entryReloaded.Id,
-                AccompanyingSymptom = symptom,
-                AccompanyingSymptomId = symptom.Id
-            };
-
-            return await Task
-                .FromResult(entryAccompanyingSymptom)
-                .ConfigureAwait(false);
-        }
-
-
-        #endregion
     }
 }

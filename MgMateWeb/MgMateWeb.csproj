@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\UtilsInterfaces\" />
     <Folder Include="Models\FormModels\" />
     <Folder Include="Utils\" />
   </ItemGroup>
