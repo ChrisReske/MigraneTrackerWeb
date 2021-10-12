@@ -177,9 +177,11 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var entry = await _context.Entries
-                .FindAsync(id)
+            var entry = await _unitOfWork
+                .Entries
+                .GetAsync(id)
                 .ConfigureAwait(false);
+
 
             if (entry == null)
             {
