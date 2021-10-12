@@ -156,13 +156,12 @@ namespace MgMateWeb.Controllers
                      .CompleteAsync()
                      .ConfigureAwait(false);
 
-
                 entryAccompanyingSymptoms.Add(entryAccompanyingSymptom);
             }
 
             entryReloaded.EntryAccompanyingSymptoms = entryAccompanyingSymptoms;
-            _context.Update(entry);
-
+            _unitOfWork.Entries.Update(entry);
+            
             return RedirectToAction(nameof(Index));
         }
 
