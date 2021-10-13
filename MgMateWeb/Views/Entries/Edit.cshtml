@@ -1,4 +1,4 @@
-﻿@model MgMateWeb.Models.EntryModels.Entry
+﻿@model MgMateWeb.Dto.EntryDto
 
 @{
     ViewData["Title"] = "Edit";
@@ -14,11 +14,8 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control" />
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="CreationDate"/>
+            <input type="hidden" asp-for="LastChangedAt"/>
             <div class="form-group">
                 <label asp-for="HoursOfPain" class="control-label"></label>
                 <input asp-for="HoursOfPain" class="form-control" />

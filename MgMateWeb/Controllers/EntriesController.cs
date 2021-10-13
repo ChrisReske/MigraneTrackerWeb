@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MgMateWeb.Dto;
 using MgMateWeb.Interfaces.MapperInterfaces;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces;
@@ -154,7 +155,9 @@ namespace MgMateWeb.Controllers
                         .CreateEntryAccompanyingSymptom(entryReloaded, symptom)
                         .ConfigureAwait(false);
 
-                _unitOfWork.EntryAccompanyingSymptoms.Add(entryAccompanyingSymptom);
+                await _unitOfWork.EntryAccompanyingSymptoms
+                    .AddAsync(entryAccompanyingSymptom)
+                    .ConfigureAwait(false);
 
                 await _unitOfWork
                      .CompleteAsync()
@@ -190,7 +193,12 @@ namespace MgMateWeb.Controllers
             {
                 return NotFound();
             }
-            return View(entry);
+
+            var entryDto = await _entryMapper
+                .MapEntryToEntryDtoAsync(entry)
+                .ConfigureAwait(false);
+
+            return View(entryDto);
         }
 
         // POST: Entries/Edit/5
@@ -198,18 +206,22 @@ namespace MgMateWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Entry entry)
+        public async Task<IActionResult> Edit(int id, EntryDto entryDto)
         {
-            if (id != entry.Id)
+            if (id != entryDto.Id)
             {
                 return NotFound();
             }
 
             if (!ModelState.IsValid)
             {
-                return View(entry);
+                return View(entryDto);
             }
 
+            var entry = await _entryMapper
+                .MapEntryFromEntryDtoAsync(entryDto)
+                .ConfigureAwait(false);
+            
             try
             {
                 _unitOfWork.Entries.Update(entry);
