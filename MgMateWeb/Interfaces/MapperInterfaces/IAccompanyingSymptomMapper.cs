@@ -5,7 +5,7 @@ using MgMateWeb.Models.EntryModels;
 
 namespace MgMateWeb.Interfaces.MapperInterfaces
 {
-    public interface ICustomMapper
+    public interface IAccompanyingSymptomMapper
     {
         Task<AccompanyingSymptom> MapFromAccompanyingSymptomDtoAsync(AccompanyingSymptomDto accompanyingSymptomDto);
         Task<AccompanyingSymptomDto> MapToAccompanyingSymptomDtoAsync(AccompanyingSymptom accompanyingSymptom);

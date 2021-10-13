@@ -2,26 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using MgMateWeb.Dto;
+using MgMateWeb.Interfaces.MapperInterfaces;
 using MgMateWeb.Models.EntryModels;
-using MgMateWeb.Utils;
+using MgMateWeb.Utils.Mappers;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace MgMateWebTests.UtilsTests
 {
     [TestFixture]
-    public class CustomMapperTests
+    public class AccompanyingSymptomsMapperTests
     {
         #region Fields and constants
 
-        CustomMapper _customMapper;
+        private IAccompanyingSymptomMapper _accompanyingSymptomMapper;
 
         #endregion
 
         [SetUp]
         public void Init()
         {
-            _customMapper = new CustomMapper();
+            _accompanyingSymptomMapper = new AccompanyingSymptomMapper();
+
         }
 
         #region Testing CustomMapper > MapFromAccompanyingSymptomDtoAsync
@@ -29,7 +31,7 @@ namespace MgMateWebTests.UtilsTests
         [Test]
         public void MapFromAccompanyingSymptomDtoAsync_ParameterAccompanyingSymptomDtoIsNull_ReturnsNewAccompanyingSymptomObject()
         {
-            var result = _customMapper.MapFromAccompanyingSymptomDtoAsync(null);
+            var result = _accompanyingSymptomMapper.MapFromAccompanyingSymptomDtoAsync(null);
 
             Assert.IsTrue(result.Result.CreationDate == DateTime.MinValue);
         }
@@ -39,7 +41,7 @@ namespace MgMateWebTests.UtilsTests
         {
             var fakeAccompanyingSymptomsDto = new AccompanyingSymptomDto();
 
-            var result = _customMapper.MapFromAccompanyingSymptomDtoAsync(fakeAccompanyingSymptomsDto);
+            var result = _accompanyingSymptomMapper.MapFromAccompanyingSymptomDtoAsync(fakeAccompanyingSymptomsDto);
 
             Assert.IsTrue(result.Result.CreationDate == DateTime.MinValue);
         }
@@ -49,7 +51,7 @@ namespace MgMateWebTests.UtilsTests
         {
             var fakeAccompanyingSymptomsDto = CreateFakeAccompanyingSymptomDto();
 
-            var result = _customMapper.MapFromAccompanyingSymptomDtoAsync(fakeAccompanyingSymptomsDto);
+            var result = _accompanyingSymptomMapper.MapFromAccompanyingSymptomDtoAsync(fakeAccompanyingSymptomsDto);
 
             var fakeAccompanyingSymptomsDtoJson = JsonConvert.SerializeObject(fakeAccompanyingSymptomsDto);
             var resultJson = JsonConvert.SerializeObject(result.Result);
@@ -64,7 +66,7 @@ namespace MgMateWebTests.UtilsTests
         [Test]
         public void MapToAccompanyingSymptomDtoAsync_ParameterAccompanyingSymptomIsNull_ReturnsNewAccompanyingSymptomDtoObject()
         {
-            var result = _customMapper.MapToAccompanyingSymptomDtoAsync(null);
+            var result = _accompanyingSymptomMapper.MapToAccompanyingSymptomDtoAsync(null);
 
             Assert.IsTrue(result.Result.CreationDate == DateTime.MinValue);
         }
@@ -74,7 +76,7 @@ namespace MgMateWebTests.UtilsTests
         {
             var fakeAccompanyingSymptom = new AccompanyingSymptom();
 
-            var result = _customMapper
+            var result = _accompanyingSymptomMapper
                 .MapToAccompanyingSymptomDtoAsync(fakeAccompanyingSymptom);
 
             Assert.IsTrue(result.Result.CreationDate == DateTime.MinValue);
@@ -85,7 +87,7 @@ namespace MgMateWebTests.UtilsTests
         {
             var fakeAccompanyingSymptom = CreateFakeAccompanyingSymptom();
 
-            var result = _customMapper.MapToAccompanyingSymptomDtoAsync(fakeAccompanyingSymptom);
+            var result = _accompanyingSymptomMapper.MapToAccompanyingSymptomDtoAsync(fakeAccompanyingSymptom);
 
             var fakeAccompanyingSymptomJson = JsonConvert.SerializeObject(CreateFakeAccompanyingSymptom());
             var resultJson = JsonConvert.SerializeObject(result.Result);
@@ -102,7 +104,7 @@ namespace MgMateWebTests.UtilsTests
         {
             const int expectedNumberOfListItems = 0;
 
-            var result = _customMapper.MapFromMultipleAccompanyingSymptomsDtoAsync(null);
+            var result = _accompanyingSymptomMapper.MapFromMultipleAccompanyingSymptomsDtoAsync(null);
 
             Assert.AreEqual(expectedNumberOfListItems, result.Result.Count());
 
@@ -113,7 +115,7 @@ namespace MgMateWebTests.UtilsTests
         {
             const int expectedNumberOfListItems = 0;
 
-            var result = _customMapper.MapFromMultipleAccompanyingSymptomsDtoAsync(new List<AccompanyingSymptomDto>());
+            var result = _accompanyingSymptomMapper.MapFromMultipleAccompanyingSymptomsDtoAsync(new List<AccompanyingSymptomDto>());
 
             Assert.AreEqual(expectedNumberOfListItems, result.Result.Count());
         }
@@ -125,7 +127,7 @@ namespace MgMateWebTests.UtilsTests
 
             var listOfFakeAccompanyingSymptomsDto = CreateListOfFakeAccompanyingSymptomDtos();
 
-            var result = _customMapper.MapFromMultipleAccompanyingSymptomsDtoAsync(listOfFakeAccompanyingSymptomsDto);
+            var result = _accompanyingSymptomMapper.MapFromMultipleAccompanyingSymptomsDtoAsync(listOfFakeAccompanyingSymptomsDto);
 
             Assert.AreEqual(expectedNumberOfMappedListItems, result.Result.Count());
         }
@@ -139,7 +141,7 @@ namespace MgMateWebTests.UtilsTests
         {
             const int expectedNumberOfListItems = 0;
 
-            var result = _customMapper.MapToMultipleAccompanyingSymptomsDtoAsync(null);
+            var result = _accompanyingSymptomMapper.MapToMultipleAccompanyingSymptomsDtoAsync(null);
 
             Assert.AreEqual(expectedNumberOfListItems, result.Result.Count());
         }
@@ -149,7 +151,7 @@ namespace MgMateWebTests.UtilsTests
         {
             const int expectedNumberOfListItems = 0;
 
-            var result = _customMapper
+            var result = _accompanyingSymptomMapper
                 .MapToMultipleAccompanyingSymptomsDtoAsync(new List<AccompanyingSymptom>());
 
             Assert.AreEqual(expectedNumberOfListItems, result.Result.Count());
@@ -162,7 +164,7 @@ namespace MgMateWebTests.UtilsTests
             const int expectedNumberOfMappedListItems = 2;
             var fakeListOfAccompanyingSymptoms = CreateListOfFakeAccompanyingSymptoms();
 
-            var result = _customMapper
+            var result = _accompanyingSymptomMapper
                 .MapToMultipleAccompanyingSymptomsDtoAsync(fakeListOfAccompanyingSymptoms);
 
             Assert.AreEqual(expectedNumberOfMappedListItems, result.Result.Count());

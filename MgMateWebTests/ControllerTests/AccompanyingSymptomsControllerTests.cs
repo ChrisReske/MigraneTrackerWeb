@@ -2,7 +2,6 @@
 using MgMateWeb.Controllers;
 using MgMateWeb.Interfaces.MapperInterfaces;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
-using MgMateWeb.Interfaces.UtilsInterfaces;
 using Moq;
 using NUnit.Framework;
 
@@ -14,7 +13,7 @@ namespace MgMateWebTests.ControllerTests
         #region Fields and constants
 
         private Mock<IUnitOfWork> _fakeUnitOfWork;
-        private Mock<ICustomMapper> _fakeCustomMapper;
+        private Mock<IAccompanyingSymptomMapper> _fakeAccompanyingSymptomMapper;
 
         AccompanyingSymptomsController _accompanyingSymptomsController;
 
@@ -25,12 +24,12 @@ namespace MgMateWebTests.ControllerTests
         public void Init()
         {
             _fakeUnitOfWork = new Mock<IUnitOfWork>();
-            _fakeCustomMapper = new Mock<ICustomMapper>();
+            _fakeAccompanyingSymptomMapper = new Mock<IAccompanyingSymptomMapper>();
 
             _accompanyingSymptomsController =
                 new AccompanyingSymptomsController(
                     _fakeUnitOfWork.Object, 
-                    _fakeCustomMapper.Object);
+                    _fakeAccompanyingSymptomMapper.Object);
 
         }
 
@@ -44,7 +43,7 @@ namespace MgMateWebTests.ControllerTests
                 {
                     var unused = new AccompanyingSymptomsController(
                         null, 
-                        _fakeCustomMapper.Object);
+                        _fakeAccompanyingSymptomMapper.Object);
                 });
 
         }

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using MgMateWeb.Dto;
 using MgMateWeb.Interfaces.MapperInterfaces;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
-using MgMateWeb.Interfaces.UtilsInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,16 +11,16 @@ namespace MgMateWeb.Controllers
     public class AccompanyingSymptomsController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICustomMapper _customMapper;
+        private readonly IAccompanyingSymptomMapper _accompanyingSymptomMapper;
 
         public AccompanyingSymptomsController(
             IUnitOfWork unitOfWork, 
-            ICustomMapper customMapper)
+            IAccompanyingSymptomMapper accompanyingSymptomMapper)
         {
             _unitOfWork = unitOfWork 
                           ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _customMapper = customMapper 
-                            ?? throw new ArgumentNullException(nameof(customMapper));
+            _accompanyingSymptomMapper = accompanyingSymptomMapper 
+                                         ?? throw new ArgumentNullException(nameof(accompanyingSymptomMapper));
         }
 
         // GET: AccompanyingSymptom
@@ -37,7 +36,7 @@ namespace MgMateWeb.Controllers
                 return View();
             }
 
-            var accompanyingSymptomsDto = await _customMapper
+            var accompanyingSymptomsDto = await _accompanyingSymptomMapper
                 .MapToMultipleAccompanyingSymptomsDtoAsync(accompanyingSymptoms)
                 .ConfigureAwait(false);
 
@@ -64,7 +63,7 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptomDto = await _customMapper
+            var accompanyingSymptomDto = await _accompanyingSymptomMapper
                 .MapToAccompanyingSymptomDtoAsync(accompanyingSymptom)
                 .ConfigureAwait(false);
             if(accompanyingSymptomDto is null)
@@ -95,7 +94,7 @@ namespace MgMateWeb.Controllers
 
             accompanyingSymptomDto.CreationDate = DateTime.Now;
 
-            var accompanyingSymptom = await _customMapper
+            var accompanyingSymptom = await _accompanyingSymptomMapper
                 .MapFromAccompanyingSymptomDtoAsync(accompanyingSymptomDto)
                 .ConfigureAwait(false);
 
@@ -123,7 +122,7 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptomDto = await _customMapper
+            var accompanyingSymptomDto = await _accompanyingSymptomMapper
                 .MapToAccompanyingSymptomDtoAsync(accompanyingSymptom)
                 .ConfigureAwait(false);
 
@@ -151,7 +150,7 @@ namespace MgMateWeb.Controllers
 
             accompanyingSymptomDto.LastEditedAt = DateTime.Now;
 
-            var accompanyingSymptom = await _customMapper
+            var accompanyingSymptom = await _accompanyingSymptomMapper
                 .MapFromAccompanyingSymptomDtoAsync(accompanyingSymptomDto)
                 .ConfigureAwait(false);
 
@@ -198,7 +197,7 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            var accompanyingSymptomDto = await _customMapper
+            var accompanyingSymptomDto = await _accompanyingSymptomMapper
                 .MapToAccompanyingSymptomDtoAsync(accompanyingSymptom)
                 .ConfigureAwait(false);
 

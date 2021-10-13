@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using MgMateWeb.Persistence;
 using MgMateWeb.Persistence.UnitOfWork;
 using MgMateWeb.Utils;
+using MgMateWeb.Utils.Mappers;
 
 namespace MgMateWeb
 {
@@ -40,8 +41,8 @@ namespace MgMateWeb
             #region Interfaces
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<ICustomMapper, CustomMapper>();
             services.AddScoped<IEntriesControllerUtils, EntriesControllerUtils>();
+            services.AddScoped<IAccompanyingSymptomMapper, AccompanyingSymptomMapper>();
 
             #endregion
 

@@ -2,18 +2,15 @@
 using System.Threading.Tasks;
 using MgMateWeb.Dto;
 using MgMateWeb.Interfaces.MapperInterfaces;
-using MgMateWeb.Interfaces.UtilsInterfaces;
 using MgMateWeb.Models.EntryModels;
 
-namespace MgMateWeb.Utils
+namespace MgMateWeb.Utils.Mappers
 {
-    public class CustomMapper : ICustomMapper
+    public class AccompanyingSymptomMapper : IAccompanyingSymptomMapper
     {
-        #region AccompanyingSymptom
-
         public async Task<AccompanyingSymptom> MapFromAccompanyingSymptomDtoAsync(AccompanyingSymptomDto accompanyingSymptomDto)
         {
-            if(accompanyingSymptomDto is null)
+            if (accompanyingSymptomDto is null)
             {
                 return new AccompanyingSymptom();
             }
@@ -55,7 +52,7 @@ namespace MgMateWeb.Utils
         public async Task<IEnumerable<AccompanyingSymptom>> MapFromMultipleAccompanyingSymptomsDtoAsync(
             IEnumerable<AccompanyingSymptomDto> accompanyingSymptomDtos)
         {
-            if(accompanyingSymptomDtos is null)
+            if (accompanyingSymptomDtos is null)
             {
                 return new List<AccompanyingSymptom>();
             }
@@ -66,7 +63,7 @@ namespace MgMateWeb.Utils
             {
                 var accompanyingSymptom = await MapFromAccompanyingSymptomDtoAsync(accompanyingSymptomDto)
                     .ConfigureAwait(false);
-                
+
                 accompanyingSymptoms.Add(accompanyingSymptom);
             }
 
@@ -93,7 +90,5 @@ namespace MgMateWeb.Utils
 
             return await Task.FromResult(accompanyingSymptomDtos);
         }
-
-        #endregion
     }
 }
