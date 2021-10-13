@@ -37,5 +37,31 @@ namespace MgMateWebTests.UtilsTests
         }
 
         #endregion
+
+        #region MyRegion
+
+        [Test]
+        public void EntryExist_ParameterIdIsNull_ReturnsFalse()
+        {
+            var result = _entriesControllerUtils.EntryExists(0);
+
+            Assert.IsFalse(result.Result);
+        }
+
+
+        #endregion
+
+        //public async Task<bool> EntryExists(int id)
+        //{
+        //    if (id <= 0)
+        //    {
+        //        return false;
+        //    }
+
+        //    return await _unitOfWork
+        //        .Entries
+        //        .CheckIfAnyAsync(e => e.Id == id)
+        //        .ConfigureAwait(false);
+        //}
     }
 }
