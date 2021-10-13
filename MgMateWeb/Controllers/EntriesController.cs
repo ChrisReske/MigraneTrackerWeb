@@ -267,7 +267,11 @@ namespace MgMateWeb.Controllers
                 return NotFound();
             }
 
-            return View(entry);
+            var entryDto = await _entryMapper
+                .MapEntryToEntryDtoAsync(entry)
+                .ConfigureAwait(false);
+
+            return View(entryDto);
         }
 
         // POST: Entries/Delete/5

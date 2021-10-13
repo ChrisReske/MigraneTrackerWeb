@@ -43,6 +43,7 @@ namespace MgMateWeb
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEntriesControllerUtils, EntriesControllerUtils>();
             services.AddScoped<IAccompanyingSymptomMapper, AccompanyingSymptomMapper>();
+            services.AddScoped<IEntryMapper, EntryMapper>();
 
             #endregion
 
