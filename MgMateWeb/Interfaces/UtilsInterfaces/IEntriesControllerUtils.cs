@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 using MgMateWeb.Models.EntryModels;
-using MgMateWeb.Models.FormModels;
-using MgMateWeb.Models.RelationshipModels;
 
 namespace MgMateWeb.Interfaces.UtilsInterfaces
 {
@@ -11,14 +9,7 @@ namespace MgMateWeb.Interfaces.UtilsInterfaces
 
         Task<AccompanyingSymptom> FindAccompanyingSymptomById(int selectedSymptom);
 
-        Task<EntryAccompanyingSymptom> CreateEntryAccompanyingSymptom(
-            Entry entryReloaded,
-            AccompanyingSymptom symptom);
-
-        Task<Entry> CreateInitialEntryAsync(CreateEntryFormModel createEntryFormModel);
-
         Task<bool> EntryExists(int id);
-
 
     }
 }

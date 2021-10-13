@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MgMateWeb.Interfaces.MapperInterfaces;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ using MgMateWeb.Models.RelationshipModels;
 
 namespace MgMateWeb.Controllers
 {
-    // TODO Replace actual instances of 'Entry' with Dto counterpart
 
     public class EntriesController : Controller
     {
@@ -19,6 +19,7 @@ namespace MgMateWeb.Controllers
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEntriesControllerUtils _entriesControllerUtils;
+        private readonly IEntryMapper _entryMapper;
 
         #endregion
 
@@ -26,11 +27,13 @@ namespace MgMateWeb.Controllers
 
         public EntriesController(
             IUnitOfWork unitOfWork,
-            IEntriesControllerUtils entriesControllerUtils)
+            IEntriesControllerUtils entriesControllerUtils, 
+            IEntryMapper entryMapper)
         {
             _unitOfWork = unitOfWork
                           ?? throw new ArgumentNullException(nameof(unitOfWork));
             _entriesControllerUtils = entriesControllerUtils;
+            _entryMapper = entryMapper;
         }
 
         #endregion
@@ -107,7 +110,7 @@ namespace MgMateWeb.Controllers
                 return View(createEntryFormModel);
             }
 
-            var entry = await _entriesControllerUtils
+            var entry = await _entryMapper
                 .CreateInitialEntryAsync(createEntryFormModel)
                 .ConfigureAwait(false);
 
@@ -147,7 +150,7 @@ namespace MgMateWeb.Controllers
                 symptoms.Add(symptom);
 
                 var entryAccompanyingSymptom =
-                    await _entriesControllerUtils
+                    await _entryMapper
                         .CreateEntryAccompanyingSymptom(entryReloaded, symptom)
                         .ConfigureAwait(false);
 

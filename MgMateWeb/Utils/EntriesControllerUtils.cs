@@ -61,50 +61,6 @@ namespace MgMateWeb.Utils
             return symptom;
         }
 
-        public async Task<EntryAccompanyingSymptom> CreateEntryAccompanyingSymptom(
-            Entry entryReloaded,
-            AccompanyingSymptom symptom)
-        {
-            if (entryReloaded is null
-                || symptom is null)
-            {
-                return new EntryAccompanyingSymptom();
-            }
-
-            var entryAccompanyingSymptom = new EntryAccompanyingSymptom
-            {
-                Entry = entryReloaded,
-                EntryId = entryReloaded.Id,
-                AccompanyingSymptom = symptom,
-                AccompanyingSymptomId = symptom.Id
-            };
-
-            return await Task
-                .FromResult(entryAccompanyingSymptom)
-                .ConfigureAwait(false);
-        }
-
-
-        public async Task<Entry> CreateInitialEntryAsync(CreateEntryFormModel createEntryFormModel)
-        {
-            if (createEntryFormModel is null)
-            {
-                return new Entry();
-            }
-
-            var entry = new Entry()
-            {
-                CreationDate = DateTime.Now,
-                HoursOfActivity = createEntryFormModel.HoursOfActivity,
-                HoursOfIncapacitation = createEntryFormModel.HoursOfIncapacitation,
-                HoursOfPain = createEntryFormModel.HoursOfPain,
-                WasPainIncreasedDuringPhysicalActivity = createEntryFormModel.WasPainIncreasedDuringPhysicalActivity
-            };
-            return await Task
-                .FromResult(entry)
-                .ConfigureAwait(false);
-        }
-
         public async Task<bool> EntryExists(int id)
         {
             if (id <= 0)
