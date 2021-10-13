@@ -44,12 +44,41 @@ namespace MgMateWebTests.UtilsTests.MapperTests
         {
             var minDate = DateTime.MinValue;
 
-            var result = _entryMapper.CreateInitialEntryAsync(new CreateEntryFormModel());
+            var result = _entryMapper
+                .CreateInitialEntryAsync(new CreateEntryFormModel());
 
             Assert.AreNotEqual(minDate, result.Result.CreationDate);
 
         }
 
+        [Test]
+        public void CreateInitialEntryAsync_ParameterCreateEntryFormModelHasValues_ReturnsNewEntryWithMappedProperties()
+        {
+           
+            var fakeEntryFormModel = CreateFakeCreateEntryFormModel();
+
+            var result = _entryMapper
+                .CreateInitialEntryAsync(fakeEntryFormModel);
+
+            Assert.AreEqual(fakeEntryFormModel.HoursOfActivity, result.Result.HoursOfActivity);
+
+        }
+
         #endregion
+
+        #region Helper methods
+
+        CreateEntryFormModel CreateFakeCreateEntryFormModel()
+        {
+            var fakeEntryFormModel = new CreateEntryFormModel
+            {
+                HoursOfActivity = 7.5f
+            };
+
+            return fakeEntryFormModel;
+        }
+
+        #endregion
+
     }
 }
