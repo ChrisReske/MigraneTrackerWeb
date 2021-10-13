@@ -5,24 +5,17 @@ using MgMateWeb.Interfaces.UtilsInterfaces;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Models.FormModels;
 using MgMateWeb.Models.RelationshipModels;
-using MgMateWeb.Persistence;
 
 namespace MgMateWeb.Utils
 {
     public class EntriesControllerUtils : IEntriesControllerUtils
     {
-        private readonly ApplicationDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
 
-
-        public EntriesControllerUtils(
-            ApplicationDbContext context, 
-            IUnitOfWork unitOfWork)
+        public EntriesControllerUtils(IUnitOfWork unitOfWork)
         {
-            _context = context;
             _unitOfWork = unitOfWork;
         }
-
 
         public async Task<bool> SaveEntryToDbAsync(Entry entry)
         {
