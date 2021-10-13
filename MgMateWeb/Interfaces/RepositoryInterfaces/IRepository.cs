@@ -18,6 +18,9 @@ namespace MgMateWeb.Interfaces.RepositoryInterfaces
         TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
 
         void Add(TEntity entity);
+
+        Task AddAsync(TEntity entity);
+
         void AddRange(IEnumerable<TEntity> entities);
         
         void Remove(TEntity entity);

@@ -56,6 +56,14 @@ namespace MgMateWeb.Persistence.Repositories
             _context.Set<TEntity>().Add(entity);
         }
 
+        public async Task AddAsync(TEntity entity)
+        {
+            await _context.Set<TEntity>()
+                .AddAsync(entity)
+                .ConfigureAwait(false);
+
+        }
+
         public void AddRange(IEnumerable<TEntity> entities)
         {
             _context.Set<TEntity>().AddRange(entities);

@@ -11,8 +11,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MgMateWeb.Utils
 {
-    // Todo: Remove dependency on '_context' using unit-of-work and repositories.
-
     public class EntriesControllerUtils : IEntriesControllerUtils
     {
         private readonly ApplicationDbContext _context;
@@ -37,9 +35,10 @@ namespace MgMateWeb.Utils
 
             try
             {
-                _context.Add(entry);
-                await _context
-                    .SaveChangesAsync()
+
+                await _unitOfWork.Entries.AddAsync(entry);
+                await _unitOfWork
+                    .CompleteAsync()
                     .ConfigureAwait(false);
 
                 return await Task
