@@ -8,7 +8,7 @@ using MgMateWeb.Utils.Mappers;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace MgMateWebTests.UtilsTests
+namespace MgMateWebTests.UtilsTests.MapperTests
 {
     [TestFixture]
     public class AccompanyingSymptomsMapperTests

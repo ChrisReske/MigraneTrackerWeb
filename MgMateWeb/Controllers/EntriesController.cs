@@ -21,6 +21,7 @@ namespace MgMateWeb.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEntriesControllerUtils _entriesControllerUtils;
         private readonly IEntryMapper _entryMapper;
+        private readonly IEntryAccompanyingSymptomMapper _entryAccompanyingSymptomMapper;
 
         #endregion
 
@@ -29,12 +30,17 @@ namespace MgMateWeb.Controllers
         public EntriesController(
             IUnitOfWork unitOfWork,
             IEntriesControllerUtils entriesControllerUtils, 
-            IEntryMapper entryMapper)
+            IEntryMapper entryMapper, 
+            IEntryAccompanyingSymptomMapper entryAccompanyingSymptomMapper)
         {
             _unitOfWork = unitOfWork
                           ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _entriesControllerUtils = entriesControllerUtils;
-            _entryMapper = entryMapper;
+            _entriesControllerUtils = entriesControllerUtils 
+                                      ?? throw new ArgumentNullException(nameof(entriesControllerUtils));
+            _entryMapper = entryMapper 
+                           ?? throw new ArgumentNullException(nameof(entryMapper));
+            _entryAccompanyingSymptomMapper = entryAccompanyingSymptomMapper 
+                                              ?? throw new ArgumentNullException(nameof(entryAccompanyingSymptomMapper));
         }
 
         #endregion
@@ -151,8 +157,8 @@ namespace MgMateWeb.Controllers
                 symptoms.Add(symptom);
 
                 var entryAccompanyingSymptom =
-                    await _entryMapper
-                        .CreateEntryAccompanyingSymptom(entryReloaded, symptom)
+                    await _entryAccompanyingSymptomMapper
+                        .CreateEntryAccompanyingSymptomAsync(entryReloaded, symptom)
                         .ConfigureAwait(false);
 
                 await _unitOfWork.EntryAccompanyingSymptoms

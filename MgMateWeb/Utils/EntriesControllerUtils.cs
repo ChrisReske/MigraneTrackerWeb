@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces;
 using MgMateWeb.Models.EntryModels;
-using MgMateWeb.Models.FormModels;
-using MgMateWeb.Models.RelationshipModels;
 
 namespace MgMateWeb.Utils
 {
