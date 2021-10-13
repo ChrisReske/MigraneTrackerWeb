@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MgMateWeb.Dto;
+using MgMateWeb.Interfaces.MapperInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces;
 using MgMateWeb.Models.EntryModels;
 

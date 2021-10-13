@@ -1,3 +1,4 @@
+using MgMateWeb.Interfaces.MapperInterfaces;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces;
 using Microsoft.AspNetCore.Builder;

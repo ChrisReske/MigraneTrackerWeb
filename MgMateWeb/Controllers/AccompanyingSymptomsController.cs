@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MgMateWeb.Dto;
+using MgMateWeb.Interfaces.MapperInterfaces;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces;
 using Microsoft.AspNetCore.Mvc;

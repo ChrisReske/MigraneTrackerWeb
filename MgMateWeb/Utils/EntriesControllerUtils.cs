@@ -38,9 +38,11 @@ namespace MgMateWeb.Utils
             }
             catch (Exception e)
             {
+                // Todo: Add logging
                 Console.WriteLine(e);
-                throw;
             }
+
+            return false;
         }
 
 

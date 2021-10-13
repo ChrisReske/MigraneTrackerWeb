@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MgMateWeb.Dto;
 using MgMateWeb.Models.EntryModels;
 
-namespace MgMateWeb.Interfaces.UtilsInterfaces
+namespace MgMateWeb.Interfaces.MapperInterfaces
 {
     public interface ICustomMapper
     {
