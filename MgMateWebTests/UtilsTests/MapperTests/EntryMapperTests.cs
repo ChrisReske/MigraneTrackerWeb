@@ -1,4 +1,5 @@
 ﻿using System;
+using MgMateWeb.Dto;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Models.FormModels;
 using MgMateWeb.Utils.Mappers;
@@ -66,9 +67,49 @@ namespace MgMateWebTests.UtilsTests.MapperTests
 
         #endregion
 
+        #region Testing EntryMapper > MapEntryToEntryDtoAsync
+
+        [Test]
+        public void MapEntryToEntryDtoAsync_ParameterEntryIsNull_ReturnsNewAndEmptyEntryDto()
+        {
+            var emptyDto = new EntryDto();
+            var emptyDtoJson = JsonConvert.SerializeObject(emptyDto);
+
+            var result = _entryMapper.MapEntryToEntryDtoAsync(null);
+            var resultJson = JsonConvert.SerializeObject(result.Result);
+
+            Assert.AreEqual(emptyDtoJson, resultJson);
+
+        }
+
+        [Test]
+        public void MapEntryToEntryDtoAsync_ParameterEntryIsNewEntry_ReturnsNewAndEmptyEntryDto()
+        {
+            var emptyDto = new EntryDto();
+            var emptyDtoJson = JsonConvert.SerializeObject(emptyDto);
+
+            var result = _entryMapper.MapEntryToEntryDtoAsync(new Entry());
+            var resultJson = JsonConvert.SerializeObject(result.Result);
+
+            Assert.AreEqual(emptyDtoJson, resultJson);
+
+        }
+
+        [Test]
+        public void MapEntryToEntryDtoAsync_ParameterEntryHasValues_ReturnsNewDtoWithMappedValues()
+        {
+            var fakeEntryModel = CreateFakeEntry();
+
+            var result = _entryMapper.MapEntryToEntryDtoAsync(fakeEntryModel);
+
+            Assert.AreEqual(fakeEntryModel.HoursOfActivity, result.Result.HoursOfActivity);
+        }
+
+        #endregion
+
         #region Helper methods
 
-        CreateEntryFormModel CreateFakeCreateEntryFormModel()
+        private CreateEntryFormModel CreateFakeCreateEntryFormModel()
         {
             var fakeEntryFormModel = new CreateEntryFormModel
             {
@@ -76,6 +117,17 @@ namespace MgMateWebTests.UtilsTests.MapperTests
             };
 
             return fakeEntryFormModel;
+        }
+
+        private Entry CreateFakeEntry()
+        {
+            var entry = new Entry
+            {
+                HoursOfActivity = 5.5f
+            };
+
+            return entry;
+
         }
 
         #endregion
