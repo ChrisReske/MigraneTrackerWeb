@@ -107,6 +107,35 @@ namespace MgMateWebTests.UtilsTests.MapperTests
 
         #endregion
 
+        #region Testing EntryMapper > MapEntryFromEntryDtoAsync 
+
+        [Test]
+        public void MapEntryFromEntryDtoAsync_ParameterEntryDtoIsNull_ReturnsEmptyEntryModel()
+        {
+            var testEntryModel = new EntryDto();
+            var testEntryModelJson = JsonConvert.SerializeObject(testEntryModel);
+
+            var result = _entryMapper.MapEntryFromEntryDtoAsync(null);
+            var resultJson = JsonConvert.SerializeObject(result.Result);
+
+            Assert.AreEqual(testEntryModelJson, resultJson);
+        }
+
+        [Test]
+        public void MapEntryFromEntryDtoAsync_ParameterEntryDtoIsNewOrEmpty_ReturnsEmptyEntryModel()
+        {
+            var testEntryModel = new EntryDto
+            {
+                CreationDate = DateTime.Now
+            };
+
+            var result = _entryMapper.MapEntryFromEntryDtoAsync(testEntryModel);
+
+            Assert.AreEqual(testEntryModel.CreationDate, result.Result.CreationDate);
+        }
+
+        #endregion
+
         #region Helper methods
 
         private CreateEntryFormModel CreateFakeCreateEntryFormModel()
