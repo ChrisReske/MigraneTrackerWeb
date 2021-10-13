@@ -12,7 +12,8 @@ namespace MgMateWeb.Utils
 
         public EntriesControllerUtils(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork 
+                          ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         public async Task<bool> SaveEntryToDbAsync(Entry entry)
