@@ -35,7 +35,6 @@ namespace MgMateWeb.Utils
 
             try
             {
-
                 await _unitOfWork.Entries.AddAsync(entry);
                 await _unitOfWork
                     .CompleteAsync()
@@ -53,13 +52,6 @@ namespace MgMateWeb.Utils
             }
         }
 
-        public async Task<Entry> ReloadEntryAsync()
-        {
-            var entryReloaded = await _context.Entries
-                .OrderByDescending(entry => entry.CreationDate)
-                .FirstOrDefaultAsync().ConfigureAwait(false);
-            return entryReloaded;
-        }
 
         public async Task<AccompanyingSymptom> FindAccompanyingSymptomById(int selectedSymptom)
         {

@@ -8,5 +8,8 @@ namespace MgMateWeb.Interfaces.RepositoryInterfaces
     {
         Task<List<Entry>> GetAllEntriesAndRelatedDataAsync();
 
+        Task<Entry> ReloadEntryAsync();
+
+
     }
 }

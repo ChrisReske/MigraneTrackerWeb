@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MgMateWeb.Interfaces.RepositoryInterfaces;
 using MgMateWeb.Models.EntryModels;
@@ -24,6 +25,15 @@ namespace MgMateWeb.Persistence.Repositories
                 .ToListAsync()
                 .ConfigureAwait(false);
             return entries;
+        }
+
+        public async Task<Entry> ReloadEntryAsync()
+        {
+            var entryReloaded = await Context.Entries
+                .OrderByDescending(entry => entry.CreationDate)
+                .FirstOrDefaultAsync()
+                .ConfigureAwait(false);
+            return entryReloaded;
         }
 
     }

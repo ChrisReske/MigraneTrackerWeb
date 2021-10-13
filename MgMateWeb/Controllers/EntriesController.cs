@@ -130,7 +130,7 @@ namespace MgMateWeb.Controllers
             var symptoms = new List<AccompanyingSymptom>();
             var entryAccompanyingSymptoms = new List<EntryAccompanyingSymptom>();
 
-            var entryReloaded = await _entriesControllerUtils
+            var entryReloaded = await _unitOfWork.Entries
                 .ReloadEntryAsync()
                 .ConfigureAwait(false);
 

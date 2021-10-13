@@ -9,8 +9,6 @@ namespace MgMateWeb.Interfaces.UtilsInterfaces
     {
         Task<bool> SaveEntryToDbAsync(Entry entry);
 
-        Task<Entry> ReloadEntryAsync();
-
         Task<AccompanyingSymptom> FindAccompanyingSymptomById(int selectedSymptom);
 
         Task<EntryAccompanyingSymptom> CreateEntryAccompanyingSymptom(
