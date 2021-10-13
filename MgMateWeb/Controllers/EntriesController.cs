@@ -186,7 +186,6 @@ namespace MgMateWeb.Controllers
                 .GetAsync(id)
                 .ConfigureAwait(false);
 
-
             if (entry == null)
             {
                 return NotFound();
