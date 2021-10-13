@@ -31,5 +31,7 @@ namespace MgMateWeb.Interfaces.RepositoryInterfaces
 
         Task<bool> CheckIfAnyAsync(Expression<Func<TEntity, bool>> predicate);
 
+        Task<TEntity> GetAsync(int id);
+
     }
 }

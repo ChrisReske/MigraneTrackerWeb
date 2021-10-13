@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
 using MgMateWeb.Interfaces.UtilsInterfaces;
@@ -7,7 +6,6 @@ using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Models.FormModels;
 using MgMateWeb.Models.RelationshipModels;
 using MgMateWeb.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace MgMateWeb.Utils
 {
@@ -60,9 +58,11 @@ namespace MgMateWeb.Utils
                 return new AccompanyingSymptom();
             }
 
-            var symptom = await _context.AccompanyingSymptoms
-                .FindAsync(selectedSymptom)
+            var symptom = await _unitOfWork
+                .AccompanyingSymptoms
+                .GetAsync(selectedSymptom)
                 .ConfigureAwait(false);
+
             return symptom;
         }
 
