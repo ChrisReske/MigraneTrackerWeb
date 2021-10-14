@@ -158,7 +158,7 @@ namespace MgMateWeb.Controllers
 
                 var entryAccompanyingSymptom =
                     await _entryAccompanyingSymptomMapper
-                        .CreateEntryAccompanyingSymptomAsync(entryReloaded, symptom)
+                        .MapEntryAccompanyingSymptomAsync(entryReloaded, symptom)
                         .ConfigureAwait(false);
 
                 await _unitOfWork.EntryAccompanyingSymptoms

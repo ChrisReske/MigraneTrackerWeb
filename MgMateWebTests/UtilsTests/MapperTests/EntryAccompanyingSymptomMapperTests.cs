@@ -21,7 +21,7 @@ namespace MgMateWebTests.UtilsTests.MapperTests
             _accompanyingSymptomMapper = new EntryAccompanyingSymptomMapper();
         }
 
-        #region Testing EntryAccompanyingSymptomMapper > CreateEntryAccompanyingSymptomAsync
+        #region Testing EntryAccompanyingSymptomMapper > MapEntryAccompanyingSymptomAsync
 
         [Test]
         public void CreateEntryAccompanyingSymptomAsync_ParameterEntryIsNull_ReturnsNewAndEmptyEntryAccompanyingSymptom()
@@ -31,7 +31,7 @@ namespace MgMateWebTests.UtilsTests.MapperTests
 
             var result =
                 _accompanyingSymptomMapper
-                    .CreateEntryAccompanyingSymptomAsync(null, new AccompanyingSymptom());
+                    .MapEntryAccompanyingSymptomAsync(null, new AccompanyingSymptom());
 
             var resultJson = JsonConvert.SerializeObject(result.Result);
 
@@ -47,7 +47,7 @@ namespace MgMateWebTests.UtilsTests.MapperTests
 
             var result =
                 _accompanyingSymptomMapper
-                    .CreateEntryAccompanyingSymptomAsync(new Entry(), null);
+                    .MapEntryAccompanyingSymptomAsync(new Entry(), null);
 
             var resultJson = JsonConvert.SerializeObject(result.Result);
 
@@ -74,7 +74,7 @@ namespace MgMateWebTests.UtilsTests.MapperTests
 
             var result =
                 _accompanyingSymptomMapper
-                    .CreateEntryAccompanyingSymptomAsync(fakeEntry, fakeAccompanyingSymptom);
+                    .MapEntryAccompanyingSymptomAsync(fakeEntry, fakeAccompanyingSymptom);
 
             Assert.AreEqual(fakeAccompanyingSymptom.Description, result.Result.AccompanyingSymptom.Description);
 

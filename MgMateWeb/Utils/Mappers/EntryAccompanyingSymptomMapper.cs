@@ -7,7 +7,7 @@ namespace MgMateWeb.Utils.Mappers
 {
     public class EntryAccompanyingSymptomMapper : IEntryAccompanyingSymptomMapper
     {
-        public async Task<EntryAccompanyingSymptom> CreateEntryAccompanyingSymptomAsync(
+        public async Task<EntryAccompanyingSymptom> MapEntryAccompanyingSymptomAsync(
             Entry entryReloaded,
             AccompanyingSymptom symptom)
         {

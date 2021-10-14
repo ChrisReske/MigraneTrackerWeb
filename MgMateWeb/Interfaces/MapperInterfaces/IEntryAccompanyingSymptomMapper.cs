@@ -6,7 +6,7 @@ namespace MgMateWeb.Interfaces.MapperInterfaces
 {
     public interface IEntryAccompanyingSymptomMapper
     {
-        Task<EntryAccompanyingSymptom> CreateEntryAccompanyingSymptomAsync(
+        Task<EntryAccompanyingSymptom> MapEntryAccompanyingSymptomAsync(
             Entry entryReloaded,
             AccompanyingSymptom symptom);
     }
