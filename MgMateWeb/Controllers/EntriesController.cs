@@ -155,6 +155,11 @@ namespace MgMateWeb.Controllers
                  selectedSymptoms,
                  entryReloaded);
 
+            if (entryAccompanyingSymptoms is null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             entryReloaded.EntryAccompanyingSymptoms = entryAccompanyingSymptoms;
             
             _unitOfWork.Entries.Update(entry);
