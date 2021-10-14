@@ -60,7 +60,7 @@ namespace MgMateWeb.Utils
             return symptom;
         }
 
-        public async Task<bool> EntryExists(int id)
+        public async Task<bool> EntryExistsAsync(int id)
         {
             if (id <= 0)
             {

@@ -9,7 +9,7 @@ namespace MgMateWeb.Interfaces.UtilsInterfaces
 
         Task<AccompanyingSymptom> FindAccompanyingSymptomById(int selectedSymptom);
 
-        Task<bool> EntryExists(int id);
+        Task<bool> EntryExistsAsync(int id);
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MgMateWeb.Interfaces.PersistenceInterfaces;
 using MgMateWeb.Utils;
 using Moq;
@@ -12,7 +13,7 @@ namespace MgMateWebTests.UtilsTests
         #region Fields and Constants
 
         private Mock<IUnitOfWork> _fakeUnitOfWork;
-        EntriesControllerUtils _entriesControllerUtils;
+        private EntriesControllerUtils _entriesControllerUtils;
 
         #endregion
 
@@ -33,6 +34,35 @@ namespace MgMateWebTests.UtilsTests
             {
                 var unused = new EntriesControllerUtils(null);
             });
+        }
+
+        #endregion
+
+        #region Testing EntriesControllerUtils > EntryExistsAsync
+
+        [Test]
+        [TestCase(0, TestName = "Parameter 'id' is 0")]
+        [TestCase(-1, TestName = "Parameter 'id' is -1")]
+        public void EntryExists_ParameterIdIsNullOrOutOfRange_ReturnsFalse(int faultyId)
+        {
+            var result = _entriesControllerUtils.EntryExistsAsync(faultyId);
+
+            Assert.IsFalse(result.Result);
+        }
+
+        [Test]
+        public void EntryExistsAsync_ParameterIdIsValidId_ReturnsTrue()
+        {
+            const int testId = 42;
+
+
+            _fakeUnitOfWork.Setup(fuow => fuow.Entries
+                .CheckIfAnyAsync(entry => entry.Id == testId))
+                .Returns(Task.FromResult(true));
+
+            var result = _entriesControllerUtils.EntryExistsAsync(testId);
+
+            Assert.IsTrue(result.Result);
         }
 
         #endregion

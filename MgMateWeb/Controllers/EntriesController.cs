@@ -240,7 +240,7 @@ namespace MgMateWeb.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 if (! await _entriesControllerUtils
-                    .EntryExists(entry.Id)
+                    .EntryExistsAsync(entry.Id)
                     .ConfigureAwait(false))
                 {
                     return NotFound();
