@@ -45,6 +45,7 @@ namespace MgMateWeb
             services.AddScoped<IAccompanyingSymptomMapper, AccompanyingSymptomMapper>();
             services.AddScoped<IEntryMapper, EntryMapper>();
             services.AddScoped<IEntryAccompanyingSymptomMapper, EntryAccompanyingSymptomMapper>();
+            services.AddScoped<IEntryAccompanyingSymptomsUtils, EntryAccompanyingSymptomsUtils>();
 
             #endregion
 

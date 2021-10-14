@@ -21,7 +21,7 @@ namespace MgMateWeb.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEntriesControllerUtils _entriesControllerUtils;
         private readonly IEntryMapper _entryMapper;
-        private readonly IEntryAccompanyingSymptomMapper _entryAccompanyingSymptomMapper;
+        private readonly IEntryAccompanyingSymptomsUtils _entryAccompanyingSymptomsUtils;
 
         #endregion
 
@@ -29,18 +29,18 @@ namespace MgMateWeb.Controllers
 
         public EntriesController(
             IUnitOfWork unitOfWork,
-            IEntriesControllerUtils entriesControllerUtils, 
+            IEntriesControllerUtils entriesControllerUtils,
             IEntryMapper entryMapper, 
-            IEntryAccompanyingSymptomMapper entryAccompanyingSymptomMapper)
+            IEntryAccompanyingSymptomsUtils entryAccompanyingSymptomsUtils)
         {
             _unitOfWork = unitOfWork
                           ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _entriesControllerUtils = entriesControllerUtils 
+            _entriesControllerUtils = entriesControllerUtils
                                       ?? throw new ArgumentNullException(nameof(entriesControllerUtils));
-            _entryMapper = entryMapper 
+            _entryMapper = entryMapper
                            ?? throw new ArgumentNullException(nameof(entryMapper));
-            _entryAccompanyingSymptomMapper = entryAccompanyingSymptomMapper 
-                                              ?? throw new ArgumentNullException(nameof(entryAccompanyingSymptomMapper));
+            _entryAccompanyingSymptomsUtils = entryAccompanyingSymptomsUtils 
+                                              ?? throw new ArgumentNullException(nameof(entryAccompanyingSymptomsUtils));
         }
 
         #endregion
@@ -135,10 +135,6 @@ namespace MgMateWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var selectedSymptoms = createEntryFormModel.SelectedAccSymptoms;
-            var symptoms = new List<AccompanyingSymptom>();
-            var entryAccompanyingSymptoms = new List<EntryAccompanyingSymptom>();
-
             var entryReloaded = await _unitOfWork.Entries
                 .ReloadEntryAsync()
                 .ConfigureAwait(false);
@@ -148,33 +144,21 @@ namespace MgMateWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            foreach (var selectedSymptom in selectedSymptoms)
+            var selectedSymptoms = createEntryFormModel.SelectedAccSymptoms;
+            if(selectedSymptoms is null)
             {
-                var symptom = await _entriesControllerUtils
-                    .FindAccompanyingSymptomById(selectedSymptom)
-                    .ConfigureAwait(false);
-
-                symptoms.Add(symptom);
-
-                var entryAccompanyingSymptom =
-                    await _entryAccompanyingSymptomMapper
-                        .MapEntryAccompanyingSymptomAsync(entryReloaded, symptom)
-                        .ConfigureAwait(false);
-
-                await _unitOfWork.EntryAccompanyingSymptoms
-                    .AddAsync(entryAccompanyingSymptom)
-                    .ConfigureAwait(false);
-
-                await _unitOfWork
-                     .CompleteAsync()
-                     .ConfigureAwait(false);
-
-                entryAccompanyingSymptoms.Add(entryAccompanyingSymptom);
+                return RedirectToAction(nameof(Index));
             }
 
+            var entryAccompanyingSymptoms = 
+                await _entryAccompanyingSymptomsUtils.CreateEntryAccompanyingSymptomAsync(
+                 selectedSymptoms,
+                 entryReloaded);
+
             entryReloaded.EntryAccompanyingSymptoms = entryAccompanyingSymptoms;
-            _unitOfWork.Entries.Update(entry);
             
+            _unitOfWork.Entries.Update(entry);
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -227,7 +211,7 @@ namespace MgMateWeb.Controllers
             var entry = await _entryMapper
                 .MapEntryFromEntryDtoAsync(entryDto)
                 .ConfigureAwait(false);
-            
+
             try
             {
                 _unitOfWork.Entries.Update(entry);
@@ -239,7 +223,7 @@ namespace MgMateWeb.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (! await _entriesControllerUtils
+                if (!await _entriesControllerUtils
                     .EntryExistsAsync(entry.Id)
                     .ConfigureAwait(false))
                 {
