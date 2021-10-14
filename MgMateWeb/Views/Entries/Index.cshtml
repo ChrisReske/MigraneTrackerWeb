@@ -28,9 +28,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.HoursOfActivity)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EntryAccompanyingSymptoms)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -51,14 +48,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.HoursOfActivity)
-            </td>
-            <td>
-                @foreach (var entryAccompanyingSymptom in item.EntryAccompanyingSymptoms
-                    .Where(eas => eas.EntryId == item.Id)
-                    .Select(eas => eas.AccompanyingSymptom.Description))
-                {
-                    <p>@entryAccompanyingSymptom</p>
-                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
