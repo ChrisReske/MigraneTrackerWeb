@@ -57,6 +57,11 @@ namespace MgMateWeb.Utils
                 .GetAsync(selectedSymptom)
                 .ConfigureAwait(false);
 
+            if (symptom is null)
+            {
+                return new AccompanyingSymptom();
+            }
+
             return symptom;
         }
 

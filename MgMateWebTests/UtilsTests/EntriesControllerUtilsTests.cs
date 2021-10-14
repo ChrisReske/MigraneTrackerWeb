@@ -127,6 +127,63 @@ namespace MgMateWebTests.UtilsTests
 
         #endregion
 
+        #region EntriesControllerUtils > FindAccompanyingSymptomById
+
+        [Test]
+        [TestCase(0, TestName = "Selected id for symptom is 0.")]
+        [TestCase(-1, TestName = "Selected id for symptom is out of range (-1).")]
+        public void FindAccompanyingSymptomById_SelectedIdIsNullOrOutOfRange_ReturnsNewAccompanyingSymptom(int faultySymptomId)
+        {
+            var minDate = DateTime.MinValue;
+
+            var result = _entriesControllerUtils
+                .FindAccompanyingSymptomById(faultySymptomId);
+
+            Assert.AreEqual(minDate, result.Result.CreationDate);
+        }
+
+        [Test]
+        public void FindAccompanyingSymptomById_SelectedIdNotFoundInDatabase_ReturnsNull()
+        {
+            const int testId = 42;
+            AccompanyingSymptom nullSymptom = null;
+            var minDate = DateTime.MinValue;
+
+
+            _fakeUnitOfWork.Setup(fuow => fuow.AccompanyingSymptoms
+                .GetAsync(testId))
+                .Returns(Task.FromResult(nullSymptom));
+
+            var result = _entriesControllerUtils
+                .FindAccompanyingSymptomById(testId);
+
+            Assert.AreEqual(minDate, result.Result.CreationDate);
+
+        }
+
+        [Test]
+        public void FindAccompanyingSymptomById_SelectedIdFoundInDatabase_ReturnsObjectIdentifiedByPassedId()
+        {
+            const int testId = 42;
+
+            var testAccompanyingSymptom = new AccompanyingSymptom
+            {
+                Description = "This is test symptom 42",
+                Id = testId,
+            };
+
+            _fakeUnitOfWork.Setup(fuow => fuow.AccompanyingSymptoms
+                .GetAsync(testId))
+                .Returns(Task.FromResult(testAccompanyingSymptom));
+
+            var result = _entriesControllerUtils.FindAccompanyingSymptomById(testId);
+
+            Assert.AreEqual(testAccompanyingSymptom.Description, result.Result.Description);
+
+        }
+
+        #endregion
+
         #region Helper methods
         /// <summary>
         /// The following code will create a new SqlException.
@@ -136,9 +193,9 @@ namespace MgMateWebTests.UtilsTests
         public SqlException MakeSqlException()
         {
             SqlException exception = null;
+            var conn = new SqlConnection(@"Data Source=.;Database=GUARANTEED_TO_FAIL;Connection Timeout=1");
             try
             {
-                SqlConnection conn = new SqlConnection(@"Data Source=.;Database=GUARANTEED_TO_FAIL;Connection Timeout=1");
                 conn.Open();
             }
             catch (SqlException ex)
