@@ -41,7 +41,7 @@ namespace MgMateWeb.Utils
                 Console.WriteLine(e);
             }
 
-            return false;
+            return await Task.FromResult(false);
         }
 
 
