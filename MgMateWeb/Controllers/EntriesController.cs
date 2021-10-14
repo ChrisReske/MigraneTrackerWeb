@@ -63,25 +63,27 @@ namespace MgMateWeb.Controllers
         #region Entry / Details 
 
         // GET: Entries/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
+            if (id <= 0)
             {
                 return NotFound();
             }
 
             var entry = await _unitOfWork
-                .Entries
-                .GetFirstOrDefaultById(m => m.Id == id)
-                .ConfigureAwait(false);
+                .Entries.GetSingleEntryAndRelatedDataAsync(id);
 
 
-            if (entry == null)
+            if(entry is null)
             {
                 return NotFound();
             }
 
-            return View(entry);
+            var entryDto = await _entryMapper
+                .MapEntryToEntryDtoAsync(entry)
+                .ConfigureAwait(false);
+
+            return View(entryDto);
         }
 
         #endregion

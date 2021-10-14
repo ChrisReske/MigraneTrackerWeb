@@ -1,4 +1,4 @@
-﻿@model MgMateWeb.Models.EntryModels.Entry
+﻿@model MgMateWeb.Dto.EntryDto
 
 @{
     ViewData["Title"] = "Details";
@@ -11,39 +11,50 @@
     <h4>Entry</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreationDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreationDate)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.HoursOfPain)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.HoursOfPain)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.WasPainIncreasedDuringPhysicalActivity)
+        <dt class="col-sm-2">
+            @Html.DisplayTextFor(model => model.WasPainIncreasedDuringPhysicalActivity)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.WasPainIncreasedDuringPhysicalActivity)
+        <dd class="col-sm-10">
+            @Html.DisplayTextFor(model => model.WasPainIncreasedDuringPhysicalActivity)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.HoursOfIncapacitation)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.HoursOfIncapacitation)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.HoursOfActivity)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.HoursOfActivity)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EntryAccompanyingSymptoms)
+        </dt>
+        @foreach (var entryAccompanyingSymptom in Model.EntryAccompanyingSymptoms
+               .Where(eas => eas.EntryId == Model.Id)
+               .Select(eas => eas.AccompanyingSymptom.Description))
+            {
+            <dd class="col-sm-12">
+                @entryAccompanyingSymptom
+            </dd>
+        }
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>

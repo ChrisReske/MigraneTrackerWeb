@@ -10,6 +10,7 @@ namespace MgMateWeb.Interfaces.RepositoryInterfaces
 
         Task<Entry> ReloadEntryAsync();
 
+        Task<Entry> GetSingleEntryAndRelatedDataAsync(int id);
 
     }
 }

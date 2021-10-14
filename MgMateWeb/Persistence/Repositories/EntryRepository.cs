@@ -27,6 +27,24 @@ namespace MgMateWeb.Persistence.Repositories
             return entries;
         }
 
+        public async Task<Entry> GetSingleEntryAndRelatedDataAsync(int id)
+        {
+            var entry = await Context.Entries
+                .Include(e => e.EntryAccompanyingSymptoms)
+                .ThenInclude(e => e.AccompanyingSymptom)
+                .FirstOrDefaultAsync(e => e.Id == id)
+                .ConfigureAwait(false);
+
+            if(entry is null)
+            {
+                return new Entry();
+            }
+
+            return await Task
+                .FromResult(entry)
+                .ConfigureAwait(false);
+        }
+
         public async Task<Entry> ReloadEntryAsync()
         {
             var entryReloaded = await Context.Entries
