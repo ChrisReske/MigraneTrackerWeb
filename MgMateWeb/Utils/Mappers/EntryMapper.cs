@@ -4,6 +4,7 @@ using MgMateWeb.Dto;
 using MgMateWeb.Interfaces.MapperInterfaces;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Models.FormModels;
+using System.Collections.Generic;
 
 namespace MgMateWeb.Utils.Mappers
 {
@@ -72,6 +73,25 @@ namespace MgMateWeb.Utils.Mappers
             };
 
             return await Task.FromResult(entry);
+        }
+
+        public async Task<List<EntryDto>> MapEntriesToEntriesDto( List<Entry> entries)
+        {
+            if(entries == null)
+            {
+                return new List<EntryDto>();
+            }
+
+            var entriesDto = new List<EntryDto>();
+
+            foreach (var entry in entries)
+            {
+                var entryDto = await MapEntryToEntryDtoAsync(entry)
+                    .ConfigureAwait(false);
+                entriesDto.Add(entryDto);
+            }
+
+            return await Task.FromResult(entriesDto);
         }
 
     }

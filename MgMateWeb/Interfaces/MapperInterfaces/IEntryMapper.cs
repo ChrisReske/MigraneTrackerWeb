@@ -2,6 +2,7 @@
 using MgMateWeb.Dto;
 using MgMateWeb.Models.EntryModels;
 using MgMateWeb.Models.FormModels;
+using System.Collections.Generic;
 
 namespace MgMateWeb.Interfaces.MapperInterfaces
 {
@@ -13,6 +14,8 @@ namespace MgMateWeb.Interfaces.MapperInterfaces
         Task<EntryDto> MapEntryToEntryDtoAsync(Entry entry);
 
         Task<Entry> MapEntryFromEntryDtoAsync(EntryDto entryDto);
+
+        Task<List<EntryDto>> MapEntriesToEntriesDto( List<Entry> entries );
 
     }
 }
